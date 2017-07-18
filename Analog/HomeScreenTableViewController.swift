@@ -18,6 +18,10 @@ class HomeScreenTableViewController: UITableViewController {
             navigationBar.barTintColor = UIColor(hue: 0, saturation: 0, brightness: 0.97, alpha: 0.75)
             navigationBar.tintColor = .black
         }
+        
+        //Hide unused cell
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        tableView.tableFooterView?.isHidden = true
 
         
         // Uncomment the following line to preserve selection between presentations
@@ -64,6 +68,11 @@ class HomeScreenTableViewController: UITableViewController {
         // Return false if you do not want the specified item to be editable.
         return true
     }
+    
+    @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
+        
+    }
+    
     
 
     /*
