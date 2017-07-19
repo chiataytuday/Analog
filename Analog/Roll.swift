@@ -16,7 +16,9 @@ struct PropertyKeys {
     static let title = "title"
     static let camera = "camera"
     static let pushPull = "pushPull"
+    static let frames = "frames"
     static let dateAdded = "dateAdded"
+    static let lastEdited = "lastEdited"
 }
 
 class Roll: NSObject, NSCoding {
@@ -30,9 +32,9 @@ class Roll: NSObject, NSCoding {
     var title: String?
     var camera: String?
     var pushPull: Double?
-    var dateAdded: Date?
     var frames: [Frame]?
-    
+    var dateAdded: Date?
+    var lastEdited: Date?
     
     static let DocumentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let archiveURL = DocumentDirectory.appendingPathComponent("rolls")
@@ -52,7 +54,9 @@ class Roll: NSObject, NSCoding {
         aCoder.encode(title, forKey: PropertyKeys.title)
         aCoder.encode(camera, forKey: PropertyKeys.camera)
         aCoder.encode(pushPull, forKey: PropertyKeys.pushPull)
+        aCoder.encode(frames, forKey: PropertyKeys.frames)
         aCoder.encode(dateAdded, forKey: PropertyKeys.dateAdded)
+        aCoder.encode(lastEdited, forKey: PropertyKeys.lastEdited)
     }
     
     convenience required init?(coder aDecoder: NSCoder) {
@@ -65,13 +69,17 @@ class Roll: NSObject, NSCoding {
         let frameCount = aDecoder.decodeObject(forKey: PropertyKeys.frameCount) as? Int
         let title = aDecoder.decodeObject(forKey: PropertyKeys.title) as? String
         let camera = aDecoder.decodeObject(forKey: PropertyKeys.camera) as? String
-        let pushPull = aDecoder.decodeObject(forKey: PropertyKeys.pushPull) as? Double
+        let pushPull = aDecoder.decodeDouble(forKey: PropertyKeys.pushPull)
+        let frames = aDecoder.decodeObject(forKey: PropertyKeys.frames) as? [Frame]
         let dateAdded = aDecoder.decodeObject(forKey: PropertyKeys.dateAdded) as? Date
+        let lastEdited = aDecoder.decodeObject(forKey: PropertyKeys.lastEdited) as? Date
         
         self.init(filmName: filmName, format: format, frameCount: frameCount, iso: iso)
         self.title = title
         self.camera = camera
         self.pushPull = pushPull
+        self.frames = frames
         self.dateAdded = dateAdded
+        self.lastEdited = lastEdited
     }
 }

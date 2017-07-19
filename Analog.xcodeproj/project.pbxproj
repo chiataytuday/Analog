@@ -10,7 +10,6 @@
 		362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */; };
 		362901161F1A3159007DA30B /* Roll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901151F1A3159007DA30B /* Roll.swift */; };
 		362901181F1A3162007DA30B /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901171F1A3162007DA30B /* Frame.swift */; };
-		3629011A1F1A33D3007DA30B /* RollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901191F1A33D3007DA30B /* RollController.swift */; };
 		3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3629011B1F1A392C007DA30B /* AddRollViewController.swift */; };
 		364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A928D1F19CAE100B0D442 /* AppDelegate.swift */; };
 		364A92931F19CAE100B0D442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 364A92911F19CAE100B0D442 /* Main.storyboard */; };
@@ -18,6 +17,8 @@
 		364A92981F19CAE100B0D442 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 364A92961F19CAE100B0D442 /* LaunchScreen.storyboard */; };
 		364A92A31F19CAE100B0D442 /* AnalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92A21F19CAE100B0D442 /* AnalogTests.swift */; };
 		364A92AE1F19CAE100B0D442 /* AnalogUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */; };
+		3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */; };
+		36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +42,6 @@
 		362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenTableViewController.swift; sourceTree = "<group>"; };
 		362901151F1A3159007DA30B /* Roll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roll.swift; sourceTree = "<group>"; };
 		362901171F1A3162007DA30B /* Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
-		362901191F1A33D3007DA30B /* RollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollController.swift; sourceTree = "<group>"; };
 		3629011B1F1A392C007DA30B /* AddRollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRollViewController.swift; sourceTree = "<group>"; };
 		364A928A1F19CAE100B0D442 /* Analog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Analog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		364A928D1F19CAE100B0D442 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -55,6 +55,8 @@
 		364A92A91F19CAE100B0D442 /* AnalogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnalogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalogUITests.swift; sourceTree = "<group>"; };
 		364A92AF1F19CAE100B0D442 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingViewController.swift; sourceTree = "<group>"; };
+		36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRollViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,11 +109,8 @@
 			children = (
 				364A928D1F19CAE100B0D442 /* AppDelegate.swift */,
 				364A92911F19CAE100B0D442 /* Main.storyboard */,
-				3629011B1F1A392C007DA30B /* AddRollViewController.swift */,
-				362901151F1A3159007DA30B /* Roll.swift */,
-				362901191F1A33D3007DA30B /* RollController.swift */,
-				362901171F1A3162007DA30B /* Frame.swift */,
-				362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */,
+				36A3424B1F1DDD9200D00DC4 /* ViewController */,
+				36A3424C1F1DDDA800D00DC4 /* Model */,
 				364A92941F19CAE100B0D442 /* Assets.xcassets */,
 				364A92961F19CAE100B0D442 /* LaunchScreen.storyboard */,
 				364A92991F19CAE100B0D442 /* Info.plist */,
@@ -135,6 +134,26 @@
 				364A92AF1F19CAE100B0D442 /* Info.plist */,
 			);
 			path = AnalogUITests;
+			sourceTree = "<group>";
+		};
+		36A3424B1F1DDD9200D00DC4 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */,
+				3629011B1F1A392C007DA30B /* AddRollViewController.swift */,
+				3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */,
+				362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		36A3424C1F1DDDA800D00DC4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				362901151F1A3159007DA30B /* Roll.swift */,
+				362901171F1A3162007DA30B /* Frame.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,10 +294,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */,
-				3629011A1F1A33D3007DA30B /* RollController.swift in Sources */,
 				362901161F1A3159007DA30B /* Roll.swift in Sources */,
+				36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */,
 				3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */,
 				364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */,
+				3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */,
 				362901181F1A3162007DA30B /* Frame.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

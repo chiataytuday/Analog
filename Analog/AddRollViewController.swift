@@ -47,10 +47,10 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     var filteredArray = [String]()
+    var selectedRoll: Roll?
     
     @IBOutlet weak var filmSearchTable: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var questionLabel: UILabel!
     //Constraint to animate
     @IBOutlet weak var searchBarLocationConstraint: NSLayoutConstraint!
@@ -60,7 +60,6 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         filmSearchTable.dataSource = self
         filmSearchTable.delegate = self
         searchBar.delegate = self
@@ -69,6 +68,7 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         //register for keyboard notification
         registerForKeyboardNotifications()
         // Do any additional setup after loading the view.
+        self.navigationController?.navigationBar.tintColor = .black
     }
 
     override func didReceiveMemoryWarning() {
@@ -86,11 +86,34 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "searchResultCell", for: indexPath)
         
-        
         cell.textLabel?.text = filteredArray[indexPath.row]
         
         return cell
         
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCell = filmSearchTable.cellForRow(at: indexPath)
+        
+        if let cellText = selectedCell?.textLabel?.text {
+            if cellText == "Not Listed?" {
+                self.selectedRoll = nil
+                performSegue(withIdentifier: "customRollSegue", sender: self)
+                
+            } else if predefinedRolls.keys.contains(cellText) {
+                let roll = predefinedRolls[cellText]!
+                
+                if predefinedRolls[cellText]?.format == 120 {
+                    self.selectedRoll = roll
+                    performSegue(withIdentifier: "customRollSegue", sender: self)
+                } else {
+                    self.selectedRoll = roll
+                    performSegue(withIdentifier: "cameraSettingSegue", sender: self)
+                }
+            }
+        }
+        filmSearchTable.deselectRow(at: indexPath, animated: true)
     }
     
     
@@ -112,10 +135,9 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
         searchBar.showsCancelButton = true
-        cancelButton.isHidden = true
         questionLabel.isHidden = true
         
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.3) {
             self.searchBarLocationConstraint.constant = 0.0
             self.zeroDistanceConstraint.constant = 0.0
             self.tableBottomConstraint.constant = 0.0
@@ -127,17 +149,17 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        cancelButton.isHidden = false
         questionLabel.isHidden = false
         
-        UIView.animate(withDuration: 0.2) {
-            self.searchBarLocationConstraint.constant = 288.0
+        UIView.animate(withDuration: 0.3) {
+            self.searchBarLocationConstraint.constant = 163.0
             self.zeroDistanceConstraint.constant = 0.0
             self.tableBottomConstraint.constant = 0.0
             self.view.layoutIfNeeded()
         }
         
     }
+    
     
     
     //Keyboard inset registration
@@ -167,14 +189,25 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let selectedRoll = selectedRoll else { return }
+        
+        if segue.identifier == "customRollSegue" {
+            let destination = segue.destination as! CustomRollViewController
+            destination.customRoll = selectedRoll
+        } else if segue.identifier == "cameraSettingSegue" {
+            let destination = segue.destination as! CameraSettingViewController
+            destination.roll = selectedRoll
+        }
+        
+        
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
+    
 
 }
