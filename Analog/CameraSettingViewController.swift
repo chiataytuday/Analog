@@ -11,12 +11,33 @@ import UIKit
 
 class CameraSettingViewController: UIViewController {
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var cameraTextField: UITextField!
+    @IBOutlet weak var filmTextField: UITextField!
+    @IBOutlet weak var filmImage: UIImageView!
+    @IBOutlet weak var exposureLabel: UILabel!
+    
+    
     var roll: Roll?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        
+        if let roll = roll {
+            filmTextField.text = roll.filmName
+            filmTextField.isEnabled = false
+            if roll.format == 135 {
+                filmImage.image = UIImage(named: "135")
+            } else if roll.format == 120 {
+                filmImage.image = UIImage(named: "120")
+            }
+            
+            
+        }
+        
+        scrollView.registerForKeyboardNotifications()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -24,7 +45,36 @@ class CameraSettingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    @IBAction func cameraTextChanged(_ sender: UITextField) {
+        guard let cameraName = sender.text else { return }
+        
+        if !cameraName.isEmpty {
+            roll?.camera = cameraName
+        }
+        
+    }
+    
+    @IBAction func cameraTextReturnTriggered(_ sender: UITextField) {
+        cameraTextField.resignFirstResponder()
+    }
+    
+    @IBAction func exposureStepperValueChanged(_ sender: UIStepper) {
+        let value = sender.value
+        if value == -1 {
+            exposureLabel.text = "Pull 1.0 stop"
+        } else if value == 1 {
+            exposureLabel.text = "Push 1.0 stop"
+        } else if value == 0 {
+            exposureLabel.text = "Not pushed or pulled"
+        } else if value < 0 {
+            exposureLabel.text = "Pull \(-value) stops"
+        } else if value > 0 {
+            exposureLabel.text = "Push \(value) stops"
+        }
+        
+        roll?.pushPull = value
+    }
+    
     /*
     // MARK: - Navigation
 

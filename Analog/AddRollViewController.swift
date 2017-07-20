@@ -11,6 +11,7 @@ import UIKit
 class AddRollViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     let predefinedRolls: [String : Roll] = [
+        
         "Kodak Portra 400 (135)" : Roll(filmName: "Kodak Portra 400", format: 135, frameCount: 36, iso: 400),
         "Kodak Portra 400 (120)" : Roll(filmName: "Kodak Portra 400", format: 120, frameCount: nil, iso: 400),
         "Kodak Ektar 100 (135)" : Roll(filmName: "Kodak Ektar 100", format: 135, frameCount: 36, iso: 100),
@@ -39,9 +40,6 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         "Kodak T-Max 400 (120)" : Roll(filmName: "Kodak T-Max 400", format: 120, frameCount: nil, iso: 400)
     
     
-    
-    
-    
     ]
     
     
@@ -50,7 +48,7 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     var selectedRoll: Roll?
     
     @IBOutlet weak var filmSearchTable: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var filmSearchBar: UISearchBar!
     @IBOutlet weak var questionLabel: UILabel!
     //Constraint to animate
     @IBOutlet weak var searchBarLocationConstraint: NSLayoutConstraint!
@@ -62,12 +60,12 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         
         filmSearchTable.dataSource = self
         filmSearchTable.delegate = self
-        searchBar.delegate = self
+        filmSearchBar.delegate = self
         //hide cancel button on searchBar
-        searchBar.showsCancelButton = false
+        filmSearchBar.showsCancelButton = false
         //register for keyboard notification
-        registerForKeyboardNotifications()
-        // Do any additional setup after loading the view.
+        filmSearchTable.registerForKeyboardNotifications()
+        
         self.navigationController?.navigationBar.tintColor = .black
     }
 
@@ -116,12 +114,20 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         filmSearchTable.deselectRow(at: indexPath, animated: true)
     }
     
-    
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredArray = predefinedRolls.keys.filter({ (rollName) -> Bool in
-            return rollName.lowercased().contains(searchText.lowercased())
-        })
+    //helper method to filter the roll
+    func rollFilter(searchBar: UISearchBar, text: String) {
+        
+        if searchBar.selectedScopeButtonIndex == 0 {
+            filteredArray = predefinedRolls.keys.filter({ (rollName) -> Bool in
+                return rollName.lowercased().contains(text.lowercased())
+                    && rollName.lowercased().contains("135")
+            })
+        } else {
+            filteredArray = predefinedRolls.keys.filter({ (rollName) -> Bool in
+                return rollName.lowercased().contains(text.lowercased())
+                    && rollName.lowercased().contains("120")
+            })
+        }
         
         if let searchText = searchBar.text {
             if !searchText.isEmpty && !filteredArray.contains("Not Listed?") {
@@ -130,6 +136,16 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         filmSearchTable.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        rollFilter(searchBar: searchBar, text: searchText)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        if let text = searchBar.text {
+            rollFilter(searchBar: searchBar, text: text)
+        }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -145,6 +161,7 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
     }
+    
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
@@ -162,41 +179,11 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     
-    //Keyboard inset registration
-    func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(_:)), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
-    }
-    
-    func keyboardWasShown(_ notification: NSNotification) {
-        guard let info = notification.userInfo, let keyboardFrameValue = info[UIKeyboardFrameBeginUserInfoKey] as? NSValue else { return }
-        
-        let keyboardFrame = keyboardFrameValue.cgRectValue
-        let keyboardSize = keyboardFrame.size
-        
-        let contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
-        filmSearchTable.contentInset = contentInsets
-        filmSearchTable.scrollIndicatorInsets = contentInsets
-        
-    }
-    
-    
-    func keyboardWillBeHidden(_ notification: NSNotification) {
-        let contentInsets = UIEdgeInsets.zero
-        filmSearchTable.contentInset = contentInsets
-        filmSearchTable.scrollIndicatorInsets = contentInsets
-    }
-    
-    
-    
-    
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let selectedRoll = selectedRoll else { return }
+        filmSearchBar.resignFirstResponder()
         
         if segue.identifier == "customRollSegue" {
+            filmSearchBar.resignFirstResponder()
             let destination = segue.destination as! CustomRollViewController
             destination.customRoll = selectedRoll
         } else if segue.identifier == "cameraSettingSegue" {
@@ -204,9 +191,6 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
             destination.roll = selectedRoll
         }
         
-        
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
     
 
