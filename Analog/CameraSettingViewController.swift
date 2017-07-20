@@ -23,7 +23,6 @@ class CameraSettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         if let roll = roll {
             filmTextField.text = roll.filmName
             filmTextField.isEnabled = false

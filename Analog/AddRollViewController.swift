@@ -10,6 +10,7 @@ import UIKit
 
 class AddRollViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
+    //data for pre-defined rolls
     let predefinedRolls: [String : Roll] = [
         
         "Kodak Portra 400 (135)" : Roll(filmName: "Kodak Portra 400", format: 135, frameCount: 36, iso: 400),
@@ -150,37 +151,41 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
-        searchBar.showsCancelButton = true
-        questionLabel.isHidden = true
-        
         UIView.animate(withDuration: 0.3) {
             self.searchBarLocationConstraint.constant = 0.0
             self.zeroDistanceConstraint.constant = 0.0
             self.tableBottomConstraint.constant = 0.0
             self.view.layoutIfNeeded()
+            self.filmSearchBar.showsCancelButton = true
+            self.questionLabel.isHidden = true
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
         
     }
     
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-        searchBar.showsCancelButton = false
-        questionLabel.isHidden = false
+        reverseAnimation()
+    }
+    
+    func reverseAnimation() {
+        //resign first responser
+        self.filmSearchBar.resignFirstResponder()
         
         UIView.animate(withDuration: 0.3) {
             self.searchBarLocationConstraint.constant = 163.0
             self.zeroDistanceConstraint.constant = 0.0
             self.tableBottomConstraint.constant = 0.0
             self.view.layoutIfNeeded()
+            self.filmSearchBar.showsCancelButton = false
+            self.questionLabel.isHidden = false
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
         }
-        
     }
     
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        filmSearchBar.resignFirstResponder()
+        reverseAnimation()
         
         if segue.identifier == "customRollSegue" {
             filmSearchBar.resignFirstResponder()

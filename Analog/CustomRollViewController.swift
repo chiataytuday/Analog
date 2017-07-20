@@ -21,20 +21,22 @@ class CustomRollViewController: UIViewController {
     
     
     var customRoll: Roll?
-    //navigation bar button
-    let nextButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(checkAndPerformSegue))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = nextButton
+        //hide the warning label
+        warningLabel.isHidden = true
+        
+        //the next button
+        let navNextButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(checkAndPerformSegue))
+        self.navigationItem.rightBarButtonItem = navNextButton
         //disable next button on navigation controller
         checkAndEnable()
         
         //add tool bar
-        addToolBar(textField: filmTextField)
-        addToolBar(textField: frameTextField)
-        addToolBar(textField: isoTextField)
+        addToolBar(title: "Next", textField: filmTextField)
+        addToolBar(title: "Done", textField: isoTextField)
         
         //set 120 film text and first responser
         if let customRoll = customRoll {
@@ -49,12 +51,15 @@ class CustomRollViewController: UIViewController {
             isoTextField.isEnabled = false
             filmTypeImage.image = UIImage(named: "120")
             filmTypeSegment.isHidden = true
-            warningLabel.isHidden = true
+            addToolBar(title: "Done", textField: frameTextField)
             
-            frameTextField.becomeFirstResponder()
         } else {
+            
+            addToolBar(title: "Next", textField: frameTextField)
+            
             //format set to 135 since segment is initialized with 135
             customRoll = Roll(filmName: "", format: 135, frameCount: 0, iso: 0)
+            
             filmTextField.becomeFirstResponder()
         }
         
@@ -67,33 +72,33 @@ class CustomRollViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //This function is used to check whether all three fields are filled
+    //Check whether all three fields are filled and
     func checkAndEnable() {
         guard let filmText = filmTextField.text,
             let frameText = frameTextField.text,
-            let isoText = isoTextField.text
-        else {
-            nextButton.isEnabled = false
-            return
-        }
+            let isoText = isoTextField.text,
+            let navNextButton = navigationItem.rightBarButtonItem
+        else { return }
         
         if !filmText.isEmpty && !frameText.isEmpty && !isoText.isEmpty {
-            nextButton.isEnabled = true
+            navNextButton.isEnabled = true
         } else {
-            nextButton.isEnabled = false
+            navNextButton.isEnabled = false
         }
     }
     
+    //check for 0s and spaces
     func checkAndPerformSegue() {
         guard customRoll?.filmName != "",
             customRoll?.frameCount != 0,
             customRoll?.iso != 0
         else {
-            //Dismiss the keyboard
+            //Dismiss the keyboard if still on
             filmTextField.resignFirstResponder()
             frameTextField.resignFirstResponder()
             isoTextField.resignFirstResponder()
             
+            //show the warning label
             warningLabel.isHidden = false
             return
         }
@@ -150,11 +155,11 @@ class CustomRollViewController: UIViewController {
     
     
     //Toolbar
-    func addToolBar(textField: UITextField) {
+    func addToolBar(title: String, textField: UITextField) {
         let toolBar = UIToolbar()
         toolBar.tintColor = .black
-        let nextButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(toolBarNextButtonTapped))
-        toolBar.setItems([nextButton], animated: false)
+        let button = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(toolBarNextButtonTapped))
+        toolBar.setItems([button], animated: false)
         
         toolBar.isUserInteractionEnabled = true
         toolBar.sizeToFit()
@@ -171,7 +176,7 @@ class CustomRollViewController: UIViewController {
         } else if frameTextField.isFirstResponder && !isoTextField.isEnabled {
             frameTextField.resignFirstResponder()
         } else if isoTextField.isFirstResponder {
-            checkAndPerformSegue()
+            isoTextField.resignFirstResponder()
         }
     }
     
