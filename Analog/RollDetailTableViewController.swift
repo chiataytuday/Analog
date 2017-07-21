@@ -1,84 +1,52 @@
 //
-//  HomeScreenTableViewController.swift
+//  RollDetailTableViewController.swift
 //  Analog
 //
-//  Created by Zizhou Wang on 15/07/2017.
+//  Created by Zizhou Wang on 20/07/2017.
 //  Copyright © 2017 Zizhou Wang. All rights reserved.
 //
 
 import UIKit
 
-class HomeScreenTableViewController: UITableViewController {
-    
-    var album = [Roll]()
-    
+class RollDetailTableViewController: UITableViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //Hide unused cell
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        tableView.tableFooterView?.isHidden = true
-        
-        
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        if let savedAlbum = Roll.loadAlbum() {
-            album = savedAlbum
-        }
-        tableView.reloadData()
-    }
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - Table view data source
-
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 0
-//    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return album.count
-    }
-
     
+    
+    
+    // MARK: - Table view data source
+    
+    
+    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "rollCell", for: indexPath) as! HomeTableViewCell
-        let roll = album[indexPath.row]
-        
-        cell.update(with: roll)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
         // Configure the cell...
 
         return cell
     }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 105.0
-    }
-    
+    */
 
-    
+    /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    
-    @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
-        
-    }
-    
+    */
 
     /*
     // Override to support editing the table view.

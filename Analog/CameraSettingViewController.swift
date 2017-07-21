@@ -31,8 +31,7 @@ class CameraSettingViewController: UIViewController {
             } else if roll.format == 120 {
                 filmImage.image = UIImage(named: "120")
             }
-            
-            
+            cameraTextField.becomeFirstResponder()
         }
         
         scrollView.registerForKeyboardNotifications()
@@ -74,14 +73,21 @@ class CameraSettingViewController: UIViewController {
         roll?.pushPull = value
     }
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "backToHomeSegue" {
+            if let roll = roll {
+                roll.dateAdded = Date()
+                Roll.addRoll(roll)
+            }
+        }
+    }
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-    }
-    */
+    
+    
 
 }

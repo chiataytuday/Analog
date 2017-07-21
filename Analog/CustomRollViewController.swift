@@ -52,6 +52,7 @@ class CustomRollViewController: UIViewController {
             filmTypeImage.image = UIImage(named: "120")
             filmTypeSegment.isHidden = true
             addToolBar(title: "Done", textField: frameTextField)
+            frameTextField.becomeFirstResponder()
             
         } else {
             
@@ -87,21 +88,19 @@ class CustomRollViewController: UIViewController {
         }
     }
     
-    //check for 0s and spaces
+    //check for 0s and empty spaces
     func checkAndPerformSegue() {
-        guard customRoll?.filmName != "",
-            customRoll?.frameCount != 0,
-            customRoll?.iso != 0
-        else {
-            //Dismiss the keyboard if still on
-            filmTextField.resignFirstResponder()
-            frameTextField.resignFirstResponder()
-            isoTextField.resignFirstResponder()
-            
-            //show the warning label
-            warningLabel.isHidden = false
-            return
+        guard customRoll?.filmName != "", customRoll?.frameCount != 0, customRoll?.iso != 0
+            else {
+                //Dismiss the keyboard if still on
+                filmTextField.resignFirstResponder()
+                frameTextField.resignFirstResponder()
+                isoTextField.resignFirstResponder()
+                //show the warning label
+                warningLabel.isHidden = false
+                return
         }
+        
         performSegue(withIdentifier: "cameraSettingFromCustomSegue", sender: self)
     }
     
@@ -115,17 +114,23 @@ class CustomRollViewController: UIViewController {
     
     @IBAction func frameChanged(_ sender: UITextField) {
         
-        guard let text = sender.text, let frameCount = Int(text) else { return }
+        guard let text = sender.text else { return }
+        //if casting is successful
+        if let frameCount = Int(text) {
+            customRoll?.frameCount = frameCount
+        }
         
-        customRoll?.frameCount = frameCount
         checkAndEnable()
     }
     
     @IBAction func isoChanged(_ sender: UITextField) {
         
-        guard let text = sender.text, let iso = Int(text) else { return }
+        guard let text = sender.text else { return }
+        //if casting is sucesseful
+        if let iso = Int(text) {
+            customRoll?.iso = iso
+        }
         
-        customRoll?.iso = iso
         checkAndEnable()
     }
     
@@ -158,9 +163,10 @@ class CustomRollViewController: UIViewController {
     func addToolBar(title: String, textField: UITextField) {
         let toolBar = UIToolbar()
         toolBar.tintColor = .black
+        //Add a flexible space so that the button is positioned on the right
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         let button = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(toolBarNextButtonTapped))
-        toolBar.setItems([button], animated: false)
-        
+        toolBar.setItems([flexSpace, button], animated: false)
         toolBar.isUserInteractionEnabled = true
         toolBar.sizeToFit()
         
@@ -186,7 +192,6 @@ class CustomRollViewController: UIViewController {
         if segue.identifier == "cameraSettingFromCustomSegue" {
             let destination = segue.destination as! CameraSettingViewController
             destination.roll = customRoll
-            
         }
         
         // Get the new view controller using segue.destinationViewController.

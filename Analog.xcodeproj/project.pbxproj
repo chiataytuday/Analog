@@ -21,6 +21,8 @@
 		3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */; };
 		368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */; };
 		36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */; };
+		36C78A6B1F20DCFF005D4738 /* RollDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C78A6A1F20DCFF005D4738 /* RollDetailTableViewController.swift */; };
+		36C78A711F20F446005D4738 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C78A701F20F446005D4738 /* HomeTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingViewController.swift; sourceTree = "<group>"; };
 		368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInsetExtension.swift; sourceTree = "<group>"; };
 		36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRollViewController.swift; sourceTree = "<group>"; };
+		36C78A6A1F20DCFF005D4738 /* RollDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollDetailTableViewController.swift; sourceTree = "<group>"; };
+		36C78A701F20F446005D4738 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,9 +159,11 @@
 			isa = PBXGroup;
 			children = (
 				362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */,
+				36C78A701F20F446005D4738 /* HomeTableViewCell.swift */,
 				3629011B1F1A392C007DA30B /* AddRollViewController.swift */,
 				36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */,
 				3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */,
+				36C78A6A1F20DCFF005D4738 /* RollDetailTableViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -314,9 +320,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */,
+				36C78A6B1F20DCFF005D4738 /* RollDetailTableViewController.swift in Sources */,
 				362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */,
 				362901161F1A3159007DA30B /* Roll.swift in Sources */,
 				36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */,
+				36C78A711F20F446005D4738 /* HomeTableViewCell.swift in Sources */,
 				3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */,
 				364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */,
 				3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */,
