@@ -11,10 +11,9 @@ import UIKit
 class HomeTableViewCell: UITableViewCell {
 
     @IBOutlet weak var filmInfoDescriptionLabel: UILabel!
-    
     @IBOutlet weak var filmTypeImage: UIImageView!
-    
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var cameraLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,7 +29,11 @@ class HomeTableViewCell: UITableViewCell {
     func update(with roll: Roll) {
         filmTypeImage.image = UIImage(named: "\(roll.format)")
         
-        filmInfoDescriptionLabel.text = roll.filmName + ", " + "\(roll.frameCount)"
+        if let camera = roll.camera {
+            cameraLabel.text = camera
+        }
+        
+        filmInfoDescriptionLabel.text = roll.filmName + ", frame: \(roll.frameCount), iso: \(roll.iso)"
         dateLabel.text = roll.dateAdded?.description
     }
 

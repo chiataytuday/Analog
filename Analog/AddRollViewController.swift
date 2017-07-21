@@ -8,45 +8,14 @@
 
 import UIKit
 
-class AddRollViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
-    
-    //data for pre-defined rolls
-    let predefinedRolls: [String : Roll] = [
-        
-        "Kodak Portra 400 (135)" : Roll(filmName: "Kodak Portra 400", format: 135, frameCount: 36, iso: 400),
-        "Kodak Portra 400 (120)" : Roll(filmName: "Kodak Portra 400", format: 120, frameCount: 0, iso: 400),
-        "Kodak Ektar 100 (135)" : Roll(filmName: "Kodak Ektar 100", format: 135, frameCount: 36, iso: 100),
-        "Ilford HP5 Plus (135)" : Roll(filmName: "Ilford HP5 Plus", format: 135, frameCount: 36, iso: 400),
-        "Kodak Tri-X 400 (135)" : Roll(filmName: "Kodak Tri-X 400", format: 135, frameCount: 36, iso: 400),
-        "Ilford HP5 Plus (120)" : Roll(filmName: "Ilford HP5 Plus", format: 120, frameCount: 0, iso: 400),
-        "Kodak Tri-X 400 (120)" : Roll(filmName: "Kodak Tri-X 400", format: 120, frameCount: 0, iso: 400),
-        "Kodak Portra 160 (120)" : Roll(filmName: "Kodak Portra 160", format: 120, frameCount: 0, iso: 160),
-        "Kodak T-Max 400 (135)" : Roll(filmName: "Kodak T-Max 400", format: 135, frameCount: 36, iso: 400),
-        "Kodak Portra 800 (135)" : Roll(filmName: "Kodak Portra 800", format: 135, frameCount: 36, iso: 800),
-        "Kodak Ektar 100 (120)" : Roll(filmName: "Kodak Ektar 100", format: 120, frameCount: 0, iso: 100),
-        "Fuji Pro 400H (120)" : Roll(filmName: "Fuji Pro 400H", format: 120, frameCount: 0, iso: 400),
-        "Kodak Portra 160 (135)" : Roll(filmName: "Kodak Portra 160", format: 135, frameCount: 36, iso: 160),
-        "Fuji Neopan 100 (120)" : Roll(filmName: "Fuji Neopan 100", format: 120, frameCount: 0, iso: 100),
-        "Ilford Delta 3200 (135)" : Roll(filmName: "Ilford Delta 3200", format: 135, frameCount: 36, iso: 3200),
-        "Kodak UltraMax 400 (135, 36exp.)" : Roll(filmName: "Kodak UltraMax 400", format: 135, frameCount: 36, iso: 400),
-        "Ilford Delta 3200 (120)" : Roll(filmName: "Ilford Delta 3200", format: 120, frameCount: 0, iso: 3200),
-        "Fuji Provia 100F (135)" : Roll(filmName: "Fuji Provia 100F", format: 135, frameCount: 36, iso: 100),
-        "Fuji Pro 400H (135)" : Roll(filmName: "Fuji Pro 400H", format: 135, frameCount: 36, iso: 400),
-        "Ilford Delta 100 (120)" : Roll(filmName: "Ilford Delta 100", format: 120, frameCount: 0, iso: 100),
-        "Fuji Neopan 100 (135)" : Roll(filmName: "Fuji Neopan 100", format: 135, frameCount: 0, iso: 100),
-        "Agfa Vista Plus 200 (135)" : Roll(filmName: "Agfa Vista Plus 200", format: 135, frameCount: 36, iso: 200),
-        "Kodak T-Max 100 (135)" : Roll(filmName: "Kodak T-Max 100", format: 135, frameCount: 36, iso: 100),
-        "Kodak UltraMax 400 (135, 24exp.)" : Roll(filmName: "Kodak UltraMax 400", format: 135, frameCount: 24, iso: 400),
-        "Ilford FP4 Plus (120)" :Roll (filmName: "Ilford FP4 Plus", format: 120, frameCount: 0, iso: 125),
-        "Kodak T-Max 400 (120)" : Roll(filmName: "Kodak T-Max 400", format: 120, frameCount: 0, iso: 400)
-    
-    
-    ]
-    
-    
+class AddRollViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, RecentlyAddedTableViewControllerDelegate {
     
     var filteredArray = [String]()
     var selectedRoll: Roll?
+    //decleard in order to pass it to the last view controller
+    var selectedRollKey: String?
+    
+    let recentlyAddedController = RecentlyAddedTableViewController()
     
     @IBOutlet weak var filmSearchTable: UITableView!
     @IBOutlet weak var filmSearchBar: UISearchBar!
@@ -59,8 +28,10 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        filmSearchTable.dataSource = self
-        filmSearchTable.delegate = self
+        filmSearchTable.dataSource = recentlyAddedController
+        filmSearchTable.delegate = recentlyAddedController
+        //Add self as the recent dataSource's delegate
+        recentlyAddedController.delegate = self
         filmSearchBar.delegate = self
         //hide cancel button on searchBar
         filmSearchBar.showsCancelButton = false
@@ -93,21 +64,23 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCell = filmSearchTable.cellForRow(at: indexPath)
+        let selectedCellView = filmSearchTable.cellForRow(at: indexPath)
+        let predefinedRolls = Roll.predefinedRolls
         
-        if let cellText = selectedCell?.textLabel?.text {
+        if let cellText = selectedCellView?.textLabel?.text {
             if cellText == "Not Listed?" {
                 self.selectedRoll = nil
                 performSegue(withIdentifier: "customRollSegue", sender: self)
                 
             } else if predefinedRolls.keys.contains(cellText) {
-                let roll = predefinedRolls[cellText]!
+                //set the selected roll key to pass
+                selectedRollKey = cellText
+                
+                selectedRoll = predefinedRolls[cellText]!
                 
                 if predefinedRolls[cellText]?.format == 120 {
-                    self.selectedRoll = roll
                     performSegue(withIdentifier: "customRollSegue", sender: self)
                 } else {
-                    self.selectedRoll = roll
                     performSegue(withIdentifier: "cameraSettingSegue", sender: self)
                 }
             }
@@ -115,16 +88,27 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         filmSearchTable.deselectRow(at: indexPath, animated: true)
     }
     
+//    //Recently selected delegate method
+//    func recentlySelectedDidSelect(roll: Roll) {
+//        self.selectedRoll = roll
+//        
+//        if roll.format == 120 {
+//            performSegue(withIdentifier: "customRollSegue", sender: self)
+//        } else if roll.format == 135 {
+//            performSegue(withIdentifier: "cameraSettingSegue", sender: self)
+//        }
+//    }
+    
     //helper method to filter the roll
     func rollFilter(searchBar: UISearchBar, text: String) {
         
         if searchBar.selectedScopeButtonIndex == 0 {
-            filteredArray = predefinedRolls.keys.filter({ (rollName) -> Bool in
+            filteredArray = Roll.predefinedRolls.keys.filter({ (rollName) -> Bool in
                 return rollName.lowercased().contains(text.lowercased())
                     && rollName.lowercased().contains("135")
             })
         } else {
-            filteredArray = predefinedRolls.keys.filter({ (rollName) -> Bool in
+            filteredArray = Roll.predefinedRolls.keys.filter({ (rollName) -> Bool in
                 return rollName.lowercased().contains(text.lowercased())
                     && rollName.lowercased().contains("120")
             })
@@ -150,6 +134,9 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        filmSearchTable.dataSource = self
+        filmSearchTable.delegate = self
+        filmSearchTable.reloadData()
         
         UIView.animate(withDuration: 0.3) {
             self.searchBarLocationConstraint.constant = 0.0
@@ -186,6 +173,13 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    //Protocol requirement to do segue for recently added rolls
+    func performSegueWithInfo(roll: Roll, selectedRollKey: String) {
+        self.selectedRoll = roll
+        self.selectedRollKey = selectedRollKey
+        performSegue(withIdentifier: "cameraSettingSegue", sender: self)
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         reverseAnimation()
@@ -193,9 +187,11 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         if segue.identifier == "customRollSegue" {
             filmSearchBar.resignFirstResponder()
             let destination = segue.destination as! CustomRollViewController
+            destination.selectedRollKey = selectedRollKey
             destination.customRoll = selectedRoll
         } else if segue.identifier == "cameraSettingSegue" {
             let destination = segue.destination as! CameraSettingViewController
+            destination.selectedRollKey = selectedRollKey
             destination.roll = selectedRoll
         }
         

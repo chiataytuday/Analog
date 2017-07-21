@@ -18,15 +18,19 @@ class CustomRollViewController: UIViewController {
     @IBOutlet weak var filmTypeSegment: UISegmentedControl!
     @IBOutlet weak var filmTypeImage: UIImageView!
     @IBOutlet weak var warningLabel: UILabel!
+    @IBOutlet weak var conflictWarningLabel: UILabel!
     
     
     var customRoll: Roll?
+    var selectedRollKey: String?
+    let predefinedRoll = Roll.predefinedRolls
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //hide the warning label
+        //hide the warning labels
         warningLabel.isHidden = true
+        conflictWarningLabel.isHidden = true
         
         //the next button
         let navNextButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(checkAndPerformSegue))
@@ -89,19 +93,47 @@ class CustomRollViewController: UIViewController {
     }
     
     //check for 0s and empty spaces
+    //As well as save recently added
     func checkAndPerformSegue() {
-        guard customRoll?.filmName != "", customRoll?.frameCount != 0, customRoll?.iso != 0
-            else {
-                //Dismiss the keyboard if still on
-                filmTextField.resignFirstResponder()
-                frameTextField.resignFirstResponder()
-                isoTextField.resignFirstResponder()
-                //show the warning label
-                warningLabel.isHidden = false
-                return
+        guard let filmName = customRoll?.filmName,
+            let frameCount = customRoll?.frameCount,
+            let iso = customRoll?.iso,
+            let format = customRoll?.format else { return }
+        
+        if filmName.isEmpty || iso == 0 || format == 0 {
+            //Dismiss all the keyboards
+            filmTextField.resignFirstResponder()
+            frameTextField.resignFirstResponder()
+            isoTextField.resignFirstResponder()
+            //show the warning label
+            warningLabel.isHidden = false
+            return
         }
         
-        performSegue(withIdentifier: "cameraSettingFromCustomSegue", sender: self)
+        //following block to check whether name is illegal
+        //Making sure it's a custom roll
+        guard filmTextField.isEnabled else {
+            performSegue(withIdentifier: "cameraSettingFromCustomSegue", sender: self)
+            return
+        }
+        
+        let customRollKey = filmName + " (\(format), \(frameCount)exp.)"
+        
+        //Do below if containing an illegal roll name
+        if predefinedRoll.keys.contains(customRollKey) {
+            //Dismiss all the keyboards
+            filmTextField.resignFirstResponder()
+            frameTextField.resignFirstResponder()
+            isoTextField.resignFirstResponder()
+            //show the warning label
+            conflictWarningLabel.isHidden = false
+            //clear text
+            filmTextField.clearsOnBeginEditing = true
+        } else {
+            //It should be an legal name now
+            performSegue(withIdentifier: "cameraSettingFromCustomSegue", sender: self)
+        }
+        
     }
     
     //call the check function whenever text was changed
@@ -152,10 +184,10 @@ class CustomRollViewController: UIViewController {
     
     //hide the warning when text begin to edit again
     @IBAction func textFieldBeginEditing(_ sender: UITextField) {
-        if warningLabel.isHidden == false {
-            warningLabel.isHidden = true
-        }
-        
+        //reverse the possible action while film name conflict
+        filmTextField.clearsOnBeginEditing = false
+        warningLabel.isHidden = true
+        conflictWarningLabel.isHidden = true
     }
     
     
@@ -191,6 +223,7 @@ class CustomRollViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "cameraSettingFromCustomSegue" {
             let destination = segue.destination as! CameraSettingViewController
+            destination.selectedRollKey = selectedRollKey
             destination.roll = customRoll
         }
         

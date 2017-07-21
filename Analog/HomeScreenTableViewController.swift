@@ -14,6 +14,8 @@ class HomeScreenTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //hide the back button
+        navigationItem.setHidesBackButton(true, animated: false)
         
         //Hide unused cell
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))

@@ -17,8 +17,9 @@ class CameraSettingViewController: UIViewController {
     @IBOutlet weak var filmImage: UIImageView!
     @IBOutlet weak var exposureLabel: UILabel!
     
-    
+    var selectedRollKey: String?
     var roll: Roll?
+    let predefinedRoll = Roll.predefinedRolls
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +34,7 @@ class CameraSettingViewController: UIViewController {
             }
             cameraTextField.becomeFirstResponder()
         }
-        
         scrollView.registerForKeyboardNotifications()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -74,17 +73,54 @@ class CameraSettingViewController: UIViewController {
     }
     
     
+    @IBAction func doneButtonTriggered(_ sender: UIBarButtonItem) {
+        if let roll = roll {
+            guard let text = cameraTextField.text else {
+                //Simply add date and save roll
+                roll.dateAdded = Date()
+                Roll.addRoll(roll)
+                return
+            }
+            
+            if text.isEmpty {
+                roll.camera = nil
+            } else {
+                roll.camera = text
+            }
+            
+            roll.dateAdded = Date()
+            Roll.addRoll(roll)
+            
+            //Code for adding the roll to recently added
+            guard selectedRollKey != nil else {
+                //Leaning the roll for future use
+                let leanedRoll = Roll(filmName: roll.filmName, format: roll.format, frameCount: roll.frameCount, iso: roll.iso)
+                Roll.saveCustomAdded(roll: leanedRoll)
+                performSegue(withIdentifier: "backToHomeSegue", sender: self)
+                return
+            }
+            
+            Roll.saveRecentlyAdded(for: selectedRollKey!)
+            performSegue(withIdentifier: "backToHomeSegue", sender: self)
+        }
+        
+    }
+    
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "backToHomeSegue" {
-            if let roll = roll {
-                roll.dateAdded = Date()
-                Roll.addRoll(roll)
-            }
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "backToHomeSegue" {
+//            if let roll = roll, let text = cameraTextField.text {
+//                if text.isEmpty {
+//                    roll.camera = nil
+//                }
+//                roll.dateAdded = Date()
+//                Roll.addRoll(roll)
+//            }
+//        }
+//    }
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     
