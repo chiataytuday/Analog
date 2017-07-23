@@ -36,5 +36,6 @@ class HomeTableViewCell: UITableViewCell {
         filmInfoDescriptionLabel.text = roll.filmName + ", frame: \(roll.frameCount), iso: \(roll.iso)"
         dateLabel.text = roll.dateAdded?.description
     }
+    
 
 }

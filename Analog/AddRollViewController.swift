@@ -30,11 +30,16 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         
         filmSearchTable.dataSource = recentlyAddedController
         filmSearchTable.delegate = recentlyAddedController
+        //hideScopeBar
+        self.filmSearchBar.showsScopeBar = false
+        
         //Add self as the recent dataSource's delegate
         recentlyAddedController.delegate = self
+        
         filmSearchBar.delegate = self
         //hide cancel button on searchBar
         filmSearchBar.showsCancelButton = false
+        filmSearchBar.showsScopeBar = false
         //register for keyboard notification
         filmSearchTable.registerForKeyboardNotifications()
         
@@ -88,17 +93,6 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         filmSearchTable.deselectRow(at: indexPath, animated: true)
     }
     
-//    //Recently selected delegate method
-//    func recentlySelectedDidSelect(roll: Roll) {
-//        self.selectedRoll = roll
-//        
-//        if roll.format == 120 {
-//            performSegue(withIdentifier: "customRollSegue", sender: self)
-//        } else if roll.format == 135 {
-//            performSegue(withIdentifier: "cameraSettingSegue", sender: self)
-//        }
-//    }
-    
     //helper method to filter the roll
     func rollFilter(searchBar: UISearchBar, text: String) {
         
@@ -145,6 +139,7 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
             self.view.layoutIfNeeded()
             self.filmSearchBar.showsCancelButton = true
             self.questionLabel.isHidden = true
+            self.filmSearchBar.showsScopeBar = true
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
         
@@ -155,7 +150,20 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else {
+            return
+        }
+        
+        if text.isEmpty {
+            //set the delegate to recentlyAddedController
+            filmSearchTable.dataSource = recentlyAddedController
+            filmSearchTable.delegate = recentlyAddedController
+            //hide the scope bar if text is not empty
+            filmSearchBar.showsScopeBar = false
+        }
+        
         reverseAnimation()
+
     }
     
     func reverseAnimation() {
@@ -177,7 +185,11 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     func performSegueWithInfo(roll: Roll, selectedRollKey: String) {
         self.selectedRoll = roll
         self.selectedRollKey = selectedRollKey
-        performSegue(withIdentifier: "cameraSettingSegue", sender: self)
+        if roll.format == 120 {
+            performSegue(withIdentifier: "customRollSegue", sender: self)
+        } else {
+            performSegue(withIdentifier: "cameraSettingSegue", sender: self)
+        }
     }
     
     

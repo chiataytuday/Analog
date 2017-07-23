@@ -19,6 +19,7 @@ class CustomRollViewController: UIViewController {
     @IBOutlet weak var filmTypeImage: UIImageView!
     @IBOutlet weak var warningLabel: UILabel!
     @IBOutlet weak var conflictWarningLabel: UILabel!
+    @IBOutlet weak var framesLabel: UILabel!
     
     
     var customRoll: Roll?
@@ -55,6 +56,8 @@ class CustomRollViewController: UIViewController {
             isoTextField.isEnabled = false
             filmTypeImage.image = UIImage(named: "120")
             filmTypeSegment.isHidden = true
+            framesLabel.text = "Frames on your camera"
+            
             addToolBar(title: "Done", textField: frameTextField)
             frameTextField.becomeFirstResponder()
             
@@ -100,7 +103,7 @@ class CustomRollViewController: UIViewController {
             let iso = customRoll?.iso,
             let format = customRoll?.format else { return }
         
-        if filmName.isEmpty || iso == 0 || format == 0 {
+        if filmName.isEmpty || frameCount == 0 || iso == 0 {
             //Dismiss all the keyboards
             filmTextField.resignFirstResponder()
             frameTextField.resignFirstResponder()
@@ -191,7 +194,7 @@ class CustomRollViewController: UIViewController {
     }
     
     
-    //Toolbar
+    //Keyboard Toolbar
     func addToolBar(title: String, textField: UITextField) {
         let toolBar = UIToolbar()
         toolBar.tintColor = .black

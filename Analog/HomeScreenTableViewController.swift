@@ -11,6 +11,7 @@ import UIKit
 class HomeScreenTableViewController: UITableViewController {
     
     var album = [Roll]()
+    var rollIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,13 +70,18 @@ class HomeScreenTableViewController: UITableViewController {
         return 105.0
     }
     
-
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //prepare for the destination's index path
+        rollIndexPath = indexPath
+        
+        performSegue(withIdentifier: "showRollSegue", sender: self)
+    }
     
     // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
+//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        // Return false if you do not want the specified item to be editable.
+//        return true
+//    }
     
     @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
         
@@ -109,14 +115,19 @@ class HomeScreenTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showRollSegue" {
+            let destination = segue.destination as! FrameEditingViewController
+            //set the index path for usage
+            destination.rollIndexPath = rollIndexPath
+        }
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
+    
 
 }

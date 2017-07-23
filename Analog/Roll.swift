@@ -19,6 +19,15 @@ struct PropertyKeys {
     static let frames = "frames"
     static let dateAdded = "dateAdded"
     static let lastEdited = "lastEdited"
+    
+    //for frame object
+    static let location = "location"
+    static let addDate = "addDate"
+    static let aperture = "aperture"
+    static let shutter = "shutter"
+    static let compensation = "compensation"
+    static let notes = "notes"
+    
 }
 
 class Roll: NSObject, NSCoding {
@@ -32,7 +41,8 @@ class Roll: NSObject, NSCoding {
     var title: String?
     var camera: String?
     var pushPull: Double?
-    var frames: [Frame]?
+    var frames: [Frame?]?
+    //reserved, should not change
     var dateAdded: Date?
     var lastEdited: Date?
     
@@ -71,7 +81,7 @@ class Roll: NSObject, NSCoding {
         let title = aDecoder.decodeObject(forKey: PropertyKeys.title) as? String
         let camera = aDecoder.decodeObject(forKey: PropertyKeys.camera) as? String
         let pushPull = aDecoder.decodeObject(forKey: PropertyKeys.pushPull) as? Double
-        let frames = aDecoder.decodeObject(forKey: PropertyKeys.frames) as? [Frame]
+        let frames = aDecoder.decodeObject(forKey: PropertyKeys.frames) as? [Frame?]
         let dateAdded = aDecoder.decodeObject(forKey: PropertyKeys.dateAdded) as? Date
         let lastEdited = aDecoder.decodeObject(forKey: PropertyKeys.lastEdited) as? Date
         
@@ -82,6 +92,13 @@ class Roll: NSObject, NSCoding {
         self.frames = frames
         self.dateAdded = dateAdded
         self.lastEdited = lastEdited
+    }
+    
+    //return equal if two objects are added at the exact same date
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let roll = object as? Roll else {return false}
+        
+        return dateAdded == roll.dateAdded
     }
     
     static let predefinedRolls: [String : Roll] = [
@@ -101,7 +118,7 @@ class Roll: NSObject, NSCoding {
         "Ilford Delta 100 (120)" : Roll(filmName: "Ilford Delta 100", format: 120, frameCount: 0, iso: 100),
         "Fujicolor PRO 400H (135)" : Roll(filmName: "Fujicolor PRO 400H", format: 135, frameCount: 36, iso: 400),
         "Kodak GC/UltraMax 400 (135, 24exp.)" : Roll(filmName: "Kodak GC/UltraMax 400", format: 135, frameCount: 24, iso: 400),
-        "Fujifilm Neopan 100 Acros (135)" : Roll(filmName: "Fujifilm Neopan 100 Acros", format: 100, frameCount: 36, iso: 100),
+        "Fujifilm Neopan 100 Acros (135)" : Roll(filmName: "Fujifilm Neopan 100 Acros", format: 135, frameCount: 36, iso: 100),
         "Kodak Ektar 100 (120)" : Roll(filmName: "Kodak Ektar 100", format: 120, frameCount: 0, iso: 100),
         "Kodak T-Max 100 (135)" : Roll(filmName: "Kodak T-Max 100", format: 135, frameCount: 36, iso: 100),
         "Ilford FP4 Plus (120)" : Roll(filmName: "Ilford FP4 Plus", format: 120, frameCount: 0, iso: 125),
@@ -134,6 +151,9 @@ class Roll: NSObject, NSCoding {
         "Aristra EDU Ultra 100 (120)" : Roll(filmName: "Aristra EDU Ultra 100", format: 120, frameCount: 0, iso: 100)
     ]
     
+    //new roll adding function
+    
+    //Only for adding new roll use
     static func addRoll(_ roll: Roll) {
         if let loadedAlbum = Roll.loadAlbum() {
             var albumToSave = loadedAlbum
@@ -150,15 +170,17 @@ class Roll: NSObject, NSCoding {
         return NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll]
     }
     
+    
+    //recently added function
+    
     //func for saveing recently added rolls, by passing in a string
     //the func will check whether the roll is predefined, and add it to the archive file
     static func saveRecentlyAdded(for key: String) {
-        guard var recentlyAddedRolls = Roll.loadRecentlyAdded()
-            else {
-                var emptyDict = [String : Roll]()
-                emptyDict[key] = predefinedRolls[key]
-                NSKeyedArchiver.archiveRootObject(emptyDict, toFile: Roll.recentlyAddedArchiveURL.path)
-                return
+        guard var recentlyAddedRolls = Roll.loadRecentlyAdded() else {
+            var emptyDict = [String : Roll]()
+            emptyDict[key] = predefinedRolls[key]
+            NSKeyedArchiver.archiveRootObject(emptyDict, toFile: Roll.recentlyAddedArchiveURL.path)
+            return
         }
         
         //Prepare for not to overwrite existing recently added
@@ -170,16 +192,15 @@ class Roll: NSObject, NSCoding {
     
     //function to save a custom added roll to the recently added roll archive file
     static func saveCustomAdded(roll: Roll) {
-        let customRollKey = roll.filmName + " (\(roll.iso), \(roll.frameCount)exp.)"
+        let customRollKey = roll.filmName + " (\(roll.format), \(roll.frameCount)exp.)"
         
         guard !predefinedRolls.keys.contains(customRollKey) else { return }
         
-        guard var recentlyAddedRolls = Roll.loadRecentlyAdded()
-            else {
-                var emptyDict = [String : Roll]()
-                emptyDict[customRollKey] = roll
-                NSKeyedArchiver.archiveRootObject(emptyDict, toFile: Roll.recentlyAddedArchiveURL.path)
-                return
+        guard var recentlyAddedRolls = Roll.loadRecentlyAdded() else {
+            var emptyDict = [String : Roll]()
+            emptyDict[customRollKey] = roll
+            NSKeyedArchiver.archiveRootObject(emptyDict, toFile: Roll.recentlyAddedArchiveURL.path)
+            return
         }
         
         if !recentlyAddedRolls.keys.contains(customRollKey) {
@@ -192,5 +213,68 @@ class Roll: NSObject, NSCoding {
     static func loadRecentlyAdded() -> [String : Roll]? {
         return NSKeyedUnarchiver.unarchiveObject(withFile: Roll.recentlyAddedArchiveURL.path) as? [String: Roll]
     }
+    
+    //function for delete recently added
+    static func deleteRecentlyAdded(with key: String) {
+        guard var recentlyAdded = Roll.loadRecentlyAdded() else { return }
+        recentlyAdded[key] = nil
+        NSKeyedArchiver.archiveRootObject(recentlyAdded, toFile: Roll.recentlyAddedArchiveURL.path)
+    }
+    
+    
+    //basic roll maneuver
+    //all of the method below requires an existing roll
+    
+    //Bug notice: :>
+    //If two different row should have different date added, date edited
+    //But if the user attemped to change the system time and add two rolls of the same time,
+    //Previous roll will be overwritten
+    static func saveRoll(for rollIndex: IndexPath, with roll: Roll) {
+        guard var album = Roll.loadAlbum(), album.contains(roll) else { return }
+        
+        roll.lastEdited = Date()
+        album.remove(at: rollIndex.row)
+        album.insert(roll, at: 0)
+        
+        NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+    }
+    
+    //load a specific roll from memory
+    static func loadRoll(with rollIndex: IndexPath) -> Roll? {
+        guard let album = Roll.loadAlbum(), album.indices.contains(rollIndex.row) else { return nil }
+        
+        return album[rollIndex.row]
+    }
+    
+    //deleting roll
+    static func deleteRoll(at rollIndex: IndexPath) {
+        guard var album = Roll.loadAlbum(), album.indices.contains(rollIndex.row) else { return }
+        album.remove(at: rollIndex.row)
+        
+        NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+    }
+    
+//    //Add or edit frame
+//    static func saveFrame(for rollIndex: IndexPath, frameIndex: Int, with frame: Frame) {
+//        //Have to make sure the roll already exist
+//        guard let album = Roll.loadAlbum(), rollIndex.row <= album.count - 1 else { return }
+//        
+//        let roll = album[rollIndex.row]
+//        var frames = roll.frames
+//        
+//        if frames == nil {
+//            frames = [Frame]()
+//            frames?.append(frame)
+//            roll.frames = frames
+//            Roll.saveRoll(for: rollIndex, with: roll)
+//        } else {
+//            guard var nonEmptyFrames = frames, frameIndex <= nonEmptyFrames.count - 1 else { return }
+//            
+//            nonEmptyFrames[frameIndex] = frame
+//            roll.frames = nonEmptyFrames
+//            
+//            Roll.saveRoll(for: rollIndex, with: roll)
+//        }
+//    }
     
 }
