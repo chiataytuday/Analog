@@ -14,6 +14,7 @@ protocol RollDetailTableViewControllerDelegate {
     func didUpdateLocationDescription(locationName: String, locationDescription: String)
     func disableControls()
     func enableControls()
+    func didUpdateDate(with date: Date)
 }
 
 class RollDetailTableViewController: UITableViewController, CLLocationManagerDelegate, MKMapViewDelegate {
@@ -21,11 +22,18 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var locationDetailLabel: UILabel!
+    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
     
     //setting up location manager for map and description use
     let locationManager = CLLocationManager()
     //delegate in order to pass data to the parent
     var delegate: FrameEditingViewController?
+    
+    //variable for showing or hiding date picker
+    var isDatePickerHidden = true
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +47,34 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    //table view protocol method
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath.section, indexPath.row) {
+        case (0, 0):
+            return 230
+        case (0, 1):
+            return 75
+        case (0, 2):
+            if isDatePickerHidden {
+                return 75
+            } else {
+                return 230
+            }
+        default:
+            return 44.0
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section == 0 && indexPath.row == 2 {
+            isDatePickerHidden = !isDatePickerHidden
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
+    }
+    
     
     
     func updateView(with frame: Frame) {
@@ -55,7 +91,7 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
             annotation.coordinate = locationObject
             mapView.addAnnotation(annotation)
             
-            let span = MKCoordinateSpanMake(0.03, 0.03)
+            let span = MKCoordinateSpanMake(0.01, 0.01)
             let region = MKCoordinateRegionMake(locationObject, span)
             
             
@@ -79,8 +115,17 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
             updateViewForLocationNotCaptured()
         }
         
-        //block to update view here
+        //block to update other view here
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .full
+        timeLabel.text = dateFormatter.string(from: frame.addDate)
         
+        dateFormatter.dateFormat = "h:mm a"
+        dateFormatter.amSymbol = "AM"
+        dateFormatter.pmSymbol = "PM"
+        dateLabel.text = dateFormatter.string(from: frame.addDate)
+        
+        datePicker.date = frame.addDate
     }
     
     
@@ -90,11 +135,13 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
         //disable the control now and reable when info is available
         self.delegate?.disableControls()
         
+        self.locationNameLabel.text = "Loading location"
+        self.locationDetailLabel.text = "Loading location"
+        
         geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
             
-            
             if error != nil {
-                self.delegate?.didUpdateLocationDescription(locationName: "Select location here", locationDescription: "Can't load location Info")
+                self.delegate?.didUpdateLocationDescription(locationName: "Select location", locationDescription: "Can't load location Info")
                 
                 UIApplication.shared.endIgnoringInteractionEvents()
                 self.delegate?.enableControls()
@@ -106,17 +153,35 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
                 return
             }
             
+            
             let placeMark = returnedPlaceMarks[0]
             //should now be able to control
             self.delegate?.enableControls()
             
-            if let locationName = placeMark.name,
-                let locationDetail = placeMark.thoroughfare {
-                
-                //call the delegate's method, 
-                //and the delegate's method will be responsible to update the view
-                self.delegate?.didUpdateLocationDescription(locationName: locationName, locationDescription: locationDetail)
+            var locationName = ""
+            var locationDetail = ""
+            
+            
+            //placemark info processing
+            if let name = placeMark.name {
+                locationName += name
             }
+            if let thoroughfare = placeMark.thoroughfare {
+                locationDetail += thoroughfare
+            }
+            //check for whether the locality is the same as the administrativeArea
+            if let locality = placeMark.locality,
+                let administrativeArea = placeMark.administrativeArea {
+                locationDetail += ", " + locality
+                
+                if administrativeArea != locality {
+                    locationDetail += ", " + administrativeArea
+                }
+            }
+            if let country = placeMark.country {
+                locationDetail += ", " + country
+            }
+            self.delegate?.didUpdateLocationDescription(locationName: locationName, locationDescription: locationDetail)
         }
     }
     
@@ -131,6 +196,9 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
     }
     
     
+    @IBAction func didUpdateDate(_ sender: UIDatePicker) {
+        delegate?.didUpdateDate(with: sender.date)
+    }
     
     
     

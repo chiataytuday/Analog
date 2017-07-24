@@ -111,10 +111,14 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
             frames.indices.contains(currentFrameIndex) else { return }
         
         if frames[currentFrameIndex] == nil {
-            addFrameView.isHidden = false
+            UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn, animations: {
+                self.addFrameView.alpha = 0.9
+            }, completion: nil)
             deleteFrameButton.isEnabled = false
         } else {
-            addFrameView.isHidden = true
+            UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseOut, animations: {
+                self.addFrameView.alpha = 0
+            }, completion: nil)
             deleteFrameButton.isEnabled = true
             
             if let frameToUpdate = frames[currentFrameIndex] {
@@ -140,6 +144,17 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
         }
     }
     
+    func didUpdateDate(with date: Date) {
+        if let roll = loadedRoll,
+            let frames = roll.frames,
+            let currentFrame = frames[currentFrameIndex]{
+            
+            currentFrame.addDate = date
+            editFrames(with: currentFrame)
+            
+            updateView()
+        }
+    }
     
     
     //implement the delegate method to add, save, or delete frame and roll at the same time
@@ -175,6 +190,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
         stepper.isEnabled = true
     }
     
+    //for index appear then disapppear animation
     func performIndexViewAnimation() {
         UIView.animate(withDuration: 0, animations: {
             self.indexBackgroundBlack.alpha = 0.7
@@ -198,7 +214,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
     }
 
     @IBAction func sliderEditingEnd(_ sender: UISlider) {
-        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.5, delay: 1, options: .curveEaseOut, animations: {
             self.indexBackgroundBlack.alpha = 0
             self.indexLabel.alpha = 0
         }, completion: nil)
@@ -226,6 +242,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
         currentFrameIndex = intValue - 1
         
         indexLabel.text = "\(intValue)"
+        
         performIndexViewAnimation()
         
         updateView()
@@ -246,6 +263,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
         updateView()
     }
     
+    //animation for tool bar change
     @IBAction func goToButtonTapped(_ sender: UIButton) {
         UIView.animate(withDuration: 0, animations: {
             self.viewToolBar.alpha = 0
@@ -270,6 +288,19 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
         }
     }
     
+    @IBAction func deleteFrameButtonTapped(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: "Delete this frame?", message: nil, preferredStyle: .actionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
+            self.editFrames(with: nil)
+            self.updateView()
+        }
+        
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
+        
+    }
     
     
     
