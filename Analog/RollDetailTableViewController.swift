@@ -11,6 +11,9 @@ import MapKit
 
 protocol RollDetailTableViewControllerDelegate {
     func editFrames (with frame: Frame?)
+    func didUpdateLocationDescription(locationName: String, locationDescription: String)
+    func disableControls()
+    func enableControls()
 }
 
 class RollDetailTableViewController: UITableViewController, CLLocationManagerDelegate, MKMapViewDelegate {
@@ -19,26 +22,13 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
     @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var locationDetailLabel: UILabel!
     
-    //setting up location manager
+    //setting up location manager for map and description use
     let locationManager = CLLocationManager()
     //delegate in order to pass data to the parent
     var delegate: FrameEditingViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //setting up the location
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        
-        //check for authorization and whether location services are available
-//        if CLLocationManager.locationServicesEnabled() == true &&
-//            CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-//            
-//            locationManager.startUpdatingLocation()
-//            
-//        }
         
         //set the mapView's delegate
         mapView.delegate = self
@@ -57,6 +47,7 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
         mapView.removeAnnotations(existingAnnotations)
         
         if let location = frame.location {
+            
             //update map
             let locationObject = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
             
@@ -72,13 +63,63 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
             mapView.setRegion(region, animated: true)
             mapView.showsUserLocation = false
             
-            //update geo location labels
-            updateGeoDescription(with: location)
+            //if location already exist
+            if let locationName = frame.locationName, let locationDescription =
+                frame.locationDescription {
+                
+                locationNameLabel.text = locationName
+                locationDetailLabel.text = locationDescription
+                
+            } else if frame.hasRequestedLocationDescription == false {
+                //Do the request
+                updateLocationDescription(with: location)
+            }
+            
+        } else {
+            updateViewForLocationNotCaptured()
         }
         
         //block to update view here
         
     }
+    
+    
+    func updateLocationDescription(with location: CLLocation) {
+        
+        let geoCoder = CLGeocoder()
+        //disable the control now and reable when info is available
+        self.delegate?.disableControls()
+        
+        geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
+            
+            
+            if error != nil {
+                self.delegate?.didUpdateLocationDescription(locationName: "Select location here", locationDescription: "Can't load location Info")
+                
+                UIApplication.shared.endIgnoringInteractionEvents()
+                self.delegate?.enableControls()
+                return
+            }
+            
+            guard let returnedPlaceMarks = placeMarks else {
+                self.delegate?.enableControls()
+                return
+            }
+            
+            let placeMark = returnedPlaceMarks[0]
+            //should now be able to control
+            self.delegate?.enableControls()
+            
+            if let locationName = placeMark.name,
+                let locationDetail = placeMark.thoroughfare {
+                
+                //call the delegate's method, 
+                //and the delegate's method will be responsible to update the view
+                self.delegate?.didUpdateLocationDescription(locationName: locationName, locationDescription: locationDetail)
+            }
+        }
+    }
+    
     
     func updateViewForLocationNotCaptured() {
         locationNameLabel.text = "Select location here"
@@ -89,28 +130,7 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
         mapView.setRegion(region, animated: true)
     }
     
-    func updateGeoDescription(with location: CLLocation) {
-        let geoCoder = CLGeocoder()
-        
-        geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
-            
-            guard let returnedPlaceMarks = placeMarks else {
-                self.locationNameLabel.text = "Error loading location"
-                self.locationDetailLabel.text = "Error loading location"
-                return }
-            
-            let placeMark = returnedPlaceMarks[0]
-            
-            if let locationName = placeMark.addressDictionary?["Name"] as? String,
-                let locationDetail = placeMark.addressDictionary?["thoroughfare"] as? String {
-                
-                self.locationNameLabel.text = locationName
-                self.locationDetailLabel.text = locationDetail
-            }
-            
-        }
-        
-    }
+    
     
     
     

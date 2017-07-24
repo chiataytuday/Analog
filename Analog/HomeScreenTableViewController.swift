@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import MapKit
 
 class HomeScreenTableViewController: UITableViewController {
     
     var album = [Roll]()
     var rollIndexPath: IndexPath?
+    
+    //used only for asking permisstion
+    var locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +25,13 @@ class HomeScreenTableViewController: UITableViewController {
         //Hide unused cell
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         tableView.tableFooterView?.isHidden = true
+        
+        if CLLocationManager.authorizationStatus() != .denied
+            && CLLocationManager.authorizationStatus() != .restricted {
+            
+            //request authorization
+            locationManager.requestWhenInUseAuthorization()
+        }
         
         
         // Uncomment the following line to preserve selection between presentations

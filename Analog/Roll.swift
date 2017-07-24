@@ -18,16 +18,19 @@ struct PropertyKeys {
     static let pushPull = "pushPull"
     static let frames = "frames"
     static let dateAdded = "dateAdded"
-    static let lastEdited = "lastEdited"
+    static let lastEditedDate = "lastEditedDate"
+    static let lastEditedFrame = "lastEditedFrame"
     
     //for frame object
     static let location = "location"
+    static let locationName = "locationName"
+    static let locationDescription = "locationDescription"
+    static let hasRequestedLocationDescription = "hasRequestedLocationDescription"
     static let addDate = "addDate"
     static let aperture = "aperture"
     static let shutter = "shutter"
     static let compensation = "compensation"
     static let notes = "notes"
-    
 }
 
 class Roll: NSObject, NSCoding {
@@ -44,7 +47,8 @@ class Roll: NSObject, NSCoding {
     var frames: [Frame?]?
     //reserved, should not change
     var dateAdded: Date?
-    var lastEdited: Date?
+    var lastEditedDate: Date?
+    var lastEditedFrame: Int?
     
     static let DocumentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let albumArchiveURL = DocumentDirectory.appendingPathComponent("album")
@@ -67,7 +71,8 @@ class Roll: NSObject, NSCoding {
         aCoder.encode(pushPull, forKey: PropertyKeys.pushPull)
         aCoder.encode(frames, forKey: PropertyKeys.frames)
         aCoder.encode(dateAdded, forKey: PropertyKeys.dateAdded)
-        aCoder.encode(lastEdited, forKey: PropertyKeys.lastEdited)
+        aCoder.encode(lastEditedDate, forKey: PropertyKeys.lastEditedDate)
+        aCoder.encode(lastEditedFrame, forKey: PropertyKeys.lastEditedFrame)
     }
     
     convenience required init?(coder aDecoder: NSCoder) {
@@ -83,7 +88,8 @@ class Roll: NSObject, NSCoding {
         let pushPull = aDecoder.decodeObject(forKey: PropertyKeys.pushPull) as? Double
         let frames = aDecoder.decodeObject(forKey: PropertyKeys.frames) as? [Frame?]
         let dateAdded = aDecoder.decodeObject(forKey: PropertyKeys.dateAdded) as? Date
-        let lastEdited = aDecoder.decodeObject(forKey: PropertyKeys.lastEdited) as? Date
+        let lastEditedDate = aDecoder.decodeObject(forKey: PropertyKeys.lastEditedDate) as? Date
+        let lastEditedFrame = aDecoder.decodeObject(forKey: PropertyKeys.lastEditedFrame) as? Int
         
         self.init(filmName: filmName, format: format, frameCount: frameCount, iso: iso)
         self.title = title
@@ -91,7 +97,8 @@ class Roll: NSObject, NSCoding {
         self.pushPull = pushPull
         self.frames = frames
         self.dateAdded = dateAdded
-        self.lastEdited = lastEdited
+        self.lastEditedDate = lastEditedDate
+        self.lastEditedFrame = lastEditedFrame
     }
     
     //return equal if two objects are added at the exact same date
@@ -232,7 +239,7 @@ class Roll: NSObject, NSCoding {
     static func saveRoll(for rollIndex: IndexPath, with roll: Roll) {
         guard var album = Roll.loadAlbum(), album.contains(roll) else { return }
         
-        roll.lastEdited = Date()
+        roll.lastEditedDate = Date()
         album.remove(at: rollIndex.row)
         album.insert(roll, at: 0)
         
@@ -253,28 +260,5 @@ class Roll: NSObject, NSCoding {
         
         NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
     }
-    
-//    //Add or edit frame
-//    static func saveFrame(for rollIndex: IndexPath, frameIndex: Int, with frame: Frame) {
-//        //Have to make sure the roll already exist
-//        guard let album = Roll.loadAlbum(), rollIndex.row <= album.count - 1 else { return }
-//        
-//        let roll = album[rollIndex.row]
-//        var frames = roll.frames
-//        
-//        if frames == nil {
-//            frames = [Frame]()
-//            frames?.append(frame)
-//            roll.frames = frames
-//            Roll.saveRoll(for: rollIndex, with: roll)
-//        } else {
-//            guard var nonEmptyFrames = frames, frameIndex <= nonEmptyFrames.count - 1 else { return }
-//            
-//            nonEmptyFrames[frameIndex] = frame
-//            roll.frames = nonEmptyFrames
-//            
-//            Roll.saveRoll(for: rollIndex, with: roll)
-//        }
-//    }
     
 }
