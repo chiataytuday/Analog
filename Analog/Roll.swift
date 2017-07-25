@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct PropertyKeys {
     static let filmName = "filmName"
@@ -49,6 +50,8 @@ class Roll: NSObject, NSCoding {
     var dateAdded: Date?
     var lastEditedDate: Date?
     var lastEditedFrame: Int?
+    
+    static let dataIOQueue = DispatchQueue(label: "com.Analog.dataIOQueue")
     
     static let DocumentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let albumArchiveURL = DocumentDirectory.appendingPathComponent("album")
@@ -232,25 +235,93 @@ class Roll: NSObject, NSCoding {
     //basic roll maneuver
     //all of the method below requires an existing roll
     
-    //Bug notice: :>
-    //If two different row should have different date added, date edited
-    //But if the user attemped to change the system time and add two rolls of the same time,
-    //Previous roll will be overwritten
-    static func saveRoll(for rollIndex: IndexPath, with roll: Roll) {
-        guard var album = Roll.loadAlbum(), album.contains(roll) else { return }
+    //for initialize new frames, when frames not existed for a certain roll
+    static func initializeFrames(for rollIndex: IndexPath, count: Int) {
+        guard var album = Roll.loadAlbum(),
+            let roll = Roll.loadRoll(with: rollIndex),
+            album.indices.contains(rollIndex.row) else {return }
         
-        roll.lastEditedDate = Date()
-        album.remove(at: rollIndex.row)
-        album.insert(roll, at: 0)
-        
+        if roll.frames == nil {
+            roll.frames = Array(repeating: nil, count: count)
+            album[rollIndex.row] = roll
+        }
         NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
     }
     
+    
+    //handle all the frame changes
+    static func editFrame(rollIndex: IndexPath, frameIndex: Int, location: CLLocation?, locationName: String?, locatonDescription: String?, hasRequestedLocationDescription: Bool?, addDate: Date?, aperture: Double?, shutter: Int?, compensation: Double?, notes: String?, lastEditedFrame: Int, delete: Bool) {
+        
+        dataIOQueue.sync {
+            guard var album = Roll.loadAlbum(),
+                let roll = Roll.loadRoll(with: rollIndex),
+                var frames = roll.frames else {return}
+            
+            guard frames.indices.contains(frameIndex) else {return}
+            
+            if let frame = frames[frameIndex] {
+                if delete == true {
+                    frames[frameIndex] = nil
+                    roll.frames = frames
+                    album.remove(at: rollIndex.row)
+                    album.insert(roll, at: 0)
+                    NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+                    
+                    return
+                    
+                } else if location != nil {
+                    frame.location = location
+                } else if locationName != nil && locatonDescription != nil {
+                    frame.locationName = locationName
+                    frame.locationDescription = locatonDescription
+                } else if hasRequestedLocationDescription != nil {
+                    frame.hasRequestedLocationDescription = hasRequestedLocationDescription!
+                } else if addDate != nil {
+                    frame.addDate = addDate!
+                } else if aperture != nil {
+                    frame.aperture = aperture
+                } else if shutter != nil {
+                    frame.shutter = shutter
+                } else if compensation != nil {
+                    frame.compensation = compensation
+                } else if notes != nil {
+                    frame.notes = notes
+                }
+                
+                frames[frameIndex] = frame
+                roll.frames = frames
+                roll.lastEditedDate = Date()
+                roll.lastEditedFrame = lastEditedFrame
+                album.remove(at: rollIndex.row)
+                album.insert(roll, at: 0)
+                
+                NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+            } else {
+                //which means frame not yet exist
+                let frame = Frame(location: location, locationName: nil, locationDescription: nil, addDate: Date(), aperture: nil, shutter: nil, compensation: nil, notes: nil)
+                
+                frames[frameIndex] = frame
+                roll.frames = frames
+                roll.lastEditedDate = Date()
+                roll.lastEditedFrame = lastEditedFrame
+                album.remove(at: rollIndex.row)
+                album.insert(roll, at: 0)
+                
+                NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+            }
+
+        }
+        
+    }
+    
+    
     //load a specific roll from memory
     static func loadRoll(with rollIndex: IndexPath) -> Roll? {
-        guard let album = Roll.loadAlbum(), album.indices.contains(rollIndex.row) else { return nil }
-        
-        return album[rollIndex.row]
+        if let album = Roll.loadAlbum(), album.indices.contains(rollIndex.row) {
+            return album[rollIndex.row]
+        } else {
+            return nil
+        }
     }
     
     //deleting roll

@@ -10,10 +10,6 @@ import UIKit
 import MapKit
 
 protocol RollDetailTableViewControllerDelegate {
-    func editFrames (with frame: Frame?)
-    func didUpdateLocationDescription(locationName: String, locationDescription: String)
-    func disableControls()
-    func enableControls()
     func didUpdateDate(with date: Date)
 }
 
@@ -33,6 +29,7 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
     
     //variable for showing or hiding date picker
     var isDatePickerHidden = true
+    
     
     
     override func viewDidLoad() {
@@ -99,17 +96,7 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
             mapView.setRegion(region, animated: true)
             mapView.showsUserLocation = false
             
-            //if location already exist
-            if let locationName = frame.locationName, let locationDescription =
-                frame.locationDescription {
-                
-                locationNameLabel.text = locationName
-                locationDetailLabel.text = locationDescription
-                
-            } else if frame.hasRequestedLocationDescription == false {
-                //Do the request
-                updateLocationDescription(with: location)
-            }
+            //location labels handled in parent controller
             
         } else {
             updateViewForLocationNotCaptured()
@@ -128,63 +115,7 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
         datePicker.date = frame.addDate
     }
     
-    
-    func updateLocationDescription(with location: CLLocation) {
         
-        let geoCoder = CLGeocoder()
-        //disable the control now and reable when info is available
-        self.delegate?.disableControls()
-        
-        self.locationNameLabel.text = "Loading location"
-        self.locationDetailLabel.text = "Loading location"
-        
-        geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
-            
-            if error != nil {
-                self.delegate?.didUpdateLocationDescription(locationName: "Select location", locationDescription: "Can't load location Info")
-                
-                UIApplication.shared.endIgnoringInteractionEvents()
-                self.delegate?.enableControls()
-                return
-            }
-            
-            guard let returnedPlaceMarks = placeMarks else {
-                self.delegate?.enableControls()
-                return
-            }
-            
-            
-            let placeMark = returnedPlaceMarks[0]
-            //should now be able to control
-            self.delegate?.enableControls()
-            
-            var locationName = ""
-            var locationDetail = ""
-            
-            
-            //placemark info processing
-            if let name = placeMark.name {
-                locationName += name
-            }
-            if let thoroughfare = placeMark.thoroughfare {
-                locationDetail += thoroughfare
-            }
-            //check for whether the locality is the same as the administrativeArea
-            if let locality = placeMark.locality,
-                let administrativeArea = placeMark.administrativeArea {
-                locationDetail += ", " + locality
-                
-                if administrativeArea != locality {
-                    locationDetail += ", " + administrativeArea
-                }
-            }
-            if let country = placeMark.country {
-                locationDetail += ", " + country
-            }
-            self.delegate?.didUpdateLocationDescription(locationName: locationName, locationDescription: locationDetail)
-        }
-    }
-    
     
     func updateViewForLocationNotCaptured() {
         locationNameLabel.text = "Select location here"
