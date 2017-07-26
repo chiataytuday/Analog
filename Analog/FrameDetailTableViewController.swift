@@ -117,7 +117,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         dateFormatter.dateStyle = .full
         timeLabel.text = dateFormatter.string(from: frame.addDate)
         
-        dateFormatter.dateFormat = "h:mm:ss a"
+        dateFormatter.dateFormat = "h:mm a"
         dateFormatter.amSymbol = "AM"
         dateFormatter.pmSymbol = "PM"
         dateLabel.text = dateFormatter.string(from: frame.addDate)

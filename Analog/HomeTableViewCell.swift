@@ -57,22 +57,21 @@ class HomeTableViewCell: UITableViewCell {
         }
         
         if let lastEdited = roll.lastEditedDate {
-            let now = Date()
-            if now.timeIntervalSince(lastEdited) > 86400 {
-                dateFormatter.dateStyle = .short
+            if Calendar.current.isDateInToday(lastEdited) {
+                dateFormatter.dateFormat = "h:mm a"
                 lastEditLabel.text = dateFormatter.string(from: lastEdited)
             } else {
-                dateFormatter.dateFormat = "h:mm a"
+                dateFormatter.dateStyle = .short
                 lastEditLabel.text = dateFormatter.string(from: lastEdited)
             }
         } else {
             if let dateAdded = roll.dateAdded {
-                let now = Date()
-                if now.timeIntervalSince(dateAdded) > 86400 {
-                    dateFormatter.dateStyle = .short
+                                
+                if Calendar.current.isDateInToday(dateAdded) {
+                    dateFormatter.dateFormat = "h:mm a"
                     lastEditLabel.text = dateFormatter.string(from: dateAdded)
                 } else {
-                    dateFormatter.dateFormat = "h:mm a"
+                    dateFormatter.dateStyle = .short
                     lastEditLabel.text = dateFormatter.string(from: dateAdded)
                 }
             }

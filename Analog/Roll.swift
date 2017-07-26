@@ -274,6 +274,7 @@ class Roll: NSObject, NSCoding {
                 if delete == true {
                     frames[frameIndex] = nil
                     roll.frames = frames
+                    roll.lastEditedDate = Date()
                     album.remove(at: rollIndex.row)
                     album.insert(roll, at: 0)
                     NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)

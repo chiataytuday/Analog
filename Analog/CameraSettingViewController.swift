@@ -42,7 +42,7 @@ class CameraSettingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func cameraTextChanged(_ sender: UITextField) {
+    @IBAction func cameraEditEnded(_ sender: UITextField) {
         guard let cameraName = sender.text else { return }
         
         if !cameraName.isEmpty {

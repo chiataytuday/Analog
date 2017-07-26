@@ -12,8 +12,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         return true
@@ -34,6 +34,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        
+        //used to notify the user which frame they are in while unlocking
+        let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+        let current = navigationController?.visibleViewController as? FrameEditingViewController
+        current?.performIndexViewAnimation()
+        
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 

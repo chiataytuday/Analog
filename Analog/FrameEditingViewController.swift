@@ -51,9 +51,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             
         }
         
-        //notify the user which frame they are in, and now current frame is 0
-        performIndexViewAnimation()
-        
         //load the roll
         guard let loadedRoll = loadRoll() else { return }
         
@@ -78,6 +75,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             //loaded only once, so can not be but in updateView
             if let lastEditedIndex = loadedRoll.lastEditedFrame {
                 currentFrameIndex = lastEditedIndex
+                //Notify the user about the current frame
+                performIndexViewAnimation()
                 slider.value = Float(currentFrameIndex + 1)
                 stepper.value = Double(currentFrameIndex + 1)
                 indexLabel.text = "\(currentFrameIndex + 1)"
@@ -96,6 +95,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                     updateView(for: currentFrameIndex)
                 }
             } else {
+                performIndexViewAnimation()
                 updateView(for: 0)
             }
         }
@@ -274,42 +274,44 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     
         
-    //for index appear then disapppear animation
+    //for index pop animation
     func performIndexViewAnimation() {
         
-        if currentFrameIndex == 0 || currentFrameIndex == Int(stepper.maximumValue - 1) {
-            UIView.animate(withDuration: 0, animations: { 
-                self.indexBackgroundBlack.alpha = 0.7
-                self.indexLabel.alpha = 0.9
+        UIView.animate(withDuration: 0, animations: {
+            self.indexBackgroundBlack.alpha = 0.7
+            self.indexLabel.alpha = 0.9
+        }, completion: { (_) in
+            UIView.animate(withDuration: 0.09, animations: {
+                self.indexBackgroundBlack.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+                self.indexLabel.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
             }, completion: { (_) in
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.indexBackgroundBlack.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-                    self.indexLabel.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+                UIView.animate(withDuration: 0.09, animations: {
+                    self.indexBackgroundBlack.transform = CGAffineTransform.identity
+                    self.indexLabel.transform = CGAffineTransform.identity
                 }, completion: { (_) in
-                    UIView.animate(withDuration: 0.1, animations: {
-                        self.indexBackgroundBlack.transform = CGAffineTransform.identity
-                        self.indexLabel.transform = CGAffineTransform.identity
-                    }, completion: { (_) in
-                        UIView.animate(withDuration: 0.5, delay: 2, options: .curveEaseOut, animations: { 
-                            self.indexBackgroundBlack.alpha = 0
-                            self.indexLabel.alpha = 0
-                        }, completion: nil)
-                    })
+                    UIView.animate(withDuration: 0.5, delay: 8, options: .curveEaseOut, animations: {
+                        self.indexBackgroundBlack.alpha = 0
+                        self.indexLabel.alpha = 0
+                    }, completion: nil)
                 })
             })
-        } else {
-            UIView.animate(withDuration: 0, animations: {
-                self.indexBackgroundBlack.alpha = 0.7
-                self.indexLabel.alpha = 0.9
-            }) { (_) in
-                UIView.animate(withDuration: 0.5, delay: 2, options: .curveEaseOut, animations: {
-                    self.indexBackgroundBlack.alpha = 0
-                    self.indexLabel.alpha = 0
-                }, completion: nil)
-            }
-        }
+        })
     }
     
+    //for slider animations: Without pop
+    @IBAction func sliderEditingBegin(_ sender: UISlider) {
+        
+        self.indexBackgroundBlack.alpha = 0.7
+        self.indexLabel.alpha = 0.9
+    }
+    
+    @IBAction func sliderEditingEnd(_ sender: UISlider) {
+        UIView.animate(withDuration: 0.5, delay: 8, options: .curveEaseOut, animations: {
+            self.indexBackgroundBlack.alpha = 0
+            self.indexLabel.alpha = 0
+        }, completion: nil)
+    }
+
     
     //IB actions
     @IBAction func addFrameButtonTapped(_ sender: UIButton) {
@@ -325,6 +327,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         
         //update view
         self.loadedRoll = self.loadRoll()
+        performIndexViewAnimation()
         updateView(for: self.currentFrameIndex)
 
     }
@@ -340,8 +343,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         currentFrameIndex = intValue - 1
         
         indexLabel.text = "\(intValue)"
-        
-        performIndexViewAnimation()
         
         updateView(for: currentFrameIndex)
     }
