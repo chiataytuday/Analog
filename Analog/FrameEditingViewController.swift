@@ -77,7 +77,19 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
                 stepper.value = Double(currentFrameIndex + 1)
                 indexLabel.text = "\(currentFrameIndex + 1)"
                 
-                updateView(for: lastEditedIndex)
+                //if roll hasn't finish loading, set the roll not able to load
+                if let rollIndexPath = rollIndexPath,
+                    let frame = loadedRoll.frames?[currentFrameIndex],
+                    frame.hasRequestedLocationDescription == false {
+                    
+                    //if location info hasn't been get
+                    Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: "Can't load location", locatonDescription: "Select location here", hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: currentFrameIndex, delete: false)
+                    
+                    self.loadedRoll = loadRoll()
+                    self.updateView(for: currentFrameIndex)
+                } else {
+                    updateView(for: 0)
+                }
             }
         }
         
@@ -105,6 +117,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
                 self.addFrameView.alpha = 0.9
             }, completion: nil)
             deleteFrameButton.isEnabled = false
+            //reset the view to prepare for adding
+            rollDetailTableViewController?.updateView(with: nil)
             
         } else if let frameToUpdate = frames[currentFrameIndex] {
             //hide the add button
@@ -113,23 +127,18 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
             }, completion: nil)
             deleteFrameButton.isEnabled = true
             
-            //for container view
+            //for container view to update map and date
             rollDetailTableViewController?.updateView(with: frameToUpdate)
             
             //used to handle the location info update
-            //if location already exist
+            //if location already exist, or is loading location
             if let locationName = frameToUpdate.locationName,
                 let locationDescription = frameToUpdate.locationDescription {
                 
                 rollDetailTableViewController?.locationNameLabel.text = locationName
                 rollDetailTableViewController?.locationDetailLabel.text = locationDescription
                 
-            } else if let location = frameToUpdate.location,
-                frameToUpdate.hasRequestedLocationDescription == false {
-                //if location info hasn't been get
-                updateLocationDescription(with: location, for: currentFrameIndex)
             }
-            
         }
     }
     
@@ -164,21 +173,29 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
     
     func updateLocationDescription(with location: CLLocation, for frameIndex: Int) {
         
+        //prepare for possible index change, but set not finish loading
+        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", hasRequestedLocationDescription: false, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: frameIndex, delete: false)
+        
         geoCodeNetworkQueue.sync {
             let geoCoder = CLGeocoder()
+            //in order to let the whole group finish
+            let networkGroup = DispatchGroup()
             var locationName = ""
             var locationDetail = ""
             
             geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
+                networkGroup.enter()
                 if error != nil {
-                    
-                    //save the frame with error message, and set as has requested
-                    Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Select location", locatonDescription: "Can't load location", hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: frameIndex, delete: false)
-                    //reload roll
-                    self.loadedRoll = self.loadRoll()
-                    //update view
-                    self.updateView(for: frameIndex)
-                    
+                    networkGroup.leave()
+                    DispatchQueue.main.async {
+                        //save the frame with error message, and set as has requested
+                        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Select location", locatonDescription: "Can't load location", hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: frameIndex, delete: false)
+                        //reload roll
+                        self.loadedRoll = self.loadRoll()
+                        //update view
+                        self.updateView(for: frameIndex)
+                    }
+                    return
                 } else {
                     guard let returnedPlaceMarks = placeMarks else { return }
                     
@@ -203,8 +220,11 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
                     if let country = placeMark.country {
                         locationDetail += ", " + country
                     }
+                    
+                    networkGroup.leave()
                 }
                 
+                networkGroup.wait()
                 DispatchQueue.main.async {
                     Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: locationName, locatonDescription: locationDetail, hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: self.currentFrameIndex, delete: false)
                     //reload roll
@@ -264,7 +284,12 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
         
         guard let rollIndexPath = self.rollIndexPath else {return }
         
+        //get the current location and save
         Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, hasRequestedLocationDescription: nil, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: currentFrameIndex, delete: false)
+        
+        if let currentLocation = currentLocation {
+            updateLocationDescription(with: currentLocation, for: currentFrameIndex)
+        }
         
         //update view
         self.loadedRoll = self.loadRoll()

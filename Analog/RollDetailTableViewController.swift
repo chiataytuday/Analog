@@ -74,10 +74,20 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
     
     
     
-    func updateView(with frame: Frame) {
+    func updateView(with frame: Frame?) {
         //remove annotation
         let existingAnnotations = mapView.annotations
         mapView.removeAnnotations(existingAnnotations)
+        
+        guard let frame = frame else {
+            
+            let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
+            mapView.setRegion(region, animated: true)
+            
+            datePicker.date = Date()
+            
+            return
+        }
         
         if let location = frame.location {
             
