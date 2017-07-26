@@ -176,8 +176,13 @@ class Roll: NSObject, NSCoding {
         }
     }
     
+    //#Mark: cocurrency enhanced
     static func loadAlbum() -> [Roll]? {
-        return NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll]
+        var album: [Roll]?
+        dataIOQueue.sync {
+            album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll]
+        }
+        return album
     }
     
     
@@ -232,20 +237,26 @@ class Roll: NSObject, NSCoding {
     }
     
     
+    
     //basic roll maneuver
     //all of the method below requires an existing roll
     
+    //#Mark: all of the following is cocurrency enhanced, and not depending on one another
+    
+    
     //for initialize new frames, when frames not existed for a certain roll
     static func initializeFrames(for rollIndex: IndexPath, count: Int) {
-        guard var album = Roll.loadAlbum(),
-            let roll = Roll.loadRoll(with: rollIndex),
-            album.indices.contains(rollIndex.row) else {return }
-        
-        if roll.frames == nil {
-            roll.frames = Array(repeating: nil, count: count)
-            album[rollIndex.row] = roll
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else {return }
+            
+            let roll = album[rollIndex.row]
+            
+            if roll.frames == nil {
+                roll.frames = Array(repeating: nil, count: count)
+                album[rollIndex.row] = roll
+            }
+            NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
         }
-        NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
     }
     
     
@@ -253,11 +264,11 @@ class Roll: NSObject, NSCoding {
     static func editFrame(rollIndex: IndexPath, frameIndex: Int, location: CLLocation?, locationName: String?, locatonDescription: String?, hasRequestedLocationDescription: Bool?, addDate: Date?, aperture: Double?, shutter: Int?, compensation: Double?, notes: String?, lastEditedFrame: Int, delete: Bool) {
         
         dataIOQueue.sync {
-            guard var album = Roll.loadAlbum(),
-                let roll = Roll.loadRoll(with: rollIndex),
-                var frames = roll.frames else {return}
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll] else {return}
             
-            guard frames.indices.contains(frameIndex) else {return}
+            let roll = album[rollIndex.row]
+            guard var frames = roll.frames, frames.indices.contains(frameIndex) else {return}
+            
             
             if let frame = frames[frameIndex] {
                 if delete == true {
@@ -320,19 +331,54 @@ class Roll: NSObject, NSCoding {
     
     //load a specific roll from memory
     static func loadRoll(with rollIndex: IndexPath) -> Roll? {
-        if let album = Roll.loadAlbum(), album.indices.contains(rollIndex.row) {
-            return album[rollIndex.row]
-        } else {
-            return nil
+        var roll: Roll?
+        dataIOQueue.sync {
+            if var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) {
+                
+                roll = album[rollIndex.row]
+            } else {
+                roll = nil
+            }
         }
+        return roll
     }
     
     //deleting roll
     static func deleteRoll(at rollIndex: IndexPath) {
-        guard var album = Roll.loadAlbum(), album.indices.contains(rollIndex.row) else { return }
-        album.remove(at: rollIndex.row)
         
-        NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            album.remove(at: rollIndex.row)
+            
+            NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+        }
+    }
+    
+    static func editRollTitle(title: String?, for rollIndex: IndexPath) {
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            let roll = album[rollIndex.row]
+            roll.title = title
+            album[rollIndex.row] = roll
+            
+            NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+        }
+        
+    }
+    
+    static func editCamera(camera: String?, for rollIndex: IndexPath) {
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            let roll = album[rollIndex.row]
+            roll.camera = camera
+            album[rollIndex.row] = roll
+            
+            NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+        }
+        
     }
     
 }

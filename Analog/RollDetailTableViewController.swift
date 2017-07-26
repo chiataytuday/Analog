@@ -2,41 +2,70 @@
 //  RollDetailTableViewController.swift
 //  Analog
 //
-//  Created by Zizhou Wang on 20/07/2017.
+//  Created by Zizhou Wang on 26/07/2017.
 //  Copyright © 2017 Zizhou Wang. All rights reserved.
 //
 
 import UIKit
-import MapKit
 
 protocol RollDetailTableViewControllerDelegate {
-    func didUpdateDate(with date: Date)
+    func didUpdateTitle(title: String?)
 }
 
-class RollDetailTableViewController: UITableViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class RollDetailTableViewController: UITableViewController {
     
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var locationNameLabel: UILabel!
-    @IBOutlet weak var locationDetailLabel: UILabel!
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    
-    //setting up location manager for map and description use
-    let locationManager = CLLocationManager()
-    //delegate in order to pass data to the parent
-    var delegate: FrameEditingViewController?
-    
-    //variable for showing or hiding date picker
-    var isDatePickerHidden = true
-    
+    @IBOutlet weak var filmLabel: UILabel!
+    @IBOutlet weak var framesLabel: UILabel!
+    @IBOutlet weak var isoLabel: UILabel!
+    @IBOutlet weak var pushPullLabel: UILabel!
+    @IBOutlet weak var rollNameTextField: UITextField!
+    @IBOutlet weak var cameraTextField: UITextField!
+        
+    var indexPath: IndexPath?
+    var delegate: RollDetailTableViewControllerDelegate?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //set the mapView's delegate
-        mapView.delegate = self
+        //load from file again, end up in the dataIOQueue
+        guard let indexPath = indexPath,
+            let loadedRoll = Roll.loadRoll(with: indexPath) else {return}
+        
+        let film = loadedRoll.filmName
+        let frames = loadedRoll.frameCount
+        let iso = loadedRoll.iso
+        
+        if let pushPull = loadedRoll.pushPull {
+            var pushPullString: String{
+                if pushPull == -1 {
+                    return "Pulled 1.0 stop"
+                } else if pushPull == 1 {
+                    return "Pushed 1.0 stop"
+                } else if pushPull == 0 {
+                    return "Not pushed or pulled"
+                } else if pushPull < 0 {
+                    return "Pulled \(-pushPull) stops"
+                } else {
+                    return "Pushed \(pushPull) stops"
+                }
+            }
+            pushPullLabel.text = pushPullString
+        } else {
+            pushPullLabel.text = "Not pushed or pulled"
+        }
+        
+        filmLabel.text = film
+        framesLabel.text = "\(frames)"
+        isoLabel.text = "\(iso)"
+        
+        if let rollName = loadedRoll.title {
+            rollNameTextField.text = rollName
+        }
+        
+        if let camera = loadedRoll.camera {
+            cameraTextField.text = camera
+        }
         
     }
 
@@ -45,112 +74,38 @@ class RollDetailTableViewController: UITableViewController, CLLocationManagerDel
         // Dispose of any resources that can be recreated.
     }
     
-    //table view protocol method
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch (indexPath.section, indexPath.row) {
-        case (0, 0):
-            return 230
-        case (0, 1):
-            return 75
-        case (0, 2):
-            if isDatePickerHidden {
-                return 75
+    @IBAction func rollFieldEditingEnded(_ sender: UITextField) {
+        guard let indexPath = indexPath else { return }
+        
+        if let text = sender.text {
+            if text != "" {
+                Roll.editRollTitle(title: text, for: indexPath)
+                delegate?.didUpdateTitle(title: text)
             } else {
-                return 230
+                Roll.editRollTitle(title: nil, for: indexPath)
+                delegate?.didUpdateTitle(title: text)
             }
-        default:
-            return 44.0
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 && indexPath.row == 2 {
-            isDatePickerHidden = !isDatePickerHidden
-            tableView.beginUpdates()
-            tableView.endUpdates()
+    @IBAction func rollFieldReturned(_ sender: UITextField) {
+        cameraTextField.becomeFirstResponder()
+    }
+    
+    @IBAction func cameraFieldEditingEnded(_ sender: UITextField) {
+        guard let indexPath = indexPath else { return }
+        
+        if let text = sender.text {
+            if text != "" {
+                Roll.editCamera(camera: text, for: indexPath)
+            } else {
+                Roll.editCamera(camera: nil, for: indexPath)
+            }
         }
     }
     
-    
-    
-    func updateView(with frame: Frame?) {
-        //remove annotation
-        let existingAnnotations = mapView.annotations
-        mapView.removeAnnotations(existingAnnotations)
-        
-        guard let frame = frame else {
-            
-            let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
-            mapView.setRegion(region, animated: true)
-            
-            datePicker.date = Date()
-            
-            return
-        }
-        
-        if let location = frame.location {
-            
-            //update map
-            let locationObject = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-            
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = locationObject
-            mapView.addAnnotation(annotation)
-            
-            let span = MKCoordinateSpanMake(0.01, 0.01)
-            let region = MKCoordinateRegionMake(locationObject, span)
-            
-            
-            //map setup
-            mapView.setRegion(region, animated: true)
-            mapView.showsUserLocation = false
-            
-            //location labels handled in parent controller
-            
-        } else {
-            updateViewForLocationNotCaptured()
-        }
-        
-        //block to update other view here
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .full
-        timeLabel.text = dateFormatter.string(from: frame.addDate)
-        
-        dateFormatter.dateFormat = "h:mm a"
-        dateFormatter.amSymbol = "AM"
-        dateFormatter.pmSymbol = "PM"
-        dateLabel.text = dateFormatter.string(from: frame.addDate)
-        
-        datePicker.date = frame.addDate
+    @IBAction func cameraFieldReturned(_ sender: UITextField) {
+        cameraTextField.resignFirstResponder()
     }
     
-        
-    
-    func updateViewForLocationNotCaptured() {
-        locationNameLabel.text = "Select location here"
-        locationDetailLabel.text = "Location not captured"
-        
-        //recenter the map to locale
-        let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
-        mapView.setRegion(region, animated: true)
-    }
-    
-    
-    @IBAction func didUpdateDate(_ sender: UIDatePicker) {
-        delegate?.didUpdateDate(with: sender.date)
-    }
-    
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

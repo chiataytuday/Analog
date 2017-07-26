@@ -19,8 +19,6 @@ class HomeScreenTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //hide the back button
-        navigationItem.setHidesBackButton(true, animated: false)
         
         //Hide unused cell
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -32,13 +30,8 @@ class HomeScreenTableViewController: UITableViewController {
             //request authorization
             locationManager.requestWhenInUseAuthorization()
         }
-        
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,22 +87,26 @@ class HomeScreenTableViewController: UITableViewController {
 //        return true
 //    }
     
+
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            Roll.deleteRoll(at: indexPath)
+            if let albumLoaded = Roll.loadAlbum() {
+                album = albumLoaded
+            }
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
+    }
+    
     @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
         
     }
     
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
 
     /*
     // Override to support rearranging the table view.
