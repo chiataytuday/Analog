@@ -274,8 +274,6 @@ class Roll: NSObject, NSCoding {
                 } else if locationName != nil && locatonDescription != nil {
                     frame.locationName = locationName
                     frame.locationDescription = locatonDescription
-                } else if hasRequestedLocationDescription != nil {
-                    frame.hasRequestedLocationDescription = hasRequestedLocationDescription!
                 } else if addDate != nil {
                     frame.addDate = addDate!
                 } else if aperture != nil {
@@ -286,6 +284,11 @@ class Roll: NSObject, NSCoding {
                     frame.compensation = compensation
                 } else if notes != nil {
                     frame.notes = notes
+                }
+                
+                //because optional bool has to be unwrapped first
+                if let bool = hasRequestedLocationDescription {
+                    frame.hasRequestedLocationDescription = bool
                 }
                 
                 frames[frameIndex] = frame

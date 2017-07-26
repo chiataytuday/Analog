@@ -83,13 +83,15 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
                     frame.hasRequestedLocationDescription == false {
                     
                     //if location info hasn't been get
-                    Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: "Can't load location", locatonDescription: "Select location here", hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: currentFrameIndex, delete: false)
+                    Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: currentFrameIndex, delete: false)
                     
                     self.loadedRoll = loadRoll()
                     self.updateView(for: currentFrameIndex)
                 } else {
-                    updateView(for: 0)
+                    updateView(for: currentFrameIndex)
                 }
+            } else {
+                updateView(for: 0)
             }
         }
         
@@ -188,8 +190,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, R
                 if error != nil {
                     networkGroup.leave()
                     DispatchQueue.main.async {
+                        
                         //save the frame with error message, and set as has requested
-                        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Select location", locatonDescription: "Can't load location", hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: frameIndex, delete: false)
+                        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", hasRequestedLocationDescription: true, addDate: nil, aperture: nil, shutter: nil, compensation: nil, notes: nil, lastEditedFrame: frameIndex, delete: false)
                         //reload roll
                         self.loadedRoll = self.loadRoll()
                         //update view
