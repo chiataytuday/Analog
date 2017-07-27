@@ -1,5 +1,5 @@
 //
-//  RollDetailTableViewController.swift
+//  FrameDetailTableViewController.swift
 //  Analog
 //
 //  Created by Zizhou Wang on 20/07/2017.

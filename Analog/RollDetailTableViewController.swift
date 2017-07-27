@@ -34,20 +34,18 @@ class RollDetailTableViewController: UITableViewController {
         if let pushPull = loadedRoll.pushPull {
             var pushPullString: String{
                 if pushPull == -1 {
-                    return "Pulled 1.0 stop"
+                    return "Pulled 1 stop"
                 } else if pushPull == 1 {
-                    return "Pushed 1.0 stop"
+                    return "Pushed 1 stop"
                 } else if pushPull == 0 {
                     return "Not pushed or pulled"
                 } else if pushPull < 0 {
-                    return "Pulled \(-pushPull) stops"
+                    return "Pulled \(Int(-pushPull)) stops"
                 } else {
-                    return "Pushed \(pushPull) stops"
+                    return "Pushed \(Int(pushPull)) stops"
                 }
             }
             pushPullLabel.text = pushPullString
-        } else {
-            pushPullLabel.text = "Not pushed or pulled"
         }
         
         filmLabel.text = film

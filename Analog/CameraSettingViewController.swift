@@ -59,15 +59,15 @@ class CameraSettingViewController: UIViewController {
     @IBAction func exposureStepperValueChanged(_ sender: UIStepper) {
         let value = sender.value
         if value == -1 {
-            exposureLabel.text = "Pull 1.0 stop"
+            exposureLabel.text = "Pull 1 stop"
         } else if value == 1 {
-            exposureLabel.text = "Push 1.0 stop"
+            exposureLabel.text = "Push 1 stop"
         } else if value == 0 {
             exposureLabel.text = "Not pushed or pulled"
         } else if value < 0 {
-            exposureLabel.text = "Pull \(-value) stops"
+            exposureLabel.text = "Pull \(Int(-value)) stops"
         } else if value > 0 {
-            exposureLabel.text = "Push \(value) stops"
+            exposureLabel.text = "Push \(Int(value)) stops"
         }
         
         roll?.pushPull = value

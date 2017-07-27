@@ -19,6 +19,11 @@
 		364A92A31F19CAE100B0D442 /* AnalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92A21F19CAE100B0D442 /* AnalogTests.swift */; };
 		364A92AE1F19CAE100B0D442 /* AnalogUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */; };
 		3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */; };
+		3687E9551F29E43C00432E31 /* PredefinedRollsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */; };
+		3687E9571F29E4BC00432E31 /* AddRollExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9561F29E4BC00432E31 /* AddRollExtension.swift */; };
+		3687E95B1F29E63800432E31 /* PropertyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95A1F29E63800432E31 /* PropertyKeys.swift */; };
+		3687E9601F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */; };
+		3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */; };
 		368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */; };
 		369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369AAF9F1F23029C00C23125 /* FrameEditingViewController.swift */; };
 		36A1B0711F2206F500FC1197 /* RecentlyAddedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A1B0701F2206F500FC1197 /* RecentlyAddedTableViewController.swift */; };
@@ -66,6 +71,11 @@
 		364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalogUITests.swift; sourceTree = "<group>"; };
 		364A92AF1F19CAE100B0D442 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingViewController.swift; sourceTree = "<group>"; };
+		3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredefinedRollsExtension.swift; sourceTree = "<group>"; };
+		3687E9561F29E4BC00432E31 /* AddRollExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRollExtension.swift; sourceTree = "<group>"; };
+		3687E95A1F29E63800432E31 /* PropertyKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyKeys.swift; sourceTree = "<group>"; };
+		3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameUpdatingViewUpdateExtension.swift; sourceTree = "<group>"; };
+		3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollEditingExtension.swift; sourceTree = "<group>"; };
 		368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInsetExtension.swift; sourceTree = "<group>"; };
 		369AAF9F1F23029C00C23125 /* FrameEditingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameEditingViewController.swift; sourceTree = "<group>"; };
 		36A1B0701F2206F500FC1197 /* RecentlyAddedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentlyAddedTableViewController.swift; sourceTree = "<group>"; };
@@ -137,8 +147,8 @@
 			children = (
 				364A928D1F19CAE100B0D442 /* AppDelegate.swift */,
 				364A92911F19CAE100B0D442 /* Main.storyboard */,
-				368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */,
 				36A3424B1F1DDD9200D00DC4 /* ViewController */,
+				3687E95C1F29E75000432E31 /* Extensions */,
 				36A3424C1F1DDDA800D00DC4 /* Model */,
 				364A92941F19CAE100B0D442 /* Assets.xcassets */,
 				364A92961F19CAE100B0D442 /* LaunchScreen.storyboard */,
@@ -165,6 +175,26 @@
 			path = AnalogUITests;
 			sourceTree = "<group>";
 		};
+		3687E95C1F29E75000432E31 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */,
+				3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */,
+				3687E9631F29EAC100432E31 /* RollModelExtensions */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		3687E9631F29EAC100432E31 /* RollModelExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */,
+				3687E9561F29E4BC00432E31 /* AddRollExtension.swift */,
+				3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */,
+			);
+			name = RollModelExtensions;
+			sourceTree = "<group>";
+		};
 		36A3424B1F1DDD9200D00DC4 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +216,7 @@
 		36A3424C1F1DDDA800D00DC4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3687E95A1F29E63800432E31 /* PropertyKeys.swift */,
 				362901151F1A3159007DA30B /* Roll.swift */,
 				362901171F1A3162007DA30B /* Frame.swift */,
 			);
@@ -337,15 +368,20 @@
 				368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */,
 				36F801DE1F298FD300C34A31 /* LocationSearchResultTableViewController.swift in Sources */,
 				36C78A6B1F20DCFF005D4738 /* FrameDetailTableViewController.swift in Sources */,
+				3687E95B1F29E63800432E31 /* PropertyKeys.swift in Sources */,
 				362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */,
 				362901161F1A3159007DA30B /* Roll.swift in Sources */,
 				36A1B0711F2206F500FC1197 /* RecentlyAddedTableViewController.swift in Sources */,
 				36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */,
 				36F801DC1F298FB600C34A31 /* LocationSearchViewController.swift in Sources */,
+				3687E9551F29E43C00432E31 /* PredefinedRollsExtension.swift in Sources */,
+				3687E9571F29E4BC00432E31 /* AddRollExtension.swift in Sources */,
 				36C78A711F20F446005D4738 /* HomeTableViewCell.swift in Sources */,
 				3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */,
 				364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */,
 				3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */,
+				3687E9601F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift in Sources */,
+				3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */,
 				369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */,
 				362901181F1A3162007DA30B /* Frame.swift in Sources */,
 				36FCD4F01F28736C007EB077 /* RollDetailTableViewController.swift in Sources */,
