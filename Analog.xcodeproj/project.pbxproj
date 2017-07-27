@@ -25,6 +25,8 @@
 		36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */; };
 		36C78A6B1F20DCFF005D4738 /* FrameDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C78A6A1F20DCFF005D4738 /* FrameDetailTableViewController.swift */; };
 		36C78A711F20F446005D4738 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C78A701F20F446005D4738 /* HomeTableViewCell.swift */; };
+		36F801DC1F298FB600C34A31 /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F801DB1F298FB600C34A31 /* LocationSearchViewController.swift */; };
+		36F801DE1F298FD300C34A31 /* LocationSearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F801DD1F298FD300C34A31 /* LocationSearchResultTableViewController.swift */; };
 		36FCD4F01F28736C007EB077 /* RollDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCD4EF1F28736C007EB077 /* RollDetailTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +72,8 @@
 		36AA5D461F1F092C00EC9888 /* CustomRollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRollViewController.swift; sourceTree = "<group>"; };
 		36C78A6A1F20DCFF005D4738 /* FrameDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameDetailTableViewController.swift; sourceTree = "<group>"; };
 		36C78A701F20F446005D4738 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
+		36F801DB1F298FB600C34A31 /* LocationSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
+		36F801DD1F298FD300C34A31 /* LocationSearchResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSearchResultTableViewController.swift; sourceTree = "<group>"; };
 		36FCD4EF1F28736C007EB077 /* RollDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollDetailTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -173,6 +177,8 @@
 				369AAF9F1F23029C00C23125 /* FrameEditingViewController.swift */,
 				36C78A6A1F20DCFF005D4738 /* FrameDetailTableViewController.swift */,
 				36FCD4EF1F28736C007EB077 /* RollDetailTableViewController.swift */,
+				36F801DB1F298FB600C34A31 /* LocationSearchViewController.swift */,
+				36F801DD1F298FD300C34A31 /* LocationSearchResultTableViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -329,11 +335,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */,
+				36F801DE1F298FD300C34A31 /* LocationSearchResultTableViewController.swift in Sources */,
 				36C78A6B1F20DCFF005D4738 /* FrameDetailTableViewController.swift in Sources */,
 				362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */,
 				362901161F1A3159007DA30B /* Roll.swift in Sources */,
 				36A1B0711F2206F500FC1197 /* RecentlyAddedTableViewController.swift in Sources */,
 				36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */,
+				36F801DC1F298FB600C34A31 /* LocationSearchViewController.swift in Sources */,
 				36C78A711F20F446005D4738 /* HomeTableViewCell.swift in Sources */,
 				3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */,
 				364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */,

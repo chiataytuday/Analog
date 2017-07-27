@@ -144,6 +144,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     
     
     
+    
     /*
     // MARK: - Navigation
 

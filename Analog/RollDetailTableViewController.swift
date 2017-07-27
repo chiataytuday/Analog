@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol RollDetailTableViewControllerDelegate {
-    func didUpdateTitle(title: String?)
-}
-
 class RollDetailTableViewController: UITableViewController {
     
     @IBOutlet weak var filmLabel: UILabel!
@@ -22,7 +18,6 @@ class RollDetailTableViewController: UITableViewController {
     @IBOutlet weak var cameraTextField: UITextField!
         
     var indexPath: IndexPath?
-    var delegate: RollDetailTableViewControllerDelegate?
     
     
     override func viewDidLoad() {
@@ -74,28 +69,32 @@ class RollDetailTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func rollFieldEditingEnded(_ sender: UITextField) {
-        guard let indexPath = indexPath else { return }
-        
-        if let text = sender.text {
-            if text != "" {
-                Roll.editRollTitle(title: text, for: indexPath)
-                delegate?.didUpdateTitle(title: text)
-            } else {
-                Roll.editRollTitle(title: nil, for: indexPath)
-                delegate?.didUpdateTitle(title: text)
-            }
-        }
-    }
     
     @IBAction func rollFieldReturned(_ sender: UITextField) {
         cameraTextField.becomeFirstResponder()
     }
     
-    @IBAction func cameraFieldEditingEnded(_ sender: UITextField) {
+    
+    @IBAction func cameraFieldReturned(_ sender: UITextField) {
+        cameraTextField.resignFirstResponder()
+    }
+    
+    func saveRollName() {
         guard let indexPath = indexPath else { return }
         
-        if let text = sender.text {
+        if let text = rollNameTextField.text {
+            if text != "" {
+                Roll.editRollTitle(title: text, for: indexPath)
+            } else {
+                Roll.editRollTitle(title: nil, for: indexPath)
+            }
+        }
+    }
+    
+    func saveCamera() {
+        guard let indexPath = indexPath else { return }
+        
+        if let text = cameraTextField.text {
             if text != "" {
                 Roll.editCamera(camera: text, for: indexPath)
             } else {
@@ -104,8 +103,13 @@ class RollDetailTableViewController: UITableViewController {
         }
     }
     
-    @IBAction func cameraFieldReturned(_ sender: UITextField) {
-        cameraTextField.resignFirstResponder()
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "saveRollDetailSegue" {
+            saveRollName()
+            saveCamera()
+            
+        }
     }
     
 }

@@ -24,38 +24,31 @@ class HomeScreenTableViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         tableView.tableFooterView?.isHidden = true
         
+        //setting up location manager
         if CLLocationManager.authorizationStatus() != .denied
             && CLLocationManager.authorizationStatus() != .restricted {
             
             //request authorization
             locationManager.requestWhenInUseAuthorization()
         }
-
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
+        
+        //load the album
         if let savedAlbum = Roll.loadAlbum() {
             album = savedAlbum
         }
-        tableView.reloadData()
+
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
     }
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 0
-//    }
-
+    
+    
+    //table view delegate methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return album.count
     }
 
@@ -65,7 +58,6 @@ class HomeScreenTableViewController: UITableViewController {
         let roll = album[indexPath.row]
         
         cell.update(with: roll)
-        // Configure the cell...
 
         return cell
     }
@@ -80,61 +72,53 @@ class HomeScreenTableViewController: UITableViewController {
         
         performSegue(withIdentifier: "showRollSegue", sender: self)
     }
-    
-    // Override to support conditional editing of the table view.
-//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        // Return false if you do not want the specified item to be editable.
-//        return true
-//    }
-    
 
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            Roll.deleteRoll(at: indexPath)
-            if let albumLoaded = Roll.loadAlbum() {
-                album = albumLoaded
-            }
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.beginUpdates()
-            tableView.endUpdates()
+            //present an alert to notify the user before delete
+            let alertController = UIAlertController(title: "Delete Roll", message: "All the data in this roll will be lost", preferredStyle: .alert)
+            
+            let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+                Roll.deleteRoll(at: indexPath)
+                if let albumLoaded = Roll.loadAlbum() {
+                    self.album = albumLoaded
+                }
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            })
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alertController.addAction(cancelAction)
+            alertController.addAction(deleteAction)
+            
+            present(alertController, animated: true, completion: nil)
+            
         }
     }
     
-    @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
-        
-    }
-    
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
+    //reload data everytime unwinding to home
+    @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
+        if let savedAlbum = Roll.loadAlbum() {
+            album = savedAlbum
+        }
+        tableView.reloadData()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showRollSegue" {
             let destination = segue.destination as! FrameEditingViewController
             //set the index path for usage
             destination.rollIndexPath = rollIndexPath
         }
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
     }
     
 

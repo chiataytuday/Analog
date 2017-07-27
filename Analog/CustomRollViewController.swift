@@ -20,6 +20,7 @@ class CustomRollViewController: UIViewController {
     @IBOutlet weak var warningLabel: UILabel!
     @IBOutlet weak var conflictWarningLabel: UILabel!
     @IBOutlet weak var framesLabel: UILabel!
+    @IBOutlet weak var framesWarningLabel: UILabel!
     
     
     var customRoll: Roll?
@@ -32,6 +33,7 @@ class CustomRollViewController: UIViewController {
         //hide the warning labels
         warningLabel.isHidden = true
         conflictWarningLabel.isHidden = true
+        framesWarningLabel.isHidden = true
         
         //the next button
         let navNextButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(checkAndPerformSegue))
@@ -80,7 +82,7 @@ class CustomRollViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //Check whether all three fields are filled and
+    //Check whether all three fields are filled
     func checkAndEnable() {
         guard let filmText = filmTextField.text,
             let frameText = frameTextField.text,
@@ -113,7 +115,20 @@ class CustomRollViewController: UIViewController {
             return
         }
         
-        //following block to check whether name is illegal
+        if frameCount == 1 || frameCount > 99 {
+            //Dismiss all the keyboards
+            filmTextField.resignFirstResponder()
+            frameTextField.resignFirstResponder()
+            isoTextField.resignFirstResponder()
+            //show the warning label
+            framesWarningLabel.isHidden = false
+            //clear the frame field while being edited
+            frameTextField.clearsOnBeginEditing = true
+            return
+
+        }
+        
+        //following block to check whether name is illegal (has no conflict with defined roll)
         //Making sure it's a custom roll
         guard filmTextField.isEnabled else {
             performSegue(withIdentifier: "cameraSettingFromCustomSegue", sender: self)
@@ -187,10 +202,14 @@ class CustomRollViewController: UIViewController {
     
     //hide the warning when text begin to edit again
     @IBAction func textFieldBeginEditing(_ sender: UITextField) {
-        //reverse the possible action while film name conflict
+        //text fields no longer needed to be cleared again
         filmTextField.clearsOnBeginEditing = false
+        frameTextField.clearsOnBeginEditing = false
+        
+        //hide all the warning labels
         warningLabel.isHidden = true
         conflictWarningLabel.isHidden = true
+        framesWarningLabel.isHidden = true
     }
     
     

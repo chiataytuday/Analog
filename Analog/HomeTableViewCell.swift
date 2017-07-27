@@ -27,10 +27,9 @@ class HomeTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
+    //called by the table view, update all the info related to the roll
     func update(with roll: Roll) {
         filmTypeImage.image = UIImage(named: "\(roll.format)")
         
@@ -78,14 +77,23 @@ class HomeTableViewCell: UITableViewCell {
         }
         
         if let frames = roll.frames {
-            let filtered = frames.filter({ (frame) -> Bool in
-                frame != nil
-            })
-            frameCountLabel.text = "\(filtered.count)/\(roll.frameCount)"
+            var lastFrame: Int?
+            
+            for index in frames.indices {
+                if frames[index] != nil {
+                    lastFrame = index + 1
+                }
+            }
+            
+            if let lastFrame = lastFrame {
+                frameCountLabel.text = "\(lastFrame)/\(roll.frameCount)"
+            } else {
+                frameCountLabel.text = "0/\(roll.frameCount)"
+            }
             
         }
         
-        
+        //end of cell update method
     }
     
 

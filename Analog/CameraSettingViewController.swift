@@ -13,7 +13,8 @@ class CameraSettingViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var cameraTextField: UITextField!
-    @IBOutlet weak var filmTextField: UITextField!
+    @IBOutlet weak var filmLabel: UILabel!
+    @IBOutlet weak var confirmationLabel: UILabel!
     @IBOutlet weak var filmImage: UIImageView!
     @IBOutlet weak var exposureLabel: UILabel!
     
@@ -25,8 +26,8 @@ class CameraSettingViewController: UIViewController {
         super.viewDidLoad()
         
         if let roll = roll {
-            filmTextField.text = roll.filmName
-            filmTextField.isEnabled = false
+            filmLabel.text = roll.filmName
+            confirmationLabel.text = "Frames: \(roll.frameCount), ISO: \(roll.iso)"
             if roll.format == 135 {
                 filmImage.image = UIImage(named: "135")
             } else if roll.format == 120 {
