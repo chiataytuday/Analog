@@ -11,9 +11,13 @@ import MapKit
 
 protocol FrameDetailTableViewControllerDelegate {
     func didUpdateDate(with date: Date)
+    func didUpdateLens(lens: Int?)
+    func didUpdateAperture(aperture: Double?)
+    func didUpdateShutter(shutter: Int?)
+    func didUpdateNotes(notes: String?)
 }
 
-class FrameDetailTableViewController: UITableViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class FrameDetailTableViewController: UITableViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITextViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var locationNameLabel: UILabel!
@@ -21,6 +25,10 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var lensTextField: UITextField!
+    @IBOutlet weak var apertureTextField: UITextField!
+    @IBOutlet weak var shutterTextField: UITextField!
+    @IBOutlet weak var noteTextView: UITextView!
     
     //setting up location manager for map and description use
     let locationManager = CLLocationManager()
@@ -37,6 +45,13 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         
         //set the mapView's delegate
         mapView.delegate = self
+        noteTextView.delegate = self
+        
+        //add toolbar items
+        addToolBar(title: "Done", textField: lensTextField, textView: nil)
+        addToolBar(title: "Next", textField: apertureTextField, textView: nil)
+        addToolBar(title: "Done", textField: shutterTextField, textView: nil)
+        addToolBar(title: "Done", textField: nil, textView: noteTextView)
         
     }
 
@@ -50,7 +65,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
             return 230
-        case (0, 1):
+        case (0, 1), (0, 3):
             return 75
         case (0, 2):
             if isDatePickerHidden {
@@ -58,18 +73,33 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             } else {
                 return 230
             }
+        case (0, 4):
+            return 100
+        //for (0, 5)
         default:
-            return 44.0
+            return 180
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 && indexPath.row == 2 {
+        
+        switch (indexPath.section, indexPath.row) {
+        case (0, 2):
             isDatePickerHidden = !isDatePickerHidden
             tableView.beginUpdates()
             tableView.endUpdates()
+        case (0, 3):
+            lensTextField.becomeFirstResponder()
+        case (0, 4):
+            apertureTextField.becomeFirstResponder()
+        case(0, 5):
+            noteTextView.becomeFirstResponder()
+        default:
+            return
         }
+        
+        
     }
     
     
@@ -116,14 +146,35 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .full
         timeLabel.text = dateFormatter.string(from: frame.addDate)
-        
         dateFormatter.dateFormat = "h:mm a"
         dateFormatter.amSymbol = "AM"
         dateFormatter.pmSymbol = "PM"
         dateLabel.text = dateFormatter.string(from: frame.addDate)
-        
         datePicker.date = frame.addDate
         datePicker.maximumDate = Date()
+        
+        //lens info should be covered in parent controller
+        
+        //update aperture
+        if let aperture = frame.aperture {
+            apertureTextField.text = "\(aperture)"
+        } else {
+            apertureTextField.text = nil
+        }
+        //update shutter
+        if let shutter = frame.shutter {
+            shutterTextField.text = "\(shutter)"
+        } else {
+            shutterTextField.text = nil
+        }
+        //update notes
+        if let notes = frame.notes {
+            noteTextView.text = notes
+        } else {
+            //reset to the place holder
+            noteTextView.textColor = .lightGray
+            noteTextView.text = "Notes"
+        }
     }
     
         
@@ -135,6 +186,90 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         //recenter the map to locale
         let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
         mapView.setRegion(region, animated: true)
+    }
+    
+    @IBAction func lensEditingBegin(_ sender: UITextField) {
+        if sender.text != nil && sender.text != "" {
+            let withouMM = sender.text?.replacingOccurrences(of: "mm", with: "")
+            sender.text = withouMM
+        }
+    }
+    
+    @IBAction func lensEditingEnd(_ sender: UITextField) {
+        if sender.text == nil || sender.text == "" {
+            delegate?.didUpdateLens(lens: nil)
+        } else {
+            delegate?.didUpdateLens(lens: Int(sender.text!))
+            //("mm" was appended in update view)
+        }
+    }
+    
+    @IBAction func apertureEditingEnd(_ sender: UITextField) {
+        if sender.text == nil || sender.text == "" {
+            delegate?.didUpdateAperture(aperture: nil)
+        } else {
+            delegate?.didUpdateAperture(aperture: Double(sender.text!))
+        }
+    }
+    
+    @IBAction func shutterEditingEnd(_ sender: UITextField) {
+        if sender.text == nil || sender.text == "" {
+            delegate?.didUpdateShutter(shutter: nil)
+        } else {
+            delegate?.didUpdateShutter(shutter: Int(sender.text!))
+        }
+    }
+    
+    //delegate methods for textView
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Notes" {
+            noteTextView.text = ""
+            noteTextView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == "" {
+            noteTextView.textColor = .lightGray
+            noteTextView.text = "Notes"
+            delegate?.didUpdateNotes(notes: nil)
+        } else {
+            delegate?.didUpdateNotes(notes: textView.text)
+        }
+    }
+    
+    
+    func toolBarButtonTapped() {
+        if lensTextField.isFirstResponder {
+            lensTextField.resignFirstResponder()
+        } else if apertureTextField.isFirstResponder {
+            shutterTextField.becomeFirstResponder()
+        } else if shutterTextField.isFirstResponder {
+            shutterTextField.resignFirstResponder()
+        } else if noteTextView.isFirstResponder {
+            noteTextView.resignFirstResponder()
+        }
+    }
+    
+    //Keyboard Toolbar
+    func addToolBar(title: String, textField: UITextField?, textView: UITextView?) {
+        
+        let toolBar = UIToolbar()
+        toolBar.tintColor = .black
+        //Add a flexible space so that the button is positioned on the right
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let button = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(toolBarButtonTapped))
+        toolBar.setItems([flexSpace, button], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        toolBar.sizeToFit()
+        
+        if let textField = textField {
+            textField.inputAccessoryView = toolBar
+        } else if let textView = textView {
+            textView.inputAccessoryView = toolBar
+        }
+        
+        
     }
     
     

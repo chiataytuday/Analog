@@ -76,6 +76,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             
             Roll.initializeFrames(for: rollIndexPath, count: loadedRoll.frameCount)
             
+            //reload roll after initialization
+            self.loadedRoll = loadRoll()
             
             performIndexViewAnimation()
             
@@ -151,7 +153,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     func didUpdateDate(with date: Date) {
         if let rollIndexPath = rollIndexPath {
             
-            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: date, aperture: nil, shutter: nil, lens: nil, notes: nil, lastAddedFrame: nil, delete: false)
+            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: date, lastAddedFrame: nil, delete: false)
             
             //reload roll
             loadedRoll = loadRoll()
@@ -160,6 +162,53 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         }
     }
     
+    func didUpdateLens(lens: Int?) {
+        if let rollIndexPath = rollIndexPath {
+            Roll.editCurrentLens(lens: lens, for: rollIndexPath)
+            
+            Roll.editFrameLens(lens: lens, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
+            
+            loadedRoll = loadRoll()
+            
+            updateView(for: currentFrameIndex)
+        }
+    }
+    
+    func didUpdateAperture(aperture: Double?) {
+        if let rollIndexPath = rollIndexPath {
+            
+            Roll.editFrameAperture(aperture: aperture, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
+            
+            //reload roll
+            loadedRoll = loadRoll()
+            //update view
+            updateView(for: currentFrameIndex)
+        }
+    }
+    
+    func didUpdateShutter(shutter: Int?) {
+        if let rollIndexPath = rollIndexPath {
+            
+            Roll.editFrameShutter(shutter: shutter, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
+            
+            //reload roll
+            loadedRoll = loadRoll()
+            //update view
+            updateView(for: currentFrameIndex)
+        }
+    }
+    
+    func didUpdateNotes(notes: String?) {
+        if let rollIndexPath = rollIndexPath {
+            
+            Roll.editFrameNotes(notes: notes, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
+            
+            //reload roll
+            loadedRoll = loadRoll()
+            //update view
+            updateView(for: currentFrameIndex)
+        }
+    }
     
     
     //Animations
@@ -237,7 +286,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         guard let rollIndexPath = self.rollIndexPath else {return }
         
         //get the current location and save
-        Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, addDate: nil, aperture: nil, shutter: nil, lens: nil, notes: nil, lastAddedFrame: currentFrameIndex, delete: false)
+        Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: currentFrameIndex, delete: false)
         
         if let currentLocation = currentLocation {
             updateLocationDescription(with: currentLocation, for: currentFrameIndex)
@@ -292,7 +341,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             
             guard let rollIndexPath = self.rollIndexPath else {return}
             
-            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: nil, aperture: nil, shutter: nil, lens: nil, notes: nil, lastAddedFrame: nil, delete: true)
+            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: nil, delete: true)
             
             self.loadedRoll = self.loadRoll()
             self.updateView(for: self.currentFrameIndex)

@@ -21,6 +21,7 @@ struct PropertyKeys {
     static let dateAdded = "dateAdded"
     static let lastEditedDate = "lastEditedDate"
     static let lastAddedFrame = "lastAddedFrame"
+    static let currentLens = "CurrentLens"
     
     //for Frame object
     static let location = "location"

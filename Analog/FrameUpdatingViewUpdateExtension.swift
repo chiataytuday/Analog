@@ -50,6 +50,12 @@ extension FrameEditingViewController {
             //for container view to update map and date
             frameDetailTableViewController?.updateView(with: frameToUpdate)
             
+            //used to update lens
+            if let lens = frameToUpdate.lens {
+                frameDetailTableViewController?.lensTextField.text = "\(lens)mm"
+            }
+            
+            
             //used to handle the location info update
             //if location already exist, or is loading location
             if let locationName = frameToUpdate.locationName,
@@ -71,9 +77,9 @@ extension FrameEditingViewController {
     func updateLocationDescription(with location: CLLocation, for frameIndex: Int) {
         
         //prepare for possible currentIndex change, but set not finish loading
-        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", addDate: nil, aperture: nil, shutter: nil, lens: nil, notes: nil, lastAddedFrame: nil, delete: false)
+        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", addDate: nil, lastAddedFrame: nil, delete: false)
         
-        geoCodeNetworkQueue.async {
+        DispatchQueue.global(qos: .userInitiated).async {
             let geoCoder = CLGeocoder()
             //wait for the networkgroup to finish before updating ui
             let networkGroup = DispatchGroup()
@@ -88,7 +94,7 @@ extension FrameEditingViewController {
                     DispatchQueue.main.async {
                         
                         //save the frame with error message, and set as has requested
-                        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", addDate: nil, aperture: nil, shutter: nil, lens: nil, notes: nil, lastAddedFrame: nil, delete: false)
+                        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
                         //reload roll
                         self.loadedRoll = self.loadRoll()
                         //update view
@@ -125,7 +131,7 @@ extension FrameEditingViewController {
                 
                 networkGroup.wait()
                 DispatchQueue.main.async {
-                    Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: locationName, locatonDescription: locationDetail, addDate: nil, aperture: nil, shutter: nil, lens: nil, notes: nil, lastAddedFrame: nil, delete: false)
+                    Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: locationName, locatonDescription: locationDetail, addDate: nil, lastAddedFrame: nil, delete: false)
                     //reload roll, load is always after the write, so data should be the latest
                     self.loadedRoll = self.loadRoll()
                     //update view

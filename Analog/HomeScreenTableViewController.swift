@@ -79,7 +79,7 @@ class HomeScreenTableViewController: UITableViewController {
         if editingStyle == .delete {
             
             //present an alert to notify the user before delete
-            let alertController = UIAlertController(title: "Delete Roll", message: "All the data in this roll will be lost", preferredStyle: .alert)
+            let alertController = UIAlertController(title: "Delete Roll", message: "All data in this roll will be lost", preferredStyle: .alert)
             
             let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
                 Roll.deleteRoll(at: indexPath)

@@ -25,6 +25,7 @@ class Roll: NSObject, NSCoding {
     var dateAdded: Date?
     var lastEditedDate: Date?
     var lastAddedFrame: Int?
+    var currentLens: Int?
     
     //data io serial queue
     static let dataIOQueue = DispatchQueue(label: "com.Analog.dataIOQueue")
@@ -52,6 +53,7 @@ class Roll: NSObject, NSCoding {
         aCoder.encode(dateAdded, forKey: PropertyKeys.dateAdded)
         aCoder.encode(lastEditedDate, forKey: PropertyKeys.lastEditedDate)
         aCoder.encode(lastAddedFrame, forKey: PropertyKeys.lastAddedFrame)
+        aCoder.encode(currentLens, forKey: PropertyKeys.currentLens)
     }
     
     convenience required init?(coder aDecoder: NSCoder) {
@@ -69,6 +71,7 @@ class Roll: NSObject, NSCoding {
         let dateAdded = aDecoder.decodeObject(forKey: PropertyKeys.dateAdded) as? Date
         let lastEditedDate = aDecoder.decodeObject(forKey: PropertyKeys.lastEditedDate) as? Date
         let lastAddedFrame = aDecoder.decodeObject(forKey: PropertyKeys.lastAddedFrame) as? Int
+        let currentLens = aDecoder.decodeObject(forKey: PropertyKeys.currentLens) as? Int
         
         self.init(filmName: filmName, format: format, frameCount: frameCount, iso: iso)
         self.title = title
@@ -78,6 +81,7 @@ class Roll: NSObject, NSCoding {
         self.dateAdded = dateAdded
         self.lastEditedDate = lastEditedDate
         self.lastAddedFrame = lastAddedFrame
+        self.currentLens = currentLens
     }
     
     //return equal if two objects are added at the exact same date

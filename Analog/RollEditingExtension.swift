@@ -12,9 +12,10 @@ import MapKit
 extension Roll {
     //roll editing maneuvers
     
+    //only used for initial adding (automatic recording)
     //handle all the frame changes while use
-    //concurrent enhanced in data io queue
-    static func editFrame(rollIndex: IndexPath, frameIndex: Int, location: CLLocation?, locationName: String?, locatonDescription: String?, addDate: Date?, aperture: Double?, shutter: Int?, lens: Int?, notes: String?, lastAddedFrame: Int?, delete: Bool) {
+    //serial enhanced by dataIOQueue
+    static func editFrame(rollIndex: IndexPath, frameIndex: Int, location: CLLocation?, locationName: String?, locatonDescription: String?, addDate: Date?, lastAddedFrame: Int?, delete: Bool) {
         
         dataIOQueue.sync {
             guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll] else {return}
@@ -41,14 +42,6 @@ extension Roll {
                     frame.locationDescription = locatonDescription
                 } else if addDate != nil {
                     frame.addDate = addDate!
-                } else if aperture != nil {
-                    frame.aperture = aperture
-                } else if shutter != nil {
-                    frame.shutter = shutter
-                } else if lens != nil {
-                    frame.lens = lens
-                } else if notes != nil {
-                    frame.notes = notes
                 } else if lastAddedFrame != nil {
                     roll.lastAddedFrame = lastAddedFrame
                 }
@@ -63,6 +56,11 @@ extension Roll {
             } else {
                 //which means frame not yet exist
                 let frame = Frame(location: location, locationName: nil, locationDescription: nil, addDate: Date(), aperture: nil, shutter: nil, lens: nil, notes: nil)
+                
+                //set the current lens for convinence
+                if let lens = roll.currentLens {
+                    frame.lens = lens
+                }
                 
                 frames[frameIndex] = frame
                 roll.frames = frames
@@ -144,6 +142,115 @@ extension Roll {
             NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
         }
         
+    }
+    
+    static func editCurrentLens(lens: Int?, for rollIndex: IndexPath) {
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            let roll = album[rollIndex.row]
+            roll.currentLens = lens
+            album[rollIndex.row] = roll
+            
+            NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+        }
+    }
+    
+    static func editFrameLens(lens: Int?, rollIndex: IndexPath, frameIndex: Int) {
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            let roll = album[rollIndex.row]
+            
+            guard var frames = roll.frames, frames.indices.contains(frameIndex) else {return}
+            
+            if let frame = frames[frameIndex] {
+                frame.lens = lens
+                frames[frameIndex] = frame
+                
+                //new roll already
+                roll.frames = frames
+                roll.lastEditedDate = Date()
+                album.remove(at: rollIndex.row)
+                album.insert(roll, at: 0)
+                
+                NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+            }
+            
+        }
+        
+    }
+    
+    static func editFrameAperture(aperture: Double?, rollIndex: IndexPath, frameIndex: Int) {
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            let roll = album[rollIndex.row]
+            
+            guard var frames = roll.frames, frames.indices.contains(frameIndex) else {return}
+            
+            if let frame = frames[frameIndex] {
+                frame.aperture = aperture
+                frames[frameIndex] = frame
+                
+                //new roll already
+                roll.frames = frames
+                roll.lastEditedDate = Date()
+                album.remove(at: rollIndex.row)
+                album.insert(roll, at: 0)
+                
+                NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+            }
+        }
+    }
+    
+    
+    static func editFrameShutter(shutter: Int?, rollIndex: IndexPath, frameIndex: Int) {
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            let roll = album[rollIndex.row]
+            
+            guard var frames = roll.frames, frames.indices.contains(frameIndex) else {return}
+            
+            if let frame = frames[frameIndex] {
+                frame.shutter = shutter
+                frames[frameIndex] = frame
+                
+                //new roll already
+                roll.frames = frames
+                roll.lastEditedDate = Date()
+                album.remove(at: rollIndex.row)
+                album.insert(roll, at: 0)
+                
+                NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+            }
+            
+        }
+    }
+    
+    static func editFrameNotes(notes: String?, rollIndex: IndexPath, frameIndex: Int) {
+        dataIOQueue.sync {
+            guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
+            
+            let roll = album[rollIndex.row]
+            
+            guard var frames = roll.frames, frames.indices.contains(frameIndex) else {return}
+            
+            if let frame = frames[frameIndex] {
+                frame.notes = notes
+                frames[frameIndex] = frame
+                
+                //new roll already
+                roll.frames = frames
+                roll.lastEditedDate = Date()
+                album.remove(at: rollIndex.row)
+                album.insert(roll, at: 0)
+                
+                NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
+            }
+            
+        }
     }
     
     
