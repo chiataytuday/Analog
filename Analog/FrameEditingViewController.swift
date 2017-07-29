@@ -75,7 +75,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             self.navigationItem.title = title
         }
         
-        //set the slider and stepper value
+        //set the slider and stepper value, they are currentFrameIndex + 1!!!!!
         slider.maximumValue = Float(loadedRoll.frameCount)
         stepper.maximumValue = Double(loadedRoll.frameCount)
         
@@ -148,16 +148,16 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         if swipe.direction == .left && currentFrameIndex < loadedRoll.frameCount - 1 {
             currentFrameIndex += 1
             //link the slider and stepper
-            slider.value = Float(currentFrameIndex)
-            stepper.value = Double(currentFrameIndex)
+            slider.value = Float(currentFrameIndex + 1)
+            stepper.value = Double(currentFrameIndex + 1)
             indexLabel.text = "\(currentFrameIndex + 1)"
             performIndexViewAnimation()
             updateView(for: currentFrameIndex)
         } else if swipe.direction == .right && currentFrameIndex > 0 {
             currentFrameIndex -= 1
             //link the slider and stepper
-            slider.value = Float(currentFrameIndex)
-            stepper.value = Double(currentFrameIndex)
+            slider.value = Float(currentFrameIndex + 1)
+            stepper.value = Double(currentFrameIndex + 1)
             indexLabel.text = "\(currentFrameIndex + 1)"
             performIndexViewAnimation()
             updateView(for: currentFrameIndex)

@@ -39,6 +39,14 @@ class HomeScreenTableViewController: UITableViewController {
 
         self.navigationItem.leftBarButtonItem = self.editButtonItem
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if album.isEmpty {
+            self.navigationItem.leftBarButtonItem?.isEnabled = false
+        } else {
+            self.navigationItem.leftBarButtonItem?.isEnabled = true
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -85,10 +93,16 @@ class HomeScreenTableViewController: UITableViewController {
                 Roll.deleteRoll(at: indexPath)
                 if let albumLoaded = Roll.loadAlbum() {
                     self.album = albumLoaded
+                    
+                    if self.album.isEmpty {
+                        self.setEditing(false, animated: true)
+                        self.navigationItem.leftBarButtonItem?.isEnabled = false
+                    }
                 }
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 tableView.beginUpdates()
                 tableView.endUpdates()
+                
             })
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -100,6 +114,7 @@ class HomeScreenTableViewController: UITableViewController {
             
         }
     }
+    
     
     
     // MARK: - Navigation

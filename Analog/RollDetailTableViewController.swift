@@ -16,7 +16,7 @@ class RollDetailTableViewController: UITableViewController {
     @IBOutlet weak var pushPullLabel: UILabel!
     @IBOutlet weak var rollNameTextField: UITextField!
     @IBOutlet weak var cameraTextField: UITextField!
-    @IBOutlet weak var lastEditedFrameLabel: UILabel!
+    @IBOutlet weak var lastAddedLabel: UILabel!
     @IBOutlet weak var framesRecordedLabel: UILabel!
         
     var indexPath: IndexPath?
@@ -59,11 +59,13 @@ class RollDetailTableViewController: UITableViewController {
         filmLabel.text = film
         framesLabel.text = "\(frames)"
         isoLabel.text = "\(iso)"
-        if let lastEditedFrame = loadedRoll.lastAddedFrame {
-            lastEditedFrameLabel.text = "\(lastEditedFrame)"
+        
+        if let lastAddedFrame = loadedRoll.lastAddedFrame {
+            lastAddedLabel.text = "\(lastAddedFrame + 1)"
         } else {
-            lastEditedFrameLabel.text = "N/A"
+            lastAddedLabel.text = "N/A"
         }
+        
         framesRecordedLabel.text = "\(frameRecordedCount)/\(frames)"
         
         
@@ -84,7 +86,7 @@ class RollDetailTableViewController: UITableViewController {
     
     
     @IBAction func rollFieldReturned(_ sender: UITextField) {
-        cameraTextField.becomeFirstResponder()
+        rollNameTextField.resignFirstResponder()
     }
     
     

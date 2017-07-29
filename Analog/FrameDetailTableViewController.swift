@@ -117,6 +117,9 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     
     
     func updateView(with frame: Frame?) {
+        //reset table view's position
+        tableView.setContentOffset(CGPoint.zero, animated: true)
+        
         //remove annotation
         let existingAnnotations = mapView.annotations
         mapView.removeAnnotations(existingAnnotations)
@@ -126,7 +129,14 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
             mapView.setRegion(region, animated: true)
             
+            locationNameLabel.text = "Loading location..."
+            locationDetailLabel.text = "Loading location..."
             datePicker.date = Date()
+            lensTextField.text = nil
+            apertureTextField.text = nil
+            shutterTextField.text = nil
+            noteTextView.textColor = .lightGray
+            noteTextView.text = "Notes"
             
             return
         }
