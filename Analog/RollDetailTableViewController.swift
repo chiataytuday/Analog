@@ -16,6 +16,8 @@ class RollDetailTableViewController: UITableViewController {
     @IBOutlet weak var pushPullLabel: UILabel!
     @IBOutlet weak var rollNameTextField: UITextField!
     @IBOutlet weak var cameraTextField: UITextField!
+    @IBOutlet weak var lastEditedFrameLabel: UILabel!
+    @IBOutlet weak var framesRecordedLabel: UILabel!
         
     var indexPath: IndexPath?
     
@@ -30,6 +32,12 @@ class RollDetailTableViewController: UITableViewController {
         let film = loadedRoll.filmName
         let frames = loadedRoll.frameCount
         let iso = loadedRoll.iso
+        
+        var frameRecordedCount = 0
+        if let frames = loadedRoll.frames {
+            frameRecordedCount = frames.filter { $0 != nil }.count
+        }
+        
         
         if let pushPull = loadedRoll.pushPull {
             var pushPullString: String{
@@ -51,6 +59,13 @@ class RollDetailTableViewController: UITableViewController {
         filmLabel.text = film
         framesLabel.text = "\(frames)"
         isoLabel.text = "\(iso)"
+        if let lastEditedFrame = loadedRoll.lastAddedFrame {
+            lastEditedFrameLabel.text = "\(lastEditedFrame)"
+        } else {
+            lastEditedFrameLabel.text = "N/A"
+        }
+        framesRecordedLabel.text = "\(frameRecordedCount)/\(frames)"
+        
         
         if let rollName = loadedRoll.title {
             rollNameTextField.text = rollName

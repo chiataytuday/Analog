@@ -29,7 +29,9 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
     var selectedLocation: CLLocation?
     var selectedName: String?
     var selectedDetail: String?
-
+    
+    var locationManager = CLLocationManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,7 +46,12 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
             mapView.region = region
         }
         
+        mapView.showsUserLocation = true
+        
         searchResultTable.registerForKeyboardNotifications()
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
         
         // Do any additional setup after loading the view.
     }
@@ -178,11 +185,6 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
         
         checkAndEnable()
     }
-    
-    
-    
-    
-    
     
     
     
