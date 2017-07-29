@@ -21,9 +21,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     @IBOutlet weak var editToolBar: UIToolbar!
     @IBOutlet weak var viewToolBar: UIToolbar!
     
-    //start a concurrent queue for networking
-    let geoCodeNetworkQueue = DispatchQueue(label: "com.Analog.geoCodeNetworkQueue", attributes: .concurrent)
-    
     //use for loading roll
     var rollIndexPath: IndexPath?
     var loadedRoll: Roll?
@@ -52,9 +49,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             
         }
         
-        //hide the index combo, should later perform index animation
-        indexBackgroundBlack.alpha = 0
-        indexLabel.alpha = 0
+        //show the index combo, should later disapper with perform normal index animation
+        indexBackgroundBlack.alpha = 0.7
+        indexLabel.alpha = 0.9
         
         //load the roll
         guard let rollIndexPath = rollIndexPath,
@@ -79,7 +76,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             //reload roll after initialization
             self.loadedRoll = loadRoll()
             
-            performIndexViewAnimation()
+            performAnimationWithoutPop()
             
             updateView(for: 0)
             
@@ -87,7 +84,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             let notifGroup = DispatchGroup()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 notifGroup.enter()
-                self.navigationItem.prompt = "Now you can start to record frames!"
+                self.navigationItem.prompt = "Now you can start to record your frames!"
                 notifGroup.leave()
             })
             //wait for the first to complete
@@ -116,13 +113,13 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 }
                 
                 //Notify the user about the current frame
-                performIndexViewAnimation()
+                performAnimationWithoutPop()
                 
                 updateView(for: currentFrameIndex)
                 
             } else {
                 //the user has not added any frame
-                performIndexViewAnimation()
+                performAnimationWithoutPop()
                 updateView(for: 0)
             }
         }
@@ -211,6 +208,19 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     }
     
     
+    func didUpdateLocationInfo(location: CLLocation, title: String, detail: String) {
+        if let rollIndexPath = rollIndexPath {
+            
+            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: location, locationName: title, locatonDescription: detail, addDate: nil, lastAddedFrame: nil, delete: false)
+            
+            //reload roll
+            loadedRoll = loadRoll()
+            //update view
+            updateView(for: currentFrameIndex)
+        }
+    }
+    
+    
     //Animations
     
     //for index pop animation
@@ -235,6 +245,13 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 })
             })
         })
+    }
+    
+    func performAnimationWithoutPop() {
+        UIView.animate(withDuration: 0.5, delay: 8, options: .curveEaseOut, animations: {
+            self.indexBackgroundBlack.alpha = 0
+            self.indexLabel.alpha = 0
+        }, completion: nil)
     }
     
     //for slider animation

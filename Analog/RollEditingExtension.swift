@@ -35,14 +35,24 @@ extension Roll {
                     
                     return
                     
-                } else if location != nil {
+                }
+                
+                if location != nil {
                     frame.location = location
-                } else if locationName != nil && locatonDescription != nil {
+                }
+                
+                if locationName != nil {
                     frame.locationName = locationName
+                }
+                if locatonDescription != nil {
                     frame.locationDescription = locatonDescription
-                } else if addDate != nil {
+                }
+                
+                if addDate != nil {
                     frame.addDate = addDate!
-                } else if lastAddedFrame != nil {
+                }
+                
+                if lastAddedFrame != nil {
                     roll.lastAddedFrame = lastAddedFrame
                 }
                 

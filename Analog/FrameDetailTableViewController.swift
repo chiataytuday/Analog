@@ -15,9 +15,10 @@ protocol FrameDetailTableViewControllerDelegate {
     func didUpdateAperture(aperture: Double?)
     func didUpdateShutter(shutter: Int?)
     func didUpdateNotes(notes: String?)
+    func didUpdateLocationInfo(location: CLLocation, title: String, detail: String)
 }
 
-class FrameDetailTableViewController: UITableViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITextViewDelegate {
+class FrameDetailTableViewController: UITableViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITextViewDelegate, LocationSearchViewControllerDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var locationNameLabel: UILabel!
@@ -85,6 +86,17 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         tableView.deselectRow(at: indexPath, animated: true)
         
         switch (indexPath.section, indexPath.row) {
+        case (0, 1):
+            //prevent searching while still loading and saving
+            if locationNameLabel.text == "Loading location..." {
+                let alertController = UIAlertController(title: "Please wait", message: "Please wait until the load finishes", preferredStyle: .alert)
+                let dismissAction = UIAlertAction(title: "Okay", style: .cancel, handler: nil)
+                alertController.addAction(dismissAction)
+                present(alertController, animated: true, completion: nil)
+                
+            } else {
+                performSegue(withIdentifier: "searchLocationSegue", sender: self)
+            }
         case (0, 2):
             isDatePickerHidden = !isDatePickerHidden
             tableView.beginUpdates()
@@ -188,6 +200,10 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         mapView.setRegion(region, animated: true)
     }
     
+    func didUpdateLocationInfo(location: CLLocation, title: String, detail: String) {
+        delegate?.didUpdateLocationInfo(location: location, title: title, detail: detail)
+    }
+    
     @IBAction func lensEditingBegin(_ sender: UITextField) {
         if sender.text != nil && sender.text != "" {
             let withouMM = sender.text?.replacingOccurrences(of: "mm", with: "")
@@ -280,14 +296,19 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "searchLocationSegue" {
+            let destination = segue.destination as! UINavigationController
+            let targetController = destination.topViewController as! LocationSearchViewController
+            
+            targetController.previousRegion = mapView.region
+            targetController.delegate = self
+        }
     }
-    */
+    
 
 }

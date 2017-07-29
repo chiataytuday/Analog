@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		361489691F2046E800BBEA27 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361489681F2046E800BBEA27 /* MapKit.framework */; };
+		3615799B1F2C4025008450F4 /* PlacemarkExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */; };
 		362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */; };
 		362901161F1A3159007DA30B /* Roll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901151F1A3159007DA30B /* Roll.swift */; };
 		362901181F1A3162007DA30B /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901171F1A3162007DA30B /* Frame.swift */; };
@@ -31,7 +32,6 @@
 		36C78A6B1F20DCFF005D4738 /* FrameDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C78A6A1F20DCFF005D4738 /* FrameDetailTableViewController.swift */; };
 		36C78A711F20F446005D4738 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C78A701F20F446005D4738 /* HomeTableViewCell.swift */; };
 		36F801DC1F298FB600C34A31 /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F801DB1F298FB600C34A31 /* LocationSearchViewController.swift */; };
-		36F801DE1F298FD300C34A31 /* LocationSearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F801DD1F298FD300C34A31 /* LocationSearchResultTableViewController.swift */; };
 		36FCD4F01F28736C007EB077 /* RollDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCD4EF1F28736C007EB077 /* RollDetailTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +54,7 @@
 
 /* Begin PBXFileReference section */
 		361489681F2046E800BBEA27 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacemarkExtension.swift; sourceTree = "<group>"; };
 		362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenTableViewController.swift; sourceTree = "<group>"; };
 		362901151F1A3159007DA30B /* Roll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roll.swift; sourceTree = "<group>"; };
 		362901171F1A3162007DA30B /* Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
@@ -83,7 +84,6 @@
 		36C78A6A1F20DCFF005D4738 /* FrameDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameDetailTableViewController.swift; sourceTree = "<group>"; };
 		36C78A701F20F446005D4738 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		36F801DB1F298FB600C34A31 /* LocationSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
-		36F801DD1F298FD300C34A31 /* LocationSearchResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSearchResultTableViewController.swift; sourceTree = "<group>"; };
 		36FCD4EF1F28736C007EB077 /* RollDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollDetailTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,11 +147,11 @@
 			children = (
 				364A928D1F19CAE100B0D442 /* AppDelegate.swift */,
 				364A92911F19CAE100B0D442 /* Main.storyboard */,
+				364A92961F19CAE100B0D442 /* LaunchScreen.storyboard */,
 				36A3424B1F1DDD9200D00DC4 /* ViewController */,
 				3687E95C1F29E75000432E31 /* Extensions */,
 				36A3424C1F1DDDA800D00DC4 /* Model */,
 				364A92941F19CAE100B0D442 /* Assets.xcassets */,
-				364A92961F19CAE100B0D442 /* LaunchScreen.storyboard */,
 				364A92991F19CAE100B0D442 /* Info.plist */,
 			);
 			path = Analog;
@@ -179,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */,
+				3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */,
 				3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */,
 				3687E9631F29EAC100432E31 /* RollModelExtensions */,
 			);
@@ -208,7 +209,6 @@
 				36C78A6A1F20DCFF005D4738 /* FrameDetailTableViewController.swift */,
 				36FCD4EF1F28736C007EB077 /* RollDetailTableViewController.swift */,
 				36F801DB1F298FB600C34A31 /* LocationSearchViewController.swift */,
-				36F801DD1F298FD300C34A31 /* LocationSearchResultTableViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -366,7 +366,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */,
-				36F801DE1F298FD300C34A31 /* LocationSearchResultTableViewController.swift in Sources */,
 				36C78A6B1F20DCFF005D4738 /* FrameDetailTableViewController.swift in Sources */,
 				3687E95B1F29E63800432E31 /* PropertyKeys.swift in Sources */,
 				362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */,
@@ -384,6 +383,7 @@
 				3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */,
 				369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */,
 				362901181F1A3162007DA30B /* Frame.swift in Sources */,
+				3615799B1F2C4025008450F4 /* PlacemarkExtension.swift in Sources */,
 				36FCD4F01F28736C007EB077 /* RollDetailTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -538,10 +538,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = EDHA3A3J5S;
 				INFOPLIST_FILE = Analog/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hankerve.Analog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -551,10 +553,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = EDHA3A3J5S;
 				INFOPLIST_FILE = Analog/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hankerve.Analog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

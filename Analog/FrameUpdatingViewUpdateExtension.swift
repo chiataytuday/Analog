@@ -110,21 +110,8 @@ extension FrameEditingViewController {
                     if let name = placeMark.name {
                         locationName += name
                     }
-                    if let thoroughfare = placeMark.thoroughfare {
-                        locationDetail += thoroughfare
-                    }
-                    //check for whether the locality is the same as the administrativeArea
-                    if let locality = placeMark.locality,
-                        let administrativeArea = placeMark.administrativeArea {
-                        locationDetail += ", " + locality
-                        
-                        if administrativeArea != locality {
-                            locationDetail += ", " + administrativeArea
-                        }
-                    }
-                    if let country = placeMark.country {
-                        locationDetail += ", " + country
-                    }
+                    
+                    locationDetail += placeMark.phrasePlacemarkDetail()
                     
                     networkGroup.leave()
                 }
