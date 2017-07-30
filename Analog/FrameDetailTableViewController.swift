@@ -117,8 +117,6 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     
     
     func updateView(with frame: Frame?) {
-        //reset table view's position
-        tableView.setContentOffset(CGPoint.zero, animated: true)
         
         //remove annotation
         let existingAnnotations = mapView.annotations
@@ -150,7 +148,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             annotation.coordinate = locationObject
             mapView.addAnnotation(annotation)
             
-            let span = MKCoordinateSpanMake(0.01, 0.01)
+            let span = MKCoordinateSpanMake(0.002, 0.002)
             let region = MKCoordinateRegionMake(locationObject, span)
             
             

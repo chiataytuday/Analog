@@ -28,6 +28,13 @@ extension FrameEditingViewController {
             //important!! check if update is needed
             frameIndex == currentFrameIndex else { return }
         
+        //hide or show the notif image
+        if loadedRoll.lastAddedFrame == nil {
+            tapToSwitchImage.isHidden = false
+        } else {
+            tapToSwitchImage.isHidden = true
+        }
+        
         if frames[currentFrameIndex] == nil {
             
             //show the add button

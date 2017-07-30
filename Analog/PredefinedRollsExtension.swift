@@ -28,7 +28,7 @@ extension Roll {
         "Kodak GC/UltraMax 400 (135, 24exp.)" : Roll(filmName: "Kodak GC/UltraMax 400", format: 135, frameCount: 24, iso: 400),
         "Fujifilm Neopan 100 Acros (135)" : Roll(filmName: "Fujifilm Neopan 100 Acros", format: 135, frameCount: 36, iso: 100),
         "Kodak Ektar 100 (120)" : Roll(filmName: "Kodak Ektar 100", format: 120, frameCount: 0, iso: 100),
-        "Kodak T-Max 100 (135)" : Roll(filmName: "Kodak T-Max 100", format: 135, frameCount: 36, iso: 100),
+        "Kodak T-Max 100 (135, 36exp.)" : Roll(filmName: "Kodak T-Max 100", format: 135, frameCount: 36, iso: 100),
         "Ilford FP4 Plus (120)" : Roll(filmName: "Ilford FP4 Plus", format: 120, frameCount: 0, iso: 125),
         "Ilford Pan F Plus (120)" : Roll(filmName: "Ilford Pan F Plus", format: 120, frameCount: 0, iso: 50),
         "Cinestill 800Tungsten Xpro (135)" : Roll(filmName: "Cinestill 800Tungsten Xpro", format: 135, frameCount: 36, iso: 800),
@@ -52,10 +52,23 @@ extension Roll {
         "CineStill 50Daylight Xpro (135)" : Roll(filmName: "CineStill 50Daylight Xpro", format: 135, frameCount: 36, iso: 50),
         "LomoChrome Purple XR 400 (135)" : Roll(filmName: "LomoChrome Purple XR 400", format: 135, frameCount: 36, iso: 400),
         "Fujicolor PRO 400H (120)" : Roll(filmName: "Fujicolor Pro 400H", format: 120, frameCount: 0, iso: 400),
-        "Fujicolor 200 (135)" : Roll(filmName: "Fujicolor 200", format: 135, frameCount: 36, iso: 200),
+        "Fujicolor 200 (135, 36exp.)" : Roll(filmName: "Fujicolor 200", format: 135, frameCount: 36, iso: 200),
         "Ilford HP5 Plus (135, 24exp.)" : Roll(filmName: "Ilford HP5 Plus", format: 135, frameCount: 24, iso: 400),
         "Arista EDU Ultra 400 (135)" : Roll(filmName: "Aristra EDU Ultra 400", format: 135, frameCount: 36, iso: 400),
         "Fujicolor Supera X-Tra 400 (135)" : Roll(filmName: "Fujicolor Supera X-Tra 400", format: 135, frameCount: 36, iso: 400),
-        "Aristra EDU Ultra 100 (120)" : Roll(filmName: "Aristra EDU Ultra 100", format: 120, frameCount: 0, iso: 100)
+        "Aristra EDU Ultra 100 (120)" : Roll(filmName: "Aristra EDU Ultra 100", format: 120, frameCount: 0, iso: 100),
+        "Kentmere 100 (135)" : Roll(filmName: "Kentmere 100", format: 135, frameCount: 36, iso: 100),
+        "Arista EDU Ultra 400 (120)" : Roll(filmName: "Arista EDU Ultra 400", format: 120, frameCount: 0, iso: 400),
+        "Fujicolor Superia X-TRA 800 (135, 24xep.)" : Roll(filmName: "Fujicolor Superia X-TRA 800", format: 135, frameCount: 24, iso: 800),
+        "Bergger Pancro 400 (135)" : Roll(filmName: "Bergger Pancro 400", format: 135, frameCount: 36, iso: 400),
+        "Rollei Digibase CR 200 PRO (135)" : Roll(filmName: "Rollei Digibase CR 200 PRO", format: 135, frameCount: 36, iso: 200),
+        "Kodak T-Max 100 (135, 24exp.)" : Roll(filmName: "Kodak T-Max 100", format: 135, frameCount: 24, iso: 100),
+        "Fujicolor 200 (135, 24exp.)" : Roll(filmName: "Fujicolor 200", format: 135, frameCount: 24, iso: 200),
+        "AgfaPhoto Vista plus 200 (135)" : Roll(filmName: "AgfaPhoto Vista plus 200", format: 135, frameCount: 36, iso: 200),
+        "Fujicolor Superia X-TRA 800 (135, 36exp.)" : Roll(filmName: "Fujicolor Superia X-TRA 800", format: 135, frameCount: 36, iso: 800),
+        "Rollei Infrared 400 (120)" : Roll(filmName: "Rollei Infrared 400", format: 120, frameCount: 0, iso: 400),
+        "Fujifilm Neopan 100 (120)" : Roll(filmName: "Fujifilm Neopan 100", format: 120, frameCount: 0, iso: 100),
+        "Rollei Infrared 400 (135)" : Roll(filmName: "Rollei Infrared 400", format: 135, frameCount: 36, iso: 400)
     ]
+    
 }

@@ -20,6 +20,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     @IBOutlet weak var addFrameButton: UIButton!
     @IBOutlet weak var editToolBar: UIToolbar!
     @IBOutlet weak var viewToolBar: UIToolbar!
+    @IBOutlet weak var tapToSwitchImage: UIImageView!
     
     let networkQueue = DispatchQueue(label: "com.hankerve.Analog.networkQueue", attributes: .concurrent)
     
@@ -307,6 +308,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     //animation for tool bar change
     @IBAction func goToButtonTapped(_ sender: UIButton) {
+        
         UIView.animate(withDuration: 0, animations: {
             self.viewToolBar.alpha = 0
         }) { (_) in
@@ -321,6 +323,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     }
     
     @IBAction func sliderBackButtonTapped(_ sender: UIButton) {
+        
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.viewToolBar.alpha = 0
         }) { (_) in

@@ -78,7 +78,7 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
         //show the annotation title automatically
         mapView.selectAnnotation(annotation, animated: true)
         
-        let span = MKCoordinateSpanMake(0.01, 0.01)
+        let span = MKCoordinateSpanMake(0.002, 0.002)
         let region = MKCoordinateRegionMake(placemark.coordinate, span)
         mapView.setRegion(region, animated: true)
         

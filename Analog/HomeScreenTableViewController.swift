@@ -43,6 +43,20 @@ class HomeScreenTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         if album.isEmpty {
             self.navigationItem.leftBarButtonItem?.isEnabled = false
+            
+            let notifGroup = DispatchGroup()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                notifGroup.enter()
+                self.navigationItem.prompt = "Tap ➕ to add a roll"
+                notifGroup.leave()
+            })
+            //wait for the first to complete
+            notifGroup.wait()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+                self.navigationItem.prompt = nil
+            })
+            
+            
         } else {
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
