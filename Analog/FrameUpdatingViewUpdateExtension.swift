@@ -88,13 +88,11 @@ extension FrameEditingViewController {
         
         //deep copy the frameIndex
         let frameIndex = Int(frameIndex)
+        let networkGroup = DispatchGroup()
         
         //prepare for possible currentIndex change, but set not finish loading
         Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", addDate: nil, lastAddedFrame: nil, delete: false)
         
-        let geoCoder = CLGeocoder()
-        //wait for the networkgroup to finish before updating ui
-        let networkGroup = DispatchGroup()
         var locationName = ""
         var locationDetail = ""
         

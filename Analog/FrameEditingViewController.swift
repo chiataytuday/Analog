@@ -35,6 +35,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation?
     
+    let geoCoder = CLGeocoder()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,8 +109,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         }
         
         //show the index combo, should later disapper with perform normal index animation
-        indexBackgroundBlack.alpha = 0.7
-        indexLabel.alpha = 0.9
         performAnimationWithoutPop()
     }
     
