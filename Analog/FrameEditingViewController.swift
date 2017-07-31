@@ -25,6 +25,10 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     //use for loading roll
     var rollIndexPath: IndexPath?
     var loadedRoll: Roll?
+    //used to cache the frames
+    var frames: [Frame?]?
+    
+    
     //start with 0!!!
     var currentFrameIndex = 0
     
@@ -37,11 +41,19 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     let geoCoder = CLGeocoder()
     
+    override func viewWillAppear(_ animated: Bool) {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            //and start updating location
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         //load the roll
         guard let rollIndexPath = rollIndexPath,
@@ -101,16 +113,14 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //check for authorization and whether location services are available
-        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            //and start updating location
-            locationManager.startUpdatingLocation()
-            
-        }
-        
         //show the index combo, should later disapper with perform normal index animation
         performAnimationWithoutPop()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        locationManager.stopUpdatingLocation()
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -293,14 +303,11 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         
         guard let rollIndexPath = self.rollIndexPath else {return }
         
-        locationManager.startUpdatingLocation()
-        
         //get the current location and save
-        Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: currentFrameIndex, delete: false)
+        Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: currentFrameIndex, delete: false)
         
         if let currentLocation = currentLocation {
             updateLocationDescription(with: currentLocation, for: currentFrameIndex)
-            locationManager.stopUpdatingLocation()
         }
         
         //update view

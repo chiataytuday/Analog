@@ -15,27 +15,31 @@ extension FrameEditingViewController {
     func loadRoll() -> Roll? {
         guard let rollIndexPath = rollIndexPath else {return nil}
         
-        return Roll.loadRoll(with: rollIndexPath)
+        let loadedRoll = Roll.loadRoll(with: rollIndexPath)
+        
+        if let frames = loadedRoll?.frames {
+            self.frames = frames
+        }
+        
+        return loadedRoll
     }
     
     //used to update the view
     //be careful frameIndex start at 0
     func updateView(for frameIndex: Int) {
-        guard let loadedRoll = loadedRoll,
-            let frames = loadedRoll.frames,
-            frames.indices.contains(currentFrameIndex),
-            
+        guard let frames = frames,
             //important!! check if update is needed
             frameIndex == currentFrameIndex else { return }
         
-        //hide or show the notif image
-        if loadedRoll.lastAddedFrame == nil {
-            tapToSwitchImage.isHidden = false
-        } else {
-            tapToSwitchImage.isHidden = true
-        }
-        
         if frames[currentFrameIndex] == nil {
+            guard let loadedRoll = loadedRoll else { return }
+            
+            //hide or show the notif image
+            if loadedRoll.lastAddedFrame == nil {
+                tapToSwitchImage.isHidden = false
+            } else {
+                tapToSwitchImage.isHidden = true
+            }
             
             //show the add button
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn, animations: {
