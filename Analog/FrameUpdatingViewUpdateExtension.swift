@@ -71,11 +71,14 @@ extension FrameEditingViewController {
                 //IMPORTANT! disable the delete button if loading
                 if locationName == "Loading location..." {
                     deleteFrameButton.isEnabled = false
+                    updateLocationDescription(with: frameToUpdate.location!, for: currentFrameIndex)
+                    //the label should be "loading location for now
+                    frameDetailTableViewController?.locationNameLabel.text = locationName
+                    frameDetailTableViewController?.locationDetailLabel.text = locationDescription
+                } else {
+                    frameDetailTableViewController?.locationNameLabel.text = locationName
+                    frameDetailTableViewController?.locationDetailLabel.text = locationDescription
                 }
-                //update the location info, either loading or canceled
-                frameDetailTableViewController?.locationNameLabel.text = locationName
-                frameDetailTableViewController?.locationDetailLabel.text = locationDescription
-                
             }
         }
     }
