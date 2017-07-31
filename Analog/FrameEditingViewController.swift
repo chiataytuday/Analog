@@ -22,8 +22,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     @IBOutlet weak var viewToolBar: UIToolbar!
     @IBOutlet weak var tapToSwitchImage: UIImageView!
     
-    let networkQueue = DispatchQueue(label: "com.hankerve.Analog.networkQueue", attributes: .concurrent)
-    
     //use for loading roll
     var rollIndexPath: IndexPath?
     var loadedRoll: Roll?
@@ -40,15 +38,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
-        swipeLeft.direction = .left
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
-        swipeRight.direction = .right
-        self.view.addGestureRecognizer(swipeRight)
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -128,34 +117,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    //handle the swipe gesture
-    func handleSwipe(swipe: UISwipeGestureRecognizer) {
-        guard let loadedRoll = loadedRoll else { return }
-        
-        if swipe.direction == .left && currentFrameIndex < loadedRoll.frameCount - 1 {
-            currentFrameIndex += 1
-            //link the slider and stepper
-            slider.value = Float(currentFrameIndex + 1)
-            stepper.value = Double(currentFrameIndex + 1)
-            indexLabel.text = "\(currentFrameIndex + 1)"
-            performIndexViewAnimation()
-            updateView(for: currentFrameIndex)
-        } else if swipe.direction == .right && currentFrameIndex > 0 {
-            currentFrameIndex -= 1
-            //link the slider and stepper
-            slider.value = Float(currentFrameIndex + 1)
-            stepper.value = Double(currentFrameIndex + 1)
-            indexLabel.text = "\(currentFrameIndex + 1)"
-            performIndexViewAnimation()
-            updateView(for: currentFrameIndex)
-        } else if currentFrameIndex == 0 {
-            performIndexViewAnimation()
-        } else if currentFrameIndex == loadedRoll.frameCount - 1 {
-            performIndexViewAnimation()
-        }
-    }
-    
     
     //core location delegate method
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

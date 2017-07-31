@@ -72,7 +72,7 @@ extension FrameEditingViewController {
                 if locationName == "Loading location..." {
                     deleteFrameButton.isEnabled = false
                     updateLocationDescription(with: frameToUpdate.location!, for: currentFrameIndex)
-                    //the label should be "loading location for now
+                    //the label should be "loading location" for now
                     frameDetailTableViewController?.locationNameLabel.text = locationName
                     frameDetailTableViewController?.locationDetailLabel.text = locationDescription
                 } else {
@@ -86,55 +86,57 @@ extension FrameEditingViewController {
     //called whenever the add frame button tapped
     func updateLocationDescription(with location: CLLocation, for frameIndex: Int) {
         
+        //deep copy the frameIndex
+        let frameIndex = Int(frameIndex)
+        
         //prepare for possible currentIndex change, but set not finish loading
         Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", addDate: nil, lastAddedFrame: nil, delete: false)
         
-        networkQueue.async {
-            let geoCoder = CLGeocoder()
-            //wait for the networkgroup to finish before updating ui
-            let networkGroup = DispatchGroup()
-            var locationName = ""
-            var locationDetail = ""
-            
-            geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
-                networkGroup.enter()
-                if error != nil {
-                    networkGroup.leave()
-                    //dispatch ui update on main
-                    DispatchQueue.main.async {
-                        
-                        //save the frame with error message, and set as has requested
-                        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
-                        //reload roll
-                        self.loadedRoll = self.loadRoll()
-                        //update view
-                        self.updateView(for: frameIndex)
-                    }
-                    return
-                } else {
-                    guard let returnedPlaceMarks = placeMarks else { return }
-                    
-                    let placeMark = returnedPlaceMarks[0]
-                    
-                    //placemark info processing
-                    if let name = placeMark.name {
-                        locationName += name
-                    }
-                    
-                    locationDetail += placeMark.phrasePlacemarkDetail()
-                    
-                    networkGroup.leave()
-                }
-                
-                networkGroup.wait()
+        let geoCoder = CLGeocoder()
+        //wait for the networkgroup to finish before updating ui
+        let networkGroup = DispatchGroup()
+        var locationName = ""
+        var locationDetail = ""
+        
+        geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
+            networkGroup.enter()
+            if error != nil {
+                networkGroup.leave()
+                //dispatch ui update on main
                 DispatchQueue.main.async {
-                    Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: locationName, locatonDescription: locationDetail, addDate: nil, lastAddedFrame: nil, delete: false)
-                    //reload roll, load is always after the write, so data should be the latest
+                    
+                    //save the frame with error message, and set as has requested
+                    Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
+                    //reload roll
                     self.loadedRoll = self.loadRoll()
                     //update view
                     self.updateView(for: frameIndex)
                 }
+                return
+            } else {
+                guard let returnedPlaceMarks = placeMarks else { return }
+                
+                let placeMark = returnedPlaceMarks[0]
+                
+                //placemark info processing
+                if let name = placeMark.name {
+                    locationName += name
+                }
+                
+                locationDetail += placeMark.phrasePlacemarkDetail()
+                
+                networkGroup.leave()
             }
+            
+            networkGroup.wait()
+            DispatchQueue.main.async {
+                Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: locationName, locatonDescription: locationDetail, addDate: nil, lastAddedFrame: nil, delete: false)
+                //reload roll, load is always after the write, so data should be the latest
+                self.loadedRoll = self.loadRoll()
+                //update view
+                self.updateView(for: frameIndex)
+            }
+
         }
     }
 
