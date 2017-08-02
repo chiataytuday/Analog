@@ -64,6 +64,10 @@ extension FrameEditingViewController {
             if let lens = frameToUpdate.lens {
                 frameDetailTableViewController?.lensTextField.text = "\(lens)mm"
             }
+            
+            if frameToUpdate.locationName == "Loading location..." {
+                deleteFrameButton.isEnabled = false
+            }
         }
     }
     
@@ -76,9 +80,6 @@ extension FrameEditingViewController {
         
         //prepare for possible currentIndex change, but set not finish loading
         Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", addDate: nil, lastAddedFrame: nil, delete: false)
-        //in case after tap to reload
-        frameDetailTableViewController?.locationNameLabel.text = "Loading location..."
-        frameDetailTableViewController?.locationDetailLabel.text = "Loading location..."
         
         var locationName = ""
         var locationDetail = ""

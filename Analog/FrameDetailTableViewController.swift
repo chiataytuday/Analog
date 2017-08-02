@@ -99,6 +99,9 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
                     let location = delegate?.frames?[currentFrameIndex]?.location else {return}
                 
                 delegate?.updateLocationDescription(with: location, for: currentFrameIndex)
+                delegate?.deleteFrameButton.isEnabled = false
+                locationNameLabel.text = "Loading location..."
+                locationDetailLabel.text = "Loading location..."
                 
             } else {
                 performSegue(withIdentifier: "searchLocationSegue", sender: self)
@@ -174,6 +177,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         
         //update other views
         let dateFormatter = DateFormatter()
+        dateFormatter.locale
         dateFormatter.dateStyle = .full
         timeLabel.text = dateFormatter.string(from: frame.addDate)
         dateFormatter.dateFormat = "h:mm a"
