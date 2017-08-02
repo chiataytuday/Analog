@@ -41,19 +41,11 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     let geoCoder = CLGeocoder()
     
-    override func viewWillAppear(_ animated: Bool) {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        
-        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            //and start updating location
-            locationManager.startUpdatingLocation()
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         //load the roll
         guard let rollIndexPath = rollIndexPath,
@@ -89,7 +81,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             })
             //wait for the first to complete
             notifGroup.wait()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 7, execute: {
                 self.navigationItem.prompt = nil
             })
             
@@ -112,20 +104,26 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         //show the index combo, should later disapper with perform normal index animation
         performAnimationWithoutPop()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         locationManager.stopUpdatingLocation()
+        geoCoder.cancelGeocode()
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
     //core location delegate method
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -281,6 +279,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 }, completion: nil)
             })
         }
+        
+        tapToSwitchImage.isHidden = true
     }
     
     @IBAction func sliderBackButtonTapped(_ sender: UIButton) {
@@ -291,6 +291,12 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
                 self.editToolBar.alpha = 1
             }, completion: nil)
+        }
+        
+        if loadedRoll?.lastAddedFrame == nil {
+            tapToSwitchImage.isHidden = false
+        } else {
+            tapToSwitchImage.isHidden = true
         }
     }
     

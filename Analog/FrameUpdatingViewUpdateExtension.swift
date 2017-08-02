@@ -49,8 +49,7 @@ extension FrameEditingViewController {
             //reset the view to prepare for adding
             frameDetailTableViewController?.updateView(with: nil)
             
-        } else if let frameToUpdate = frames[currentFrameIndex] {
-            
+        } else if let frameToUpdate = frames[frameIndex] {
             
             //hide the add button
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseOut, animations: {
@@ -65,25 +64,6 @@ extension FrameEditingViewController {
             if let lens = frameToUpdate.lens {
                 frameDetailTableViewController?.lensTextField.text = "\(lens)mm"
             }
-            
-            
-            //used to handle the location info update
-            //if location already exist, or is loading location
-            if let locationName = frameToUpdate.locationName,
-                let locationDescription = frameToUpdate.locationDescription {
-                
-                //IMPORTANT! disable the delete button if loading
-                if locationName == "Loading location..." {
-                    deleteFrameButton.isEnabled = false
-                    updateLocationDescription(with: frameToUpdate.location!, for: currentFrameIndex)
-                    //the label should be "loading location" for now
-                    frameDetailTableViewController?.locationNameLabel.text = locationName
-                    frameDetailTableViewController?.locationDetailLabel.text = locationDescription
-                } else {
-                    frameDetailTableViewController?.locationNameLabel.text = locationName
-                    frameDetailTableViewController?.locationDetailLabel.text = locationDescription
-                }
-            }
         }
     }
     
@@ -96,25 +76,42 @@ extension FrameEditingViewController {
         
         //prepare for possible currentIndex change, but set not finish loading
         Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", addDate: nil, lastAddedFrame: nil, delete: false)
+        //in case after tap to reload
+        frameDetailTableViewController?.locationNameLabel.text = "Loading location..."
+        frameDetailTableViewController?.locationDetailLabel.text = "Loading location..."
         
         var locationName = ""
         var locationDetail = ""
         
         geoCoder.reverseGeocodeLocation(location) { (placeMarks, error) in
             networkGroup.enter()
+            
             if error != nil {
-                networkGroup.leave()
-                //dispatch ui update on main
-                DispatchQueue.main.async {
-                    
-                    //save the frame with error message, and set as has requested
-                    Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
-                    //reload roll
-                    self.loadedRoll = self.loadRoll()
-                    //update view
-                    self.updateView(for: frameIndex)
+                
+                if let error = error as? CLError {
+                    if error.errorCode == 2 || error.errorCode == 10 {
+                        //for network error or geoCode cancelled
+                        DispatchQueue.main.async {
+                            Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to reload", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
+                            self.loadedRoll = self.loadRoll()
+                            self.updateView(for: frameIndex)
+                        }
+                        return
+                    } else {
+                        //dispatch ui update on main
+                        DispatchQueue.main.async {
+                            
+                            //save the frame with error message, and set as has requested
+                            Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
+                            //reload roll
+                            self.loadedRoll = self.loadRoll()
+                            //update view
+                            self.updateView(for: frameIndex)
+                        }
+                        return
+                    }
                 }
-                return
+                
             } else {
                 guard let returnedPlaceMarks = placeMarks else { return }
                 

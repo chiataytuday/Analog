@@ -94,9 +94,16 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
                 alertController.addAction(dismissAction)
                 present(alertController, animated: true, completion: nil)
                 
+            } else if locationNameLabel.text == "Tap to reload" {
+                guard let currentFrameIndex = delegate?.currentFrameIndex,
+                    let location = delegate?.frames?[currentFrameIndex]?.location else {return}
+                
+                delegate?.updateLocationDescription(with: location, for: currentFrameIndex)
+                
             } else {
                 performSegue(withIdentifier: "searchLocationSegue", sender: self)
             }
+            
         case (0, 2):
             isDatePickerHidden = !isDatePickerHidden
             tableView.beginUpdates()
@@ -139,6 +146,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             return
         }
         
+        //for existing frames
         if let location = frame.location {
             
             //update map
@@ -156,13 +164,15 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             mapView.setRegion(region, animated: true)
             mapView.showsUserLocation = false
             
-            //location labels handled in parent controller
+            //location info
+            locationNameLabel.text = frame.locationName
+            locationDetailLabel.text = frame.locationDescription
             
         } else {
             updateViewForLocationNotCaptured()
         }
         
-        //block to update other view here
+        //update other views
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .full
         timeLabel.text = dateFormatter.string(from: frame.addDate)
