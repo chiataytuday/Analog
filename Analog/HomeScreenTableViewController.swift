@@ -31,6 +31,10 @@ class HomeScreenTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if let savedAlbum = Roll.loadAlbum() {
+            album = savedAlbum
+        }
+        
         if album.isEmpty {
             self.navigationItem.leftBarButtonItem?.isEnabled = false
             
@@ -49,9 +53,6 @@ class HomeScreenTableViewController: UITableViewController {
             
         } else {
             //reload data
-            if let savedAlbum = Roll.loadAlbum() {
-                album = savedAlbum
-            }
             tableView.reloadData()
             
             self.navigationItem.leftBarButtonItem?.isEnabled = true

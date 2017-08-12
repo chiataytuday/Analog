@@ -188,6 +188,8 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         //update lens
         if let lens = frame.lens {
             lensTextField.text = "\(lens)mm"
+        } else {
+            lensTextField.text = nil
         }
         
         //update aperture
