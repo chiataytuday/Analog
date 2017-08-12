@@ -11,19 +11,6 @@ import MapKit
 
 extension FrameEditingViewController {
     
-    //function for reload roll
-//    func loadRoll() -> Roll? {
-//        guard let rollIndexPath = rollIndexPath else {return nil}
-//        
-//        let loadedRoll = Roll.loadRoll(with: rollIndexPath)
-//        
-//        if let frames = loadedRoll?.frames {
-//            self.frames = frames
-//        }
-//        
-//        return loadedRoll
-//    }
-    
     //used to update the view
     //be careful frameIndex start at 0
     func updateView(for frameIndex: Int) {
@@ -31,16 +18,7 @@ extension FrameEditingViewController {
             //important!! check if update is needed
             frameIndex == currentFrameIndex else { return }
         
-        if frames[currentFrameIndex] == nil {
-//            guard let loadedRoll = loadedRoll else { return }
-            
-            //hide or show the notif image
-//            if loadedRoll.lastAddedFrame == nil {
-//                tapToSwitchImage.isHidden = false
-//            } else {
-//                tapToSwitchImage.isHidden = true
-//            }
-            
+        if frames[currentFrameIndex] == nil {            
             //show the add button
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn, animations: {
                 self.addFrameView.alpha = 0.9
@@ -63,10 +41,6 @@ extension FrameEditingViewController {
             //for container view to update map and date
             frameDetailTableViewController?.updateView(with: frameToUpdate)
             
-            
-//            if frameToUpdate.locationName == "Loading location..." {
-//                deleteFrameButton.isEnabled = false
-//            }
         }
     }
     
@@ -84,9 +58,6 @@ extension FrameEditingViewController {
         frames[currentFrameIndex]?.locationName = "Loading location..."
         frames[currentFrameIndex]?.locationDescription = "Loading location..."
         updateView(for: currentFrameIndex)
-        
-        
-//        Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Loading location...", locatonDescription: "Loading location...", addDate: nil, lastAddedFrame: nil, delete: false)
         
         var locationName = ""
         var locationDetail = ""
@@ -113,9 +84,6 @@ extension FrameEditingViewController {
                             
                             networkGroup.leave()
                             
-//                            Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to reload", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
-//                            self.loadedRoll = self.loadRoll()
-//                            self.updateView(for: frameIndex)
                         }
                         return
                     } else {
@@ -133,12 +101,6 @@ extension FrameEditingViewController {
                             
                             networkGroup.leave()
                             
-                            //save the frame with error message, and set as has requested
-//                            Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: "Tap to search", locatonDescription: "Can't load location info", addDate: nil, lastAddedFrame: nil, delete: false)
-//                            //reload roll
-//                            self.loadedRoll = self.loadRoll()
-//                            //update view
-//                            self.updateView(for: frameIndex)
                         }
                         return
                     }
@@ -171,11 +133,6 @@ extension FrameEditingViewController {
                     self.saveRoll()
                 }
                 
-//                Roll.editFrame(rollIndex: self.rollIndexPath!, frameIndex: frameIndex, location: nil, locationName: locationName, locatonDescription: locationDetail, addDate: nil, lastAddedFrame: nil, delete: false)
-//                //reload roll, load is always after the write, so data should be the latest
-//                self.loadedRoll = self.loadRoll()
-//                //update view
-//                self.updateView(for: frameIndex)
             }
 
         }

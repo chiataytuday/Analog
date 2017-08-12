@@ -30,9 +30,6 @@ extension Roll {
         return album
     }
     
-    static func saveAlbum(album: [Roll]) {
-        NSKeyedArchiver.archiveRootObject(album, toFile: Roll.albumArchiveURL.path)
-    }
     
     
     //recently added function

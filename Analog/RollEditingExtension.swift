@@ -41,14 +41,4 @@ extension Roll {
         NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
     }
     
-    static func editRollTitle(title: String?, for rollIndex: IndexPath) {
-        guard var album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll], album.indices.contains(rollIndex.row) else { return }
-        
-        let roll = album[rollIndex.row]
-        roll.title = title
-        album[rollIndex.row] = roll
-        
-        NSKeyedArchiver.archiveRootObject(album, toFile: albumArchiveURL.path)
-    }
-    
 }
