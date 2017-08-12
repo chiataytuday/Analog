@@ -206,6 +206,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         }
         //update notes
         if let notes = frame.notes {
+            noteTextView.textColor = .black
             noteTextView.text = notes
         } else {
             //reset to the place holder
