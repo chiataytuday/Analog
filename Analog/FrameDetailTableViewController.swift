@@ -177,7 +177,6 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         
         //update other views
         let dateFormatter = DateFormatter()
-        dateFormatter.locale
         dateFormatter.dateStyle = .full
         timeLabel.text = dateFormatter.string(from: frame.addDate)
         dateFormatter.dateFormat = "h:mm a"
