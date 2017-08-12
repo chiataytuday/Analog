@@ -41,11 +41,21 @@ class HomeTableViewCell: UITableViewCell {
             titleLabel.text = roll.title
         }
         
-        if roll.camera == nil  {
-            rollDetailLabel.text = roll.filmName
-        } else {
-            rollDetailLabel.text = roll.filmName + ", " + (roll.camera ?? "Camera missing")
+        var evString = ""
+        if let pushPull = roll.pushPull {
+            if pushPull > 0 {
+                evString = ", +\(Int(pushPull))ev"
+            } else if pushPull < 0 {
+                evString = ", \(Int(pushPull))ev"
+            }
         }
+        
+        if roll.camera == nil  {
+            rollDetailLabel.text = roll.filmName + evString
+        } else {
+            rollDetailLabel.text = roll.filmName + ", " + (roll.camera ?? "Camera missing") + evString
+        }
+        
         
         let dateFormatter = DateFormatter()
         

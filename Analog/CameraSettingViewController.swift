@@ -26,6 +26,10 @@ class CameraSettingViewController: UIViewController {
         super.viewDidLoad()
         
         if let roll = roll {
+            
+            //reset the push/pull to 0
+            roll.pushPull = nil
+            
             filmLabel.text = roll.filmName
             confirmationLabel.text = "Frames: \(roll.frameCount), ISO: \(roll.iso)"
             if roll.format == 135 {
