@@ -48,6 +48,12 @@ class HomeScreenTableViewController: UITableViewController {
             
             
         } else {
+            //reload data
+            if let savedAlbum = Roll.loadAlbum() {
+                album = savedAlbum
+            }
+            tableView.reloadData()
+            
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
     }
@@ -56,8 +62,6 @@ class HomeScreenTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    
     
     //table view delegate methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -125,10 +129,7 @@ class HomeScreenTableViewController: UITableViewController {
     
     //reload data everytime unwinding to home
     @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
-        if let savedAlbum = Roll.loadAlbum() {
-            album = savedAlbum
-        }
-        tableView.reloadData()
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

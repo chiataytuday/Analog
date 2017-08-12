@@ -99,7 +99,6 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
                     let location = delegate?.frames?[currentFrameIndex]?.location else {return}
                 
                 delegate?.updateLocationDescription(with: location, for: currentFrameIndex)
-                delegate?.deleteFrameButton.isEnabled = false
                 locationNameLabel.text = "Loading location..."
                 locationDetailLabel.text = "Loading location..."
                 
@@ -186,7 +185,10 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         datePicker.date = frame.addDate
         datePicker.maximumDate = Date()
         
-        //lens info should be covered in parent controller
+        //update lens
+        if let lens = frame.lens {
+            lensTextField.text = "\(lens)mm"
+        }
         
         //update aperture
         if let aperture = frame.aperture {

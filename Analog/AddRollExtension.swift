@@ -23,13 +23,15 @@ extension Roll {
         }
     }
     
-    //#Mark: cocurrency enhanced
+    //for album loading at home screen
     static func loadAlbum() -> [Roll]? {
         var album: [Roll]?
-        dataIOQueue.sync {
-            album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll]
-        }
+        album = NSKeyedUnarchiver.unarchiveObject(withFile: Roll.albumArchiveURL.path) as? [Roll]
         return album
+    }
+    
+    static func saveAlbum(album: [Roll]) {
+        NSKeyedArchiver.archiveRootObject(album, toFile: Roll.albumArchiveURL.path)
     }
     
     

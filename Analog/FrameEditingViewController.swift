@@ -49,10 +49,11 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         
         //load the roll
         guard let rollIndexPath = rollIndexPath,
-            let loadedRoll = loadRoll() else { return }
+            let loadedRoll = Roll.loadRoll(with: rollIndexPath) else { return }
         
         //assign loadedRoll
         self.loadedRoll = loadedRoll
+        frames = loadedRoll.frames
         
         if let title = loadedRoll.title {
             self.navigationItem.title = title
@@ -65,10 +66,15 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         //initialize the array for saving if not existed
         if loadedRoll.frames == nil {
             
-            Roll.initializeFrames(for: rollIndexPath, count: loadedRoll.frameCount)
+            //initialize the frames
+            frames = Array(repeating: nil, count: loadedRoll.frameCount)
+            
+            tapToSwitchImage.isHidden = false
+            
+            //Roll.initializeFrames(for: rollIndexPath, count: loadedRoll.frameCount)
             
             //reload roll after initialization
-            self.loadedRoll = loadRoll()
+            //self.loadedRoll = loadRoll()
             
             updateView(for: 0)
             
@@ -88,6 +94,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         } else {
             //preparation for previously edited roll
             if let lastAddedIndex = loadedRoll.lastAddedFrame {
+                
+                tapToSwitchImage.isHidden = true
                 
                 currentFrameIndex = lastAddedIndex
                 
@@ -117,11 +125,22 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     override func viewWillDisappear(_ animated: Bool) {
         locationManager.stopUpdatingLocation()
         geoCoder.cancelGeocode()
+        saveRoll()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    //called while back batton was tapped or moving to the background
+    func saveRoll() {
+        guard let rollIndexPath = rollIndexPath, let loadedRoll = loadedRoll, let frames = frames else {return}
+        
+        loadedRoll.frames = frames
+        
+        Roll.saveRoll(for: rollIndexPath, with: loadedRoll)
     }
     
     
@@ -145,76 +164,85 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     //delegate methods from container view
     func didUpdateDate(with date: Date) {
-        if let rollIndexPath = rollIndexPath {
-            
-            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: date, lastAddedFrame: nil, delete: false)
-            
-            //reload roll
-            loadedRoll = loadRoll()
-            //update view
-            updateView(for: currentFrameIndex)
-        }
+        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
+        
+        loadedRoll.lastEditedDate = Date()
+        //Note: this is allowed because "frames" is only a reference copy
+        frames[currentFrameIndex]?.addDate = date
+        
+        updateView(for: currentFrameIndex)
+        
+//        if let rollIndexPath = rollIndexPath {
+//            
+//            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: date, lastAddedFrame: nil, delete: false)
+//            
+//            //reload roll
+//            loadedRoll = loadRoll()
+//            //update view
+//            updateView(for: currentFrameIndex)
+//        }
     }
     
     func didUpdateLens(lens: Int?) {
-        if let rollIndexPath = rollIndexPath {
-            Roll.editCurrentLens(lens: lens, for: rollIndexPath)
-            
-            Roll.editFrameLens(lens: lens, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
-            
-            loadedRoll = loadRoll()
-            
-            updateView(for: currentFrameIndex)
-        }
+        
+        
+        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
+        
+        loadedRoll.lastEditedDate = Date()
+        loadedRoll.currentLens = lens
+        frames[currentFrameIndex]?.lens = lens
+        
+        updateView(for: currentFrameIndex)
+        
+        
+//        if let rollIndexPath = rollIndexPath {
+//            Roll.editCurrentLens(lens: lens, for: rollIndexPath)
+//            
+//            Roll.editFrameLens(lens: lens, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
+//            
+//            loadedRoll = loadRoll()
+//            
+//            updateView(for: currentFrameIndex)
+//        }
     }
     
     func didUpdateAperture(aperture: Double?) {
-        if let rollIndexPath = rollIndexPath {
-            
-            Roll.editFrameAperture(aperture: aperture, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
-            
-            //reload roll
-            loadedRoll = loadRoll()
-            //update view
-            updateView(for: currentFrameIndex)
-        }
+        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
+        
+        loadedRoll.lastEditedDate = Date()
+        frames[currentFrameIndex]?.aperture = aperture
+        
+        updateView(for: currentFrameIndex)
     }
     
     func didUpdateShutter(shutter: Int?) {
-        if let rollIndexPath = rollIndexPath {
-            
-            Roll.editFrameShutter(shutter: shutter, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
-            
-            //reload roll
-            loadedRoll = loadRoll()
-            //update view
-            updateView(for: currentFrameIndex)
-        }
+        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
+        
+        loadedRoll.lastEditedDate = Date()
+        frames[currentFrameIndex]?.shutter = shutter
+        
+        updateView(for: currentFrameIndex)
     }
     
     func didUpdateNotes(notes: String?) {
-        if let rollIndexPath = rollIndexPath {
-            
-            Roll.editFrameNotes(notes: notes, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
-            
-            //reload roll
-            loadedRoll = loadRoll()
-            //update view
-            updateView(for: currentFrameIndex)
-        }
+        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
+        
+        loadedRoll.lastEditedDate = Date()
+        frames[currentFrameIndex]?.notes = notes
+        
+        updateView(for: currentFrameIndex)
     }
     
     
     func didUpdateLocationInfo(location: CLLocation, title: String, detail: String) {
-        if let rollIndexPath = rollIndexPath {
-            
-            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: location, locationName: title, locatonDescription: detail, addDate: nil, lastAddedFrame: nil, delete: false)
-            
-            //reload roll
-            loadedRoll = loadRoll()
-            //update view
-            updateView(for: currentFrameIndex)
-        }
+        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
+        
+        loadedRoll.lastEditedDate = Date()
+        frames[currentFrameIndex]?.location = location
+        frames[currentFrameIndex]?.locationName = title
+        frames[currentFrameIndex]?.locationDescription = detail
+        
+        updateView(for: currentFrameIndex)
     }
     
     
@@ -307,19 +335,44 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     @IBAction func addFrameButtonTapped(_ sender: UIButton) {
         
-        guard let rollIndexPath = self.rollIndexPath else {return }
         
-        //get the current location and save
-        Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: currentFrameIndex, delete: false)
+        guard let loadedRoll = loadedRoll, var frames  = frames else {return}
+        
+        loadedRoll.lastEditedDate = Date()
+        loadedRoll.lastAddedFrame = currentFrameIndex
+        
+        let frame = Frame(location: currentLocation, locationName: nil, locationDescription: nil, addDate: Date(), aperture: nil, shutter: nil, lens: nil, notes: nil)
+        
+        //use current lens if existed
+        if let lens = loadedRoll.currentLens {
+            frame.lens = lens
+        }
+        
+        frames[currentFrameIndex] = frame
+        self.frames = frames
         
         if let currentLocation = currentLocation {
             updateLocationDescription(with: currentLocation, for: currentFrameIndex)
         }
         
-        //update view
-        self.loadedRoll = self.loadRoll()
-        performIndexViewAnimation()
-        updateView(for: self.currentFrameIndex)
+        updateView(for: currentFrameIndex)
+        
+        
+        
+        
+//        guard let rollIndexPath = self.rollIndexPath else {return }
+//        
+//        //get the current location and save
+//        Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: currentFrameIndex, delete: false)
+//        
+//        if let currentLocation = currentLocation {
+//            updateLocationDescription(with: currentLocation, for: currentFrameIndex)
+//        }
+//        
+//        //update view
+//        self.loadedRoll = self.loadRoll()
+//        performIndexViewAnimation()
+//        updateView(for: self.currentFrameIndex)
 
     }
     
@@ -363,12 +416,26 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
             
-            guard let rollIndexPath = self.rollIndexPath else {return}
+            DispatchQueue.main.async {
+                guard let loadedRoll = self.loadedRoll, var frames  = self.frames else {return}
+                
+                loadedRoll.lastEditedDate = Date()
+                loadedRoll.lastAddedFrame = self.currentFrameIndex
+                
+                
+                frames[self.currentFrameIndex] = nil
+                self.frames = frames
+                
+                self.updateView(for: self.currentFrameIndex)
+            }
             
-            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: nil, delete: true)
             
-            self.loadedRoll = self.loadRoll()
-            self.updateView(for: self.currentFrameIndex)
+//            guard let rollIndexPath = self.rollIndexPath else {return}
+//            
+//            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: nil, delete: true)
+//            
+//            self.loadedRoll = self.loadRoll()
+//            self.updateView(for: self.currentFrameIndex)
         }
         
         alertController.addAction(deleteAction)
@@ -388,7 +455,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     @IBAction func unwindToEditing(unwindSegue: UIStoryboardSegue) {
         
         if unwindSegue.identifier == "saveRollDetailSegue" {
-            self.loadedRoll = loadRoll()
             updateView(for: currentFrameIndex)
             
             guard let loadedRoll = loadedRoll, let title = loadedRoll.title else {
@@ -404,8 +470,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         if segue.identifier == "rollDetailSegue" {
             let destinationNavigationController = segue.destination as! UINavigationController
             let targetController = destinationNavigationController.topViewController as! RollDetailTableViewController
-            targetController.indexPath = rollIndexPath
-            //targetController.delegate = self
+            targetController.loadedRoll = loadedRoll
             
         } else if segue.identifier == "frameEmbedSegue" {
             let destinationController = segue.destination as! FrameDetailTableViewController

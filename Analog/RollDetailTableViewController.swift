@@ -19,15 +19,13 @@ class RollDetailTableViewController: UITableViewController {
     @IBOutlet weak var lastAddedLabel: UILabel!
     @IBOutlet weak var framesRecordedLabel: UILabel!
         
-    var indexPath: IndexPath?
-    
+    var loadedRoll: Roll?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //load from file again, end up in the dataIOQueue
-        guard let indexPath = indexPath,
-            let loadedRoll = Roll.loadRoll(with: indexPath) else {return}
+        guard let loadedRoll = loadedRoll else {return}
         
         let film = loadedRoll.filmName
         let frames = loadedRoll.frameCount
@@ -94,35 +92,53 @@ class RollDetailTableViewController: UITableViewController {
         cameraTextField.resignFirstResponder()
     }
     
-    func saveRollName() {
-        guard let indexPath = indexPath else { return }
-        
-        if let text = rollNameTextField.text {
-            if text != "" {
-                Roll.editRollTitle(title: text, for: indexPath)
-            } else {
-                Roll.editRollTitle(title: nil, for: indexPath)
-            }
-        }
-    }
     
-    func saveCamera() {
-        guard let indexPath = indexPath else { return }
-        
-        if let text = cameraTextField.text {
-            if text != "" {
-                Roll.editCamera(camera: text, for: indexPath)
-            } else {
-                Roll.editCamera(camera: nil, for: indexPath)
-            }
-        }
-    }
+//    func saveRollName() {
+//        guard let indexPath = indexPath else { return }
+//        
+//        if let text = rollNameTextField.text {
+//            if text != "" {
+//                Roll.editRollTitle(title: text, for: indexPath)
+//            } else {
+//                Roll.editRollTitle(title: nil, for: indexPath)
+//            }
+//        }
+//    }
+//    
+//    func saveCamera() {
+//        guard let indexPath = indexPath else { return }
+//        
+//        if let text = cameraTextField.text {
+//            if text != "" {
+//                Roll.editCamera(camera: text, for: indexPath)
+//            } else {
+//                Roll.editCamera(camera: nil, for: indexPath)
+//            }
+//        }
+//    }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "saveRollDetailSegue" {
-            saveRollName()
-            saveCamera()
+            let destination = segue.destination as? FrameEditingViewController
+            
+            //save roll title
+            if let text = rollNameTextField.text {
+                if text != "" {
+                    destination?.loadedRoll?.title = text
+                } else {
+                    destination?.loadedRoll?.title = nil
+                }
+            }
+            
+            //save roll camera
+            if let text = cameraTextField.text {
+                if text != "" {
+                    destination?.loadedRoll?.camera = text
+                } else {
+                    destination?.loadedRoll?.camera = nil
+                }
+            }
             
         }
     }

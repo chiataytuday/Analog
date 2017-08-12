@@ -36,7 +36,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Untitled Roll" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="19" translatesAutoresizingMaskIntoConstraints="NO" id="iIk-3s-4jl">
-                                            <rect key="frame" x="70" y="15" width="207" height="25.5"/>
+                                            <rect key="frame" x="70" y="15" width="192" height="25.5"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="21"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -67,7 +67,7 @@
                                                 </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="3Jy-7B-H0c" firstAttribute="leading" secondItem="Iwu-QH-zo3" secondAttribute="trailing" constant="7" id="ChB-tn-h2e"/>
+                                                <constraint firstItem="3Jy-7B-H0c" firstAttribute="leading" secondItem="Iwu-QH-zo3" secondAttribute="trailing" constant="7" id="geb-z6-1ee"/>
                                             </constraints>
                                         </stackView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CFj-FM-JtO">
@@ -78,7 +78,6 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailingMargin" secondItem="iIk-3s-4jl" secondAttribute="trailing" constant="90" id="3GA-kP-PHF"/>
                                         <constraint firstItem="vA3-ht-Z7P" firstAttribute="top" secondItem="iIk-3s-4jl" secondAttribute="bottom" constant="6.5" id="53A-MD-b3G"/>
                                         <constraint firstItem="gMF-zE-oD2" firstAttribute="centerY" secondItem="avS-H0-J2t" secondAttribute="centerY" id="C4A-Lp-BgY"/>
                                         <constraint firstItem="iIk-3s-4jl" firstAttribute="top" secondItem="avS-H0-J2t" secondAttribute="top" constant="15" id="Lne-li-p8S"/>
@@ -87,6 +86,7 @@
                                         <constraint firstAttribute="bottomMargin" secondItem="CFj-FM-JtO" secondAttribute="bottom" constant="6.5" id="X4p-Q1-VvD"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="3Jy-7B-H0c" secondAttribute="trailing" id="fa1-O4-bp4"/>
                                         <constraint firstItem="GTw-Cu-AZ6" firstAttribute="top" secondItem="avS-H0-J2t" secondAttribute="topMargin" constant="9" id="jTU-dY-lkA"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="iIk-3s-4jl" secondAttribute="trailing" constant="105" id="oKn-EB-Ob1"/>
                                         <constraint firstItem="Z3g-Pl-OkE" firstAttribute="leading" secondItem="gMF-zE-oD2" secondAttribute="trailing" constant="14.5" id="ruG-sP-VXz"/>
                                         <constraint firstItem="Z3g-Pl-OkE" firstAttribute="top" secondItem="vA3-ht-Z7P" secondAttribute="bottom" constant="7" id="tFk-6y-4d1"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="CFj-FM-JtO" secondAttribute="trailing" constant="8" id="uHv-GW-927"/>
@@ -1578,7 +1578,7 @@
         <image name="divider line" width="376" height="1"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2eD-m7-ub0"/>
+        <segue reference="GDw-s1-e0K"/>
         <segue reference="P8w-o8-lL5"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

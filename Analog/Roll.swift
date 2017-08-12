@@ -27,8 +27,6 @@ class Roll: NSObject, NSCoding {
     var lastAddedFrame: Int?
     var currentLens: Int?
     
-    //data io serial queue
-    static let dataIOQueue = DispatchQueue(label: "com.Analog.dataIOQueue")
     
     static let DocumentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let albumArchiveURL = DocumentDirectory.appendingPathComponent("album")
