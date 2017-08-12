@@ -36,8 +36,6 @@ class Frame: NSObject, NSCoding {
         aCoder.encode(location, forKey: PropertyKeys.location)
         aCoder.encode(locationName, forKey: PropertyKeys.locationName)
         aCoder.encode(locationDescription, forKey: PropertyKeys.locationDescription)
-        //aCoder.encode(hasRequestedLocationDescription, forKey: PropertyKeys.hasRequestedLocationDescription)
-        //aCoder.encode(hasGotLocationInfo, forKey: PropertyKeys.hasGotLocationInfo)
         aCoder.encode(addDate, forKey: PropertyKeys.addDate)
         aCoder.encode(aperture, forKey: PropertyKeys.aperture)
         aCoder.encode(shutter, forKey: PropertyKeys.shutter)
@@ -52,16 +50,12 @@ class Frame: NSObject, NSCoding {
         let location = aDecoder.decodeObject(forKey: PropertyKeys.location) as? CLLocation
         let locationName = aDecoder.decodeObject(forKey: PropertyKeys.locationName) as? String
         let locationDescription = aDecoder.decodeObject(forKey: PropertyKeys.locationDescription) as? String
-        //let hasRequestedLocationDescription = aDecoder.decodeBool(forKey: PropertyKeys.hasRequestedLocationDescription)
-        //let hasGotLocationInfo = aDecoder.decodeBool(forKey: PropertyKeys.hasGotLocationInfo)
         let aperture = aDecoder.decodeObject(forKey: PropertyKeys.aperture) as? Double
         let shutter = aDecoder.decodeObject(forKey: PropertyKeys.shutter) as? Int
         let lens = aDecoder.decodeObject(forKey: PropertyKeys.lens) as? Int
         let notes = aDecoder.decodeObject(forKey: PropertyKeys.notes) as? String
         
         self.init(location: location, locationName: locationName, locationDescription: locationDescription, addDate: addDate, aperture: aperture, shutter: shutter, lens: lens, notes: notes)
-        //self.hasRequestedLocationDescription = hasRequestedLocationDescription
-        //self.hasGotLocationInfo = hasGotLocationInfo
     }
     
     

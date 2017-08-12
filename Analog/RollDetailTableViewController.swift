@@ -93,31 +93,6 @@ class RollDetailTableViewController: UITableViewController {
     }
     
     
-//    func saveRollName() {
-//        guard let indexPath = indexPath else { return }
-//        
-//        if let text = rollNameTextField.text {
-//            if text != "" {
-//                Roll.editRollTitle(title: text, for: indexPath)
-//            } else {
-//                Roll.editRollTitle(title: nil, for: indexPath)
-//            }
-//        }
-//    }
-//    
-//    func saveCamera() {
-//        guard let indexPath = indexPath else { return }
-//        
-//        if let text = cameraTextField.text {
-//            if text != "" {
-//                Roll.editCamera(camera: text, for: indexPath)
-//            } else {
-//                Roll.editCamera(camera: nil, for: indexPath)
-//            }
-//        }
-//    }
-    
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "saveRollDetailSegue" {
             let destination = segue.destination as? FrameEditingViewController

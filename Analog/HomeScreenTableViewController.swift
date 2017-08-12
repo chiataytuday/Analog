@@ -31,6 +31,7 @@ class HomeScreenTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        //reload album from file
         if let savedAlbum = Roll.loadAlbum() {
             album = savedAlbum
         }
@@ -52,7 +53,7 @@ class HomeScreenTableViewController: UITableViewController {
             
             
         } else {
-            //reload data
+            //reload table
             tableView.reloadData()
             
             self.navigationItem.leftBarButtonItem?.isEnabled = true
@@ -128,7 +129,6 @@ class HomeScreenTableViewController: UITableViewController {
     
     // MARK: - Navigation
     
-    //reload data everytime unwinding to home
     @IBAction func unwindToHome(unwindSegue: UIStoryboardSegue) {
         
     }

@@ -71,11 +71,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             
             tapToSwitchImage.isHidden = false
             
-            //Roll.initializeFrames(for: rollIndexPath, count: loadedRoll.frameCount)
-            
-            //reload roll after initialization
-            //self.loadedRoll = loadRoll()
-            
             updateView(for: 0)
             
             //have a notification for user when first added
@@ -172,15 +167,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         
         updateView(for: currentFrameIndex)
         
-//        if let rollIndexPath = rollIndexPath {
-//            
-//            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: date, lastAddedFrame: nil, delete: false)
-//            
-//            //reload roll
-//            loadedRoll = loadRoll()
-//            //update view
-//            updateView(for: currentFrameIndex)
-//        }
     }
     
     func didUpdateLens(lens: Int?) {
@@ -194,16 +180,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         
         updateView(for: currentFrameIndex)
         
-        
-//        if let rollIndexPath = rollIndexPath {
-//            Roll.editCurrentLens(lens: lens, for: rollIndexPath)
-//            
-//            Roll.editFrameLens(lens: lens, rollIndex: rollIndexPath, frameIndex: currentFrameIndex)
-//            
-//            loadedRoll = loadRoll()
-//            
-//            updateView(for: currentFrameIndex)
-//        }
     }
     
     func didUpdateAperture(aperture: Double?) {
@@ -356,23 +332,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         }
         
         updateView(for: currentFrameIndex)
-        
-        
-        
-        
-//        guard let rollIndexPath = self.rollIndexPath else {return }
-//        
-//        //get the current location and save
-//        Roll.editFrame(rollIndex: rollIndexPath, frameIndex: currentFrameIndex, location: currentLocation, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: currentFrameIndex, delete: false)
-//        
-//        if let currentLocation = currentLocation {
-//            updateLocationDescription(with: currentLocation, for: currentFrameIndex)
-//        }
-//        
-//        //update view
-//        self.loadedRoll = self.loadRoll()
-//        performIndexViewAnimation()
-//        updateView(for: self.currentFrameIndex)
 
     }
     
@@ -430,12 +389,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             }
             
             
-//            guard let rollIndexPath = self.rollIndexPath else {return}
-//            
-//            Roll.editFrame(rollIndex: rollIndexPath, frameIndex: self.currentFrameIndex, location: nil, locationName: nil, locatonDescription: nil, addDate: nil, lastAddedFrame: nil, delete: true)
-//            
-//            self.loadedRoll = self.loadRoll()
-//            self.updateView(for: self.currentFrameIndex)
         }
         
         alertController.addAction(deleteAction)
