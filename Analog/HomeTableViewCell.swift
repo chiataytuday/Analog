@@ -44,9 +44,9 @@ class HomeTableViewCell: UITableViewCell {
         var evString = ""
         if let pushPull = roll.pushPull {
             if pushPull > 0 {
-                evString = ", pushed \(Int(pushPull))"
+                evString = ", \(-Int(pushPull))ev"
             } else if pushPull < 0 {
-                evString = ", pulled \(-Int(pushPull))"
+                evString = ", +\(-Int(pushPull))ev"
             }
         }
         

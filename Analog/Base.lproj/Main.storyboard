@@ -333,7 +333,7 @@
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not pulled or pushed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="DiB-px-1Jm">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Normal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="DiB-px-1Jm">
                                                                 <rect key="frame" x="0.0" y="33" width="255" height="26.5"/>
                                                                 <color key="tintColor" red="0.51768016819999996" green="0.5136700273" blue="0.51769715549999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
@@ -1579,8 +1579,8 @@
         <image name="divider line" width="376" height="1"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GDw-s1-e0K"/>
         <segue reference="P8w-o8-lL5"/>
+        <segue reference="2eD-m7-ub0"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>

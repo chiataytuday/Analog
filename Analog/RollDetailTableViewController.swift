@@ -40,15 +40,15 @@ class RollDetailTableViewController: UITableViewController {
         if let pushPull = loadedRoll.pushPull {
             var pushPullString: String{
                 if pushPull == -1 {
-                    return "Pulled 1 stop"
+                    return "Overexposed 1 stop"
                 } else if pushPull == 1 {
-                    return "Pushed 1 stop"
+                    return "Underexposed 1 stop"
                 } else if pushPull == 0 {
-                    return "Not pushed or pulled"
+                    return "Normal"
                 } else if pushPull < 0 {
-                    return "Pulled \(Int(-pushPull)) stops"
+                    return "Overexposed \(Int(-pushPull)) stops"
                 } else {
-                    return "Pushed \(Int(pushPull)) stops"
+                    return "Underexposed \(Int(pushPull)) stops"
                 }
             }
             pushPullLabel.text = pushPullString
