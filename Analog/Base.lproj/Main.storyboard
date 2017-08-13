@@ -36,13 +36,13 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Untitled Roll" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="19" translatesAutoresizingMaskIntoConstraints="NO" id="iIk-3s-4jl">
-                                            <rect key="frame" x="70" y="15" width="197" height="25.5"/>
+                                            <rect key="frame" x="70" y="15" width="194" height="25.5"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="21"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vA3-ht-Z7P">
-                                            <rect key="frame" x="70" y="46.5" width="37.5" height="18"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vA3-ht-Z7P">
+                                            <rect key="frame" x="70" y="46.5" width="282" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -80,13 +80,14 @@
                                     <constraints>
                                         <constraint firstItem="vA3-ht-Z7P" firstAttribute="top" secondItem="iIk-3s-4jl" secondAttribute="bottom" constant="6.5" id="53A-MD-b3G"/>
                                         <constraint firstItem="gMF-zE-oD2" firstAttribute="centerY" secondItem="avS-H0-J2t" secondAttribute="centerY" id="C4A-Lp-BgY"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="vA3-ht-Z7P" secondAttribute="trailing" constant="15" id="C92-KJ-47l"/>
                                         <constraint firstItem="iIk-3s-4jl" firstAttribute="top" secondItem="avS-H0-J2t" secondAttribute="top" constant="15" id="Lne-li-p8S"/>
                                         <constraint firstItem="gMF-zE-oD2" firstAttribute="leading" secondItem="avS-H0-J2t" secondAttribute="leading" constant="8" id="Orz-es-anP"/>
                                         <constraint firstItem="vA3-ht-Z7P" firstAttribute="leading" secondItem="gMF-zE-oD2" secondAttribute="trailing" constant="14.5" id="X0y-Fa-wvj"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="CFj-FM-JtO" secondAttribute="bottom" constant="6.5" id="X4p-Q1-VvD"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="3Jy-7B-H0c" secondAttribute="trailing" id="fa1-O4-bp4"/>
                                         <constraint firstItem="GTw-Cu-AZ6" firstAttribute="top" secondItem="avS-H0-J2t" secondAttribute="topMargin" constant="9" id="jTU-dY-lkA"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="iIk-3s-4jl" secondAttribute="trailing" constant="100" id="oKn-EB-Ob1"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="iIk-3s-4jl" secondAttribute="trailing" constant="103" id="oKn-EB-Ob1"/>
                                         <constraint firstItem="Z3g-Pl-OkE" firstAttribute="leading" secondItem="gMF-zE-oD2" secondAttribute="trailing" constant="14.5" id="ruG-sP-VXz"/>
                                         <constraint firstItem="Z3g-Pl-OkE" firstAttribute="top" secondItem="vA3-ht-Z7P" secondAttribute="bottom" constant="7" id="tFk-6y-4d1"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="CFj-FM-JtO" secondAttribute="trailing" constant="8" id="uHv-GW-927"/>
