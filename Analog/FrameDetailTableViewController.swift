@@ -131,6 +131,9 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         let existingAnnotations = mapView.annotations
         mapView.removeAnnotations(existingAnnotations)
         
+        //scroll the table view to the top
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        
         guard let frame = frame else {
             
             let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
@@ -138,12 +141,21 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             
             locationNameLabel.text = "Loading location..."
             locationDetailLabel.text = "Loading location..."
+            
             datePicker.date = Date()
+            isDatePickerHidden = true
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            
             lensTextField.text = nil
+            lensTextField.resignFirstResponder()
             apertureTextField.text = nil
+            apertureTextField.resignFirstResponder()
             shutterTextField.text = nil
+            shutterTextField.resignFirstResponder()
             noteTextView.textColor = .lightGray
             noteTextView.text = "Notes"
+            noteTextView.resignFirstResponder()
             
             return
         }

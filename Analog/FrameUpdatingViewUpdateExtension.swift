@@ -17,7 +17,7 @@ extension FrameEditingViewController {
         guard let frames = frames,
             //important!! check if update is needed
             frameIndex == currentFrameIndex else { return }
-        
+                
         if frames[currentFrameIndex] == nil {            
             //show the add button
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn, animations: {

@@ -384,8 +384,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 
                 frames[self.currentFrameIndex] = nil
                 self.frames = frames
-                
+                                
                 self.updateView(for: self.currentFrameIndex)
+                
             }
             
             
