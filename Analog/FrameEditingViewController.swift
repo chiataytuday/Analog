@@ -166,7 +166,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         frames[currentFrameIndex]?.addDate = date
         
         updateView(for: currentFrameIndex)
-        
     }
     
     func didUpdateLens(lens: Int?) {
@@ -179,7 +178,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         frames[currentFrameIndex]?.lens = lens
         
         updateView(for: currentFrameIndex)
-        
     }
     
     func didUpdateAperture(aperture: Double?) {
@@ -197,7 +195,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         loadedRoll.lastEditedDate = Date()
         frames[currentFrameIndex]?.shutter = shutter
         
+        //necessary because the necessary refresh if frame deleted
         updateView(for: currentFrameIndex)
+        
     }
     
     func didUpdateNotes(notes: String?) {
@@ -219,6 +219,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         frames[currentFrameIndex]?.locationDescription = detail
         
         updateView(for: currentFrameIndex)
+        
     }
     
     
@@ -384,8 +385,10 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 
                 frames[self.currentFrameIndex] = nil
                 self.frames = frames
-                                
+                
                 self.updateView(for: self.currentFrameIndex)
+                
+                self.frameDetailTableViewController?.resignResponder()
                 
             }
             
