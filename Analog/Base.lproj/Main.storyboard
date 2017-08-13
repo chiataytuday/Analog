@@ -917,7 +917,7 @@
                     </tableView>
                     <connections>
                         <outlet property="apertureTextField" destination="0mF-Z5-f7p" id="v68-1f-Bgc"/>
-                        <outlet property="dateLabel" destination="2xo-vU-kEq" id="YJ2-eh-BvM"/>
+                        <outlet property="dateLabel" destination="AQt-wA-zaT" id="Vp7-DJ-E8N"/>
                         <outlet property="datePicker" destination="Oal-0H-hbu" id="hCQ-BS-O4e"/>
                         <outlet property="lensTextField" destination="aVH-Ua-Z87" id="BpB-ja-T1y"/>
                         <outlet property="locationDetailLabel" destination="UXp-fC-LnW" id="BOp-xo-2uJ"/>
@@ -925,7 +925,7 @@
                         <outlet property="mapView" destination="dkw-Y0-BPe" id="pps-fn-UeT"/>
                         <outlet property="noteTextView" destination="tIS-oq-iW3" id="KKY-C3-uhR"/>
                         <outlet property="shutterTextField" destination="S50-RE-Nbj" id="jgq-Zm-XCt"/>
-                        <outlet property="timeLabel" destination="AQt-wA-zaT" id="eWe-lD-Acf"/>
+                        <outlet property="timeLabel" destination="2xo-vU-kEq" id="1s4-ik-v6V"/>
                         <segue destination="y6i-g8-UhS" kind="presentation" identifier="searchLocationSegue" id="xHK-xv-NUO"/>
                     </connections>
                 </tableViewController>

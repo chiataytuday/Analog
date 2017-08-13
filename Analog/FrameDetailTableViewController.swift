@@ -23,9 +23,9 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var locationDetailLabel: UILabel!
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var lensTextField: UITextField!
     @IBOutlet weak var apertureTextField: UITextField!
     @IBOutlet weak var shutterTextField: UITextField!
@@ -139,8 +139,8 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             locationNameLabel.text = "Loading location..."
             locationDetailLabel.text = "Loading location..."
             
-            datePicker.date = Date()
-            
+            dateLabel.text = "Date"
+            timeLabel.text = "Time"
             lensTextField.text = nil
             apertureTextField.text = nil
             shutterTextField.text = nil
@@ -182,11 +182,11 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         //update other views
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .full
-        timeLabel.text = dateFormatter.string(from: frame.addDate)
+        dateLabel.text = dateFormatter.string(from: frame.addDate)
         dateFormatter.dateFormat = "h:mm a"
         dateFormatter.amSymbol = "AM"
         dateFormatter.pmSymbol = "PM"
-        dateLabel.text = dateFormatter.string(from: frame.addDate)
+        timeLabel.text = dateFormatter.string(from: frame.addDate)
         datePicker.date = frame.addDate
         datePicker.maximumDate = Date()
         
