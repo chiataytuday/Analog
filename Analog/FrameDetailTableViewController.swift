@@ -139,8 +139,12 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             locationNameLabel.text = "Loading location..."
             locationDetailLabel.text = "Loading location..."
             
+            isDatePickerHidden = true
+            tableView.beginUpdates()
+            tableView.endUpdates()
             dateLabel.text = "Date"
             timeLabel.text = "Time"
+            
             lensTextField.text = nil
             apertureTextField.text = nil
             shutterTextField.text = nil
@@ -187,6 +191,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         dateFormatter.amSymbol = "AM"
         dateFormatter.pmSymbol = "PM"
         timeLabel.text = dateFormatter.string(from: frame.addDate)
+        
         datePicker.date = frame.addDate
         datePicker.maximumDate = Date()
         
@@ -221,10 +226,6 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     }
     
     func resignResponder() {
-        isDatePickerHidden = true
-        tableView.beginUpdates()
-        tableView.endUpdates()
-        
         lensTextField.resignFirstResponder()
         apertureTextField.resignFirstResponder()
         shutterTextField.resignFirstResponder()
