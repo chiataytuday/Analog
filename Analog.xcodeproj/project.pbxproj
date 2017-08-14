@@ -13,6 +13,7 @@
 		362901161F1A3159007DA30B /* Roll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901151F1A3159007DA30B /* Roll.swift */; };
 		362901181F1A3162007DA30B /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901171F1A3162007DA30B /* Frame.swift */; };
 		3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3629011B1F1A392C007DA30B /* AddRollViewController.swift */; };
+		3643D5EB1F41515900E9C4CB /* FrameEditingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3643D5EA1F41515900E9C4CB /* FrameEditingExtension.swift */; };
 		364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A928D1F19CAE100B0D442 /* AppDelegate.swift */; };
 		364A92931F19CAE100B0D442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 364A92911F19CAE100B0D442 /* Main.storyboard */; };
 		364A92951F19CAE100B0D442 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 364A92941F19CAE100B0D442 /* Assets.xcassets */; };
@@ -59,6 +60,7 @@
 		362901151F1A3159007DA30B /* Roll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roll.swift; sourceTree = "<group>"; };
 		362901171F1A3162007DA30B /* Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
 		3629011B1F1A392C007DA30B /* AddRollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRollViewController.swift; sourceTree = "<group>"; };
+		3643D5EA1F41515900E9C4CB /* FrameEditingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameEditingExtension.swift; sourceTree = "<group>"; };
 		364A928A1F19CAE100B0D442 /* Analog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Analog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		364A928D1F19CAE100B0D442 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		364A92921F19CAE100B0D442 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			children = (
 				368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */,
 				3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */,
+				3643D5EA1F41515900E9C4CB /* FrameEditingExtension.swift */,
 				3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */,
 				3687E9631F29EAC100432E31 /* RollModelExtensions */,
 			);
@@ -382,6 +385,7 @@
 				3687E9601F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift in Sources */,
 				3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */,
 				369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */,
+				3643D5EB1F41515900E9C4CB /* FrameEditingExtension.swift in Sources */,
 				362901181F1A3162007DA30B /* Frame.swift in Sources */,
 				3615799B1F2C4025008450F4 /* PlacemarkExtension.swift in Sources */,
 				36FCD4F01F28736C007EB077 /* RollDetailTableViewController.swift in Sources */,
