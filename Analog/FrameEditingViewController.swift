@@ -315,7 +315,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 loadedRoll.lastEditedDate = Date()
                 loadedRoll.lastAddedFrame = self.currentFrameIndex
                 
-                
                 frames[self.currentFrameIndex] = nil
                 self.frames = frames
                 
@@ -324,7 +323,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 self.frameDetailTableViewController?.resignResponder()
                 
             }
-            
             
         }
         

@@ -24,7 +24,7 @@
 		3687E9551F29E43C00432E31 /* PredefinedRollsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */; };
 		3687E9571F29E4BC00432E31 /* AddRollExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9561F29E4BC00432E31 /* AddRollExtension.swift */; };
 		3687E95B1F29E63800432E31 /* PropertyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95A1F29E63800432E31 /* PropertyKeys.swift */; };
-		3687E9601F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */; };
+		3687E9601F29E85700432E31 /* FrameUpdatingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95F1F29E85700432E31 /* FrameUpdatingExtension.swift */; };
 		3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */; };
 		368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */; };
 		369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369AAF9F1F23029C00C23125 /* FrameEditingViewController.swift */; };
@@ -77,7 +77,7 @@
 		3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredefinedRollsExtension.swift; sourceTree = "<group>"; };
 		3687E9561F29E4BC00432E31 /* AddRollExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRollExtension.swift; sourceTree = "<group>"; };
 		3687E95A1F29E63800432E31 /* PropertyKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyKeys.swift; sourceTree = "<group>"; };
-		3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameUpdatingViewUpdateExtension.swift; sourceTree = "<group>"; };
+		3687E95F1F29E85700432E31 /* FrameUpdatingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameUpdatingExtension.swift; sourceTree = "<group>"; };
 		3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollEditingExtension.swift; sourceTree = "<group>"; };
 		368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInsetExtension.swift; sourceTree = "<group>"; };
 		369AAF9F1F23029C00C23125 /* FrameEditingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameEditingViewController.swift; sourceTree = "<group>"; };
@@ -183,7 +183,7 @@
 				368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */,
 				3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */,
 				3643D5EA1F41515900E9C4CB /* FrameEditingExtension.swift */,
-				3687E95F1F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift */,
+				3687E95F1F29E85700432E31 /* FrameUpdatingExtension.swift */,
 				3687E9631F29EAC100432E31 /* RollModelExtensions */,
 			);
 			name = Extensions;
@@ -382,7 +382,7 @@
 				3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */,
 				364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */,
 				3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */,
-				3687E9601F29E85700432E31 /* FrameUpdatingViewUpdateExtension.swift in Sources */,
+				3687E9601F29E85700432E31 /* FrameUpdatingExtension.swift in Sources */,
 				3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */,
 				369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */,
 				3643D5EB1F41515900E9C4CB /* FrameEditingExtension.swift in Sources */,

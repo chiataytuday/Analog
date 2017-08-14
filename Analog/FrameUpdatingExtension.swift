@@ -1,5 +1,5 @@
 //
-//  FrameUpdatingViewUpdateExtension.swift
+//  FrameUpdatingExtension.swift
 //  Analog
 //
 //  Created by Zizhou Wang on 27/07/2017.
