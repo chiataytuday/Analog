@@ -46,6 +46,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
         
         //load the roll
         guard let rollIndexPath = rollIndexPath,
@@ -105,11 +107,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 updateView(for: 0)
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
