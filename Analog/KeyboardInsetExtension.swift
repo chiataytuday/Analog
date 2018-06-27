@@ -16,7 +16,7 @@ extension UIScrollView {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
     }
     
-    func keyboardWasShown(_ notification: NSNotification) {
+    @objc func keyboardWasShown(_ notification: NSNotification) {
         guard let info = notification.userInfo, let keyboardFrameValue = info[UIKeyboardFrameBeginUserInfoKey] as? NSValue else { return }
         
         let keyboardFrame = keyboardFrameValue.cgRectValue
@@ -29,7 +29,7 @@ extension UIScrollView {
         
     }
     
-    func keyboardWillBeHidden(_ notification: NSNotification) {
+    @objc func keyboardWillBeHidden(_ notification: NSNotification) {
         let contentInsets = UIEdgeInsets.zero
         
         self.contentInset = contentInsets

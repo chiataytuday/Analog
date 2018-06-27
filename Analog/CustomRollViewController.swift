@@ -36,7 +36,7 @@ class CustomRollViewController: UIViewController {
         framesWarningLabel.isHidden = true
         
         //the next button
-        let navNextButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(checkAndPerformSegue))
+        let navNextButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(CustomRollViewController.checkAndPerformSegue))
         self.navigationItem.rightBarButtonItem = navNextButton
         //disable next button on navigation controller
         checkAndEnable()
@@ -99,7 +99,7 @@ class CustomRollViewController: UIViewController {
     
     //check for 0s and empty spaces
     //As well as save recently added
-    func checkAndPerformSegue() {
+    @objc func checkAndPerformSegue() {
         guard let filmName = customRoll?.filmName,
             let frameCount = customRoll?.frameCount,
             let iso = customRoll?.iso,
@@ -219,7 +219,7 @@ class CustomRollViewController: UIViewController {
         toolBar.tintColor = .black
         //Add a flexible space so that the button is positioned on the right
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let button = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(toolBarNextButtonTapped))
+        let button = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(CustomRollViewController.toolBarNextButtonTapped))
         toolBar.setItems([flexSpace, button], animated: false)
         toolBar.isUserInteractionEnabled = true
         toolBar.sizeToFit()
@@ -228,7 +228,7 @@ class CustomRollViewController: UIViewController {
     }
     
     //Toolbar next Button Tapped
-    func toolBarNextButtonTapped() {
+    @objc func toolBarNextButtonTapped() {
         if filmTextField.isFirstResponder {
             frameTextField.becomeFirstResponder()
         } else if frameTextField.isFirstResponder && isoTextField.isEnabled {

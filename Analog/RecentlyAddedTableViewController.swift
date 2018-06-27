@@ -18,6 +18,7 @@ class RecentlyAddedTableViewController: UITableViewController {
     var delegate: RecentlyAddedTableViewControllerDelegate?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         tableView.reloadData()
     }
     

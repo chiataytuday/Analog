@@ -262,17 +262,29 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         }
     }
     
+    
+    @IBAction func aperatureEditingBegin(_ sender: UITextField) {
+        apertureTextField.placeholder = nil
+    }
+    
     @IBAction func apertureEditingEnd(_ sender: UITextField) {
         if sender.text == nil || sender.text == "" {
             delegate?.didUpdateAperture(aperture: nil)
+            apertureTextField.placeholder = "Aperture"
         } else {
             delegate?.didUpdateAperture(aperture: Double(sender.text!))
         }
     }
     
+    @IBAction func ShutterEditingBegin(_ sender: UITextField) {
+        shutterTextField.placeholder = nil
+    }
+    
+    
     @IBAction func shutterEditingEnd(_ sender: UITextField) {
         if sender.text == nil || sender.text == "" {
             delegate?.didUpdateShutter(shutter: nil)
+            shutterTextField.placeholder = "Shutter"
         } else {
             delegate?.didUpdateShutter(shutter: Int(sender.text!))
         }
@@ -297,7 +309,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     }
     
     
-    func toolBarButtonTapped() {
+    @objc func toolBarButtonTapped() {
         if lensTextField.isFirstResponder {
             lensTextField.resignFirstResponder()
         } else if apertureTextField.isFirstResponder {

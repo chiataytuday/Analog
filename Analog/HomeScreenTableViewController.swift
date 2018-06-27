@@ -28,9 +28,14 @@ class HomeScreenTableViewController: UITableViewController {
         }
 
         self.navigationItem.leftBarButtonItem = self.editButtonItem
+        
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.prefersLargeTitles = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         //reload album from file
         if let savedAlbum = Roll.loadAlbum() {
             album = savedAlbum

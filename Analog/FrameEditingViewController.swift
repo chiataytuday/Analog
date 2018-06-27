@@ -61,6 +61,10 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             self.navigationItem.title = title
         }
         
+        if #available(iOS 11.0, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
+        
         //set the slider and stepper value, they are currentFrameIndex + 1!!!!!
         slider.maximumValue = Float(loadedRoll.frameCount)
         stepper.maximumValue = Double(loadedRoll.frameCount)
@@ -110,11 +114,13 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         //show the index combo, should later disapper with perform normal index animation
         performAnimationWithoutPop()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         locationManager.stopUpdatingLocation()
         geoCoder.cancelGeocode()
         saveRoll()
@@ -129,6 +135,17 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     //called while back batton was tapped or moving to the background
     func saveRoll() {
         guard let rollIndexPath = rollIndexPath, let loadedRoll = loadedRoll, let frames = frames else {return}
+        
+        
+        //Set the location name label to "loading" if not in network queue (thus not cancelled)
+        for frame in frames {
+            guard let frame = frame else { continue }
+            
+            if frame.locationName == "Loading location" {
+                frame.locationName = "Tap to reload"
+                frame.locationDescription = "Can not load location"
+            }
+        }
         
         loadedRoll.frames = frames
         
