@@ -32,4 +32,6 @@ struct PropertyKeys {
     static let shutter = "shutter"
     static let lens = "lens"
     static let notes = "notes"
+    
+    
 }

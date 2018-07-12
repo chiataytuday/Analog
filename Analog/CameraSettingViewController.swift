@@ -8,6 +8,9 @@
 
 import UIKit
 
+protocol CameraSettingViewControllerDelegate {
+    func didConfirmSavingPredefinedRoll(rollKey: String)
+}
 
 class CameraSettingViewController: UIViewController {
     
@@ -18,27 +21,29 @@ class CameraSettingViewController: UIViewController {
     @IBOutlet weak var filmImage: UIImageView!
     @IBOutlet weak var exposureLabel: UILabel!
     
-    var selectedRollKey: String?
-    var roll: Roll?
-    let predefinedRoll = Roll.predefinedRolls
+    var cameraName: String?
+    var pushPull: Double = 0.0
+    
+    //var selectedRollKey: String?
+    var dataController: DataController!
+    var roll: NewRoll!
+    var halfCompleteRoll: PredefinedRoll!
+    var predefinedRollDictionaryKey: String?
+    var rollPredefined = false
+    var delegate: CameraSettingViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let roll = roll {
-            
-            //reset the push/pull to 0
-            roll.pushPull = nil
-            
-            filmLabel.text = roll.filmName
-            confirmationLabel.text = "Frames: \(roll.frameCount), ISO: \(roll.iso)"
-            if roll.format == 135 {
-                filmImage.image = UIImage(named: "135")
-            } else if roll.format == 120 {
-                filmImage.image = UIImage(named: "120")
-                cameraTextField.becomeFirstResponder()
-            }
+        filmLabel.text = halfCompleteRoll.filmName
+        confirmationLabel.text = "Frames: \(halfCompleteRoll.frameCount), ISO: \(halfCompleteRoll.iso)"
+        if halfCompleteRoll.format == 135 {
+            filmImage.image = UIImage(named: "135")
+        } else if halfCompleteRoll.format == 120 {
+            filmImage.image = UIImage(named: "120")
+            cameraTextField.becomeFirstResponder()
         }
+        
         scrollView.registerForKeyboardNotifications()
     }
 
@@ -48,10 +53,10 @@ class CameraSettingViewController: UIViewController {
     }
     
     @IBAction func cameraEditEnded(_ sender: UITextField) {
-        guard let cameraName = sender.text else { return }
-        
-        if !cameraName.isEmpty {
-            roll?.camera = cameraName
+        if let cameraName = sender.text {
+            self.cameraName = cameraName
+        } else {
+            self.cameraName = nil
         }
         
     }
@@ -74,12 +79,45 @@ class CameraSettingViewController: UIViewController {
             exposureLabel.text = "Underexpose \(Int(value)) stops"
         }
         
-        roll?.pushPull = value
+        pushPull = value
     }
     
     
     @IBAction func doneButtonTriggered(_ sender: UIBarButtonItem) {
+        
+        //block used to save recently added
+        if rollPredefined {
+            guard let delegate = delegate else {fatalError("camera setting view controller doesn't have a delegate")}
+            
+            delegate.didConfirmSavingPredefinedRoll(rollKey: predefinedRollDictionaryKey!)
+        } else {
+            let recentlyAdded = RecentlyAddedRoll(context: dataController.viewContext)
+            recentlyAdded.predefinedRoll = halfCompleteRoll
+            recentlyAdded.timesAdded = 1
+        }
+        
+        roll = NewRoll(context: dataController.viewContext)
+        
+        //Using predefined roll data to populate roll
+        roll.filmName = halfCompleteRoll.filmName
+        roll.frameCount = halfCompleteRoll.frameCount
+        roll.iso = halfCompleteRoll.iso
+        roll.format = halfCompleteRoll.format
+        roll.newlyAdded = true
+        roll.dateAdded = Date()
+        roll.camera = cameraName
+        roll.pushPull = pushPull
+        
+        
+        try? dataController.viewContext.save()
+        
+        performSegue(withIdentifier: "showNewRollSegue", sender: self)
+        
+/*
         if let roll = roll {
+            
+            
+            
             guard let text = cameraTextField.text else {
                 //Simply add date and save roll
                 roll.dateAdded = Date()
@@ -112,6 +150,7 @@ class CameraSettingViewController: UIViewController {
             Roll.saveRecentlyAdded(for: selectedRollKey!)
             performSegue(withIdentifier: "showNewRollSegue", sender: self)
         }
+ */
         
     }
     
@@ -119,7 +158,9 @@ class CameraSettingViewController: UIViewController {
         if segue.identifier == "showNewRollSegue" {
             let destination = segue.destination as! FrameEditingViewController
             //set the frame editing view controller's index path to new rolls
-            destination.rollIndexPath = IndexPath(row: 0, section: 0)
+            //destination.rollIndexPath = IndexPath(row: 0, section: 0)
+            destination.roll = roll
+            destination.dataController = dataController
         }
         
     }

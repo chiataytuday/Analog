@@ -23,9 +23,17 @@ class CustomRollViewController: UIViewController {
     @IBOutlet weak var framesWarningLabel: UILabel!
     
     
-    var customRoll: Roll?
-    var selectedRollKey: String?
-    let predefinedRoll = Roll.predefinedRolls
+    var cameraSettingDelegate: CameraSettingViewControllerDelegate?
+    var rollPredefined = false
+    var halfCompleteRoll: PredefinedRoll!
+    var predefinedRollDictionaryKey: String?
+    
+    var dataController: DataController!
+
+    
+//    var customRoll: Roll?
+//    var selectedRollKey: String?
+//    let predefinedRoll = Roll.predefinedRolls
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +54,9 @@ class CustomRollViewController: UIViewController {
         addToolBar(title: "Done", textField: isoTextField)
         
         //set 120 film text and first responser
-        if let customRoll = customRoll {
+        if let customRoll = halfCompleteRoll {
+            
+            rollPredefined = true
             
             let filmName = customRoll.filmName
             let iso = customRoll.iso
@@ -68,7 +78,9 @@ class CustomRollViewController: UIViewController {
             addToolBar(title: "Next", textField: frameTextField)
             
             //format set to 135 since segment is initialized with 135
-            customRoll = Roll(filmName: "", format: 135, frameCount: 0, iso: 0)
+            halfCompleteRoll = PredefinedRoll(filmName: "", format: 135, frameCount: 0, iso: 0)
+            
+//            customRoll = Roll(filmName: "", format: 135, frameCount: 0, iso: 0)
             
             filmTextField.becomeFirstResponder()
         }
@@ -100,10 +112,10 @@ class CustomRollViewController: UIViewController {
     //check for 0s and empty spaces
     //As well as save recently added
     @objc func checkAndPerformSegue() {
-        guard let filmName = customRoll?.filmName,
-            let frameCount = customRoll?.frameCount,
-            let iso = customRoll?.iso,
-            let format = customRoll?.format else { return }
+        let filmName = halfCompleteRoll.filmName
+        let frameCount = halfCompleteRoll.frameCount
+        let iso = halfCompleteRoll.iso
+        let format = halfCompleteRoll.format
         
         if filmName.isEmpty || frameCount == 0 || iso == 0 {
             //Dismiss all the keyboards
@@ -138,7 +150,7 @@ class CustomRollViewController: UIViewController {
         let customRollKey = filmName + " (\(format), \(frameCount)exp.)"
         
         //Do below if containing an illegal roll name
-        if predefinedRoll.keys.contains(customRollKey) {
+        if AddRollViewController.predefinedRolls.keys.contains(customRollKey) {
             //Dismiss all the keyboards
             filmTextField.resignFirstResponder()
             frameTextField.resignFirstResponder()
@@ -158,7 +170,7 @@ class CustomRollViewController: UIViewController {
     @IBAction func filmChanged(_ sender: UITextField) {
         guard let text = sender.text else { return }
         
-        customRoll?.filmName = text
+        halfCompleteRoll.filmName = text
         checkAndEnable()
     }
     
@@ -166,8 +178,8 @@ class CustomRollViewController: UIViewController {
         
         guard let text = sender.text else { return }
         //if casting is successful
-        if let frameCount = Int(text) {
-            customRoll?.frameCount = frameCount
+        if let frameCount = Int16(text) {
+            halfCompleteRoll.frameCount = frameCount
         }
         
         checkAndEnable()
@@ -177,8 +189,8 @@ class CustomRollViewController: UIViewController {
         
         guard let text = sender.text else { return }
         //if casting is sucesseful
-        if let iso = Int(text) {
-            customRoll?.iso = iso
+        if let iso = Int16(text) {
+            halfCompleteRoll.iso = iso
         }
         
         checkAndEnable()
@@ -187,10 +199,10 @@ class CustomRollViewController: UIViewController {
     
     @IBAction func filmTypeChanged(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
-            customRoll?.format = 135
+            halfCompleteRoll.format = 135
             filmTypeImage.image = UIImage(named: "135")
         } else if sender.selectedSegmentIndex == 1 {
-            customRoll?.format = 120
+            halfCompleteRoll.format = 120
             filmTypeImage.image = UIImage(named: "120")
         }
     }
@@ -245,8 +257,14 @@ class CustomRollViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "cameraSettingFromCustomSegue" {
             let destination = segue.destination as! CameraSettingViewController
-            destination.selectedRollKey = selectedRollKey
-            destination.roll = customRoll
+            destination.rollPredefined = rollPredefined
+            destination.halfCompleteRoll = halfCompleteRoll
+            destination.delegate = cameraSettingDelegate
+            destination.predefinedRollDictionaryKey = predefinedRollDictionaryKey
+            destination.dataController = dataController
+            
+//            destination.selectedRollKey = selectedRollKey
+//            destination.roll = customRoll
         }
         
         // Get the new view controller using segue.destinationViewController.

@@ -10,10 +10,11 @@
 		361489691F2046E800BBEA27 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361489681F2046E800BBEA27 /* MapKit.framework */; };
 		3615799B1F2C4025008450F4 /* PlacemarkExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */; };
 		362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */; };
-		362901161F1A3159007DA30B /* Roll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901151F1A3159007DA30B /* Roll.swift */; };
-		362901181F1A3162007DA30B /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362901171F1A3162007DA30B /* Frame.swift */; };
 		3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3629011B1F1A392C007DA30B /* AddRollViewController.swift */; };
-		3643D5EB1F41515900E9C4CB /* FrameEditingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3643D5EA1F41515900E9C4CB /* FrameEditingExtension.swift */; };
+		36401B0420F7119D00CBC523 /* AddRollViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36401B0320F7119D00CBC523 /* AddRollViewControllerExtension.swift */; };
+		3643D5EB1F41515900E9C4CB /* FrameEditingUpdatingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3643D5EA1F41515900E9C4CB /* FrameEditingUpdatingExtension.swift */; };
+		3644EFF320EF2E9200E4859B /* Analog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3644EFF120EF2E9200E4859B /* Analog.xcdatamodeld */; };
+		3644EFF720EF3D2800E4859B /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3644EFF620EF3D2800E4859B /* DataController.swift */; };
 		364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A928D1F19CAE100B0D442 /* AppDelegate.swift */; };
 		364A92931F19CAE100B0D442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 364A92911F19CAE100B0D442 /* Main.storyboard */; };
 		364A92951F19CAE100B0D442 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 364A92941F19CAE100B0D442 /* Assets.xcassets */; };
@@ -21,11 +22,9 @@
 		364A92A31F19CAE100B0D442 /* AnalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92A21F19CAE100B0D442 /* AnalogTests.swift */; };
 		364A92AE1F19CAE100B0D442 /* AnalogUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */; };
 		3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */; };
-		3687E9551F29E43C00432E31 /* PredefinedRollsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */; };
-		3687E9571F29E4BC00432E31 /* AddRollExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9561F29E4BC00432E31 /* AddRollExtension.swift */; };
+		3687E9551F29E43C00432E31 /* PredefinedRoll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9541F29E43C00432E31 /* PredefinedRoll.swift */; };
 		3687E95B1F29E63800432E31 /* PropertyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95A1F29E63800432E31 /* PropertyKeys.swift */; };
-		3687E9601F29E85700432E31 /* FrameUpdatingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95F1F29E85700432E31 /* FrameUpdatingExtension.swift */; };
-		3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */; };
+		3687E9601F29E85700432E31 /* FrameEditingLocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95F1F29E85700432E31 /* FrameEditingLocationExtension.swift */; };
 		368FC3E01F207C9F008DB47C /* KeyboardInsetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */; };
 		369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369AAF9F1F23029C00C23125 /* FrameEditingViewController.swift */; };
 		36A1B0711F2206F500FC1197 /* RecentlyAddedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A1B0701F2206F500FC1197 /* RecentlyAddedTableViewController.swift */; };
@@ -57,10 +56,11 @@
 		361489681F2046E800BBEA27 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacemarkExtension.swift; sourceTree = "<group>"; };
 		362901131F19FFDF007DA30B /* HomeScreenTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenTableViewController.swift; sourceTree = "<group>"; };
-		362901151F1A3159007DA30B /* Roll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roll.swift; sourceTree = "<group>"; };
-		362901171F1A3162007DA30B /* Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
 		3629011B1F1A392C007DA30B /* AddRollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRollViewController.swift; sourceTree = "<group>"; };
-		3643D5EA1F41515900E9C4CB /* FrameEditingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameEditingExtension.swift; sourceTree = "<group>"; };
+		36401B0320F7119D00CBC523 /* AddRollViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRollViewControllerExtension.swift; sourceTree = "<group>"; };
+		3643D5EA1F41515900E9C4CB /* FrameEditingUpdatingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameEditingUpdatingExtension.swift; sourceTree = "<group>"; };
+		3644EFF220EF2E9200E4859B /* Analog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Analog.xcdatamodel; sourceTree = "<group>"; };
+		3644EFF620EF3D2800E4859B /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		364A928A1F19CAE100B0D442 /* Analog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Analog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		364A928D1F19CAE100B0D442 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		364A92921F19CAE100B0D442 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -74,11 +74,9 @@
 		364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalogUITests.swift; sourceTree = "<group>"; };
 		364A92AF1F19CAE100B0D442 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingViewController.swift; sourceTree = "<group>"; };
-		3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredefinedRollsExtension.swift; sourceTree = "<group>"; };
-		3687E9561F29E4BC00432E31 /* AddRollExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRollExtension.swift; sourceTree = "<group>"; };
+		3687E9541F29E43C00432E31 /* PredefinedRoll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredefinedRoll.swift; sourceTree = "<group>"; };
 		3687E95A1F29E63800432E31 /* PropertyKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyKeys.swift; sourceTree = "<group>"; };
-		3687E95F1F29E85700432E31 /* FrameUpdatingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameUpdatingExtension.swift; sourceTree = "<group>"; };
-		3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollEditingExtension.swift; sourceTree = "<group>"; };
+		3687E95F1F29E85700432E31 /* FrameEditingLocationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameEditingLocationExtension.swift; sourceTree = "<group>"; };
 		368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInsetExtension.swift; sourceTree = "<group>"; };
 		369AAF9F1F23029C00C23125 /* FrameEditingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameEditingViewController.swift; sourceTree = "<group>"; };
 		36A1B0701F2206F500FC1197 /* RecentlyAddedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentlyAddedTableViewController.swift; sourceTree = "<group>"; };
@@ -180,23 +178,13 @@
 		3687E95C1F29E75000432E31 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				36401B0320F7119D00CBC523 /* AddRollViewControllerExtension.swift */,
+				3643D5EA1F41515900E9C4CB /* FrameEditingUpdatingExtension.swift */,
+				3687E95F1F29E85700432E31 /* FrameEditingLocationExtension.swift */,
 				368FC3DF1F207C9F008DB47C /* KeyboardInsetExtension.swift */,
 				3615799A1F2C4025008450F4 /* PlacemarkExtension.swift */,
-				3643D5EA1F41515900E9C4CB /* FrameEditingExtension.swift */,
-				3687E95F1F29E85700432E31 /* FrameUpdatingExtension.swift */,
-				3687E9631F29EAC100432E31 /* RollModelExtensions */,
 			);
 			name = Extensions;
-			sourceTree = "<group>";
-		};
-		3687E9631F29EAC100432E31 /* RollModelExtensions */ = {
-			isa = PBXGroup;
-			children = (
-				3687E9541F29E43C00432E31 /* PredefinedRollsExtension.swift */,
-				3687E9561F29E4BC00432E31 /* AddRollExtension.swift */,
-				3687E9611F29EA1D00432E31 /* RollEditingExtension.swift */,
-			);
-			name = RollModelExtensions;
 			sourceTree = "<group>";
 		};
 		36A3424B1F1DDD9200D00DC4 /* ViewController */ = {
@@ -219,9 +207,10 @@
 		36A3424C1F1DDDA800D00DC4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3644EFF120EF2E9200E4859B /* Analog.xcdatamodeld */,
+				3687E9541F29E43C00432E31 /* PredefinedRoll.swift */,
 				3687E95A1F29E63800432E31 /* PropertyKeys.swift */,
-				362901151F1A3159007DA30B /* Roll.swift */,
-				362901171F1A3162007DA30B /* Frame.swift */,
+				3644EFF620EF3D2800E4859B /* DataController.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -375,21 +364,20 @@
 				36C78A6B1F20DCFF005D4738 /* FrameDetailTableViewController.swift in Sources */,
 				3687E95B1F29E63800432E31 /* PropertyKeys.swift in Sources */,
 				362901141F19FFDF007DA30B /* HomeScreenTableViewController.swift in Sources */,
-				362901161F1A3159007DA30B /* Roll.swift in Sources */,
+				3644EFF720EF3D2800E4859B /* DataController.swift in Sources */,
 				36A1B0711F2206F500FC1197 /* RecentlyAddedTableViewController.swift in Sources */,
 				36AA5D471F1F092C00EC9888 /* CustomRollViewController.swift in Sources */,
 				36F801DC1F298FB600C34A31 /* LocationSearchViewController.swift in Sources */,
-				3687E9551F29E43C00432E31 /* PredefinedRollsExtension.swift in Sources */,
-				3687E9571F29E4BC00432E31 /* AddRollExtension.swift in Sources */,
+				3687E9551F29E43C00432E31 /* PredefinedRoll.swift in Sources */,
+				36401B0420F7119D00CBC523 /* AddRollViewControllerExtension.swift in Sources */,
 				36C78A711F20F446005D4738 /* HomeTableViewCell.swift in Sources */,
 				3629011C1F1A392C007DA30B /* AddRollViewController.swift in Sources */,
 				364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */,
 				3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */,
-				3687E9601F29E85700432E31 /* FrameUpdatingExtension.swift in Sources */,
-				3687E9621F29EA1D00432E31 /* RollEditingExtension.swift in Sources */,
+				3644EFF320EF2E9200E4859B /* Analog.xcdatamodeld in Sources */,
+				3687E9601F29E85700432E31 /* FrameEditingLocationExtension.swift in Sources */,
 				369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */,
-				3643D5EB1F41515900E9C4CB /* FrameEditingExtension.swift in Sources */,
-				362901181F1A3162007DA30B /* Frame.swift in Sources */,
+				3643D5EB1F41515900E9C4CB /* FrameEditingUpdatingExtension.swift in Sources */,
 				3615799B1F2C4025008450F4 /* PlacemarkExtension.swift in Sources */,
 				36FCD4F01F28736C007EB077 /* RollDetailTableViewController.swift in Sources */,
 			);
@@ -599,7 +587,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hankerve.AnalogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Analog.app/Analog";
 			};
@@ -615,7 +603,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hankerve.AnalogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Analog.app/Analog";
 			};
@@ -630,7 +618,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hankerve.AnalogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = Analog;
 			};
@@ -645,7 +633,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hankerve.AnalogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = Analog;
 			};
@@ -691,6 +679,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3644EFF120EF2E9200E4859B /* Analog.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3644EFF220EF2E9200E4859B /* Analog.xcdatamodel */,
+			);
+			currentVersion = 3644EFF220EF2E9200E4859B /* Analog.xcdatamodel */;
+			path = Analog.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 364A92821F19CAE100B0D442 /* Project object */;
 }

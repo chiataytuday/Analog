@@ -14,8 +14,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
+    //Data controller for Core Data Stack
+    var dataController = DataController(modelName: "Analog")
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //This will setup the stack after the app launch
+        dataController.load()
+        
+        let navigationController = window?.rootViewController as! UINavigationController
+        
+        let homeScreenTableViewController = navigationController.topViewController as! HomeScreenTableViewController
+        
+        //pass the data controller to home screen
+        homeScreenTableViewController.dataController = dataController
+        
         return true
     }
 
@@ -27,10 +41,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         
         let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
-        let current = navigationController?.visibleViewController as? FrameEditingViewController
+        let frameEditingViewController = navigationController?.visibleViewController as? FrameEditingViewController
         
-        current?.geoCoder.cancelGeocode()
-        current?.saveRoll()
+        frameEditingViewController?.geoCoder.cancelGeocode()
+        
+        //current?.saveRoll()
+        
+        if let frames = frameEditingViewController?.frames {
+            for frame in frames.values {
+                if frame.locationName == "Loading location" {
+                    frame.locationName = "Tap to reload"
+                    frame.locationDescription = "Can not load location"
+                }
+            }
+        }
+        
+        saveViewContext()
         
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -55,8 +81,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        saveViewContext()
+    }
+    
+    func saveViewContext() {
+        try? dataController.viewContext.save()
     }
 
 

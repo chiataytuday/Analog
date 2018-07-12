@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Gc5-yJ-z9e">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Gc5-yJ-z9e">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -115,7 +115,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="l7u-8U-kIp">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <segue destination="A5I-55-krB" kind="presentation" id="X3A-Eh-EAo"/>
+                                <segue destination="A5I-55-krB" kind="presentation" identifier="addRollSegue" id="X3A-Eh-EAo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1583,8 +1583,8 @@
         <image name="divider line" width="376" height="1"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GDw-s1-e0K"/>
-        <segue reference="P8w-o8-lL5"/>
+        <segue reference="2eD-m7-ub0"/>
+        <segue reference="Kz5-Xo-go3"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>

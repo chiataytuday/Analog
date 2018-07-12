@@ -11,9 +11,9 @@ import MapKit
 
 protocol FrameDetailTableViewControllerDelegate {
     func didUpdateDate(with date: Date)
-    func didUpdateLens(lens: Int?)
+    func didUpdateLens(lens: Int16?)
     func didUpdateAperture(aperture: Double?)
-    func didUpdateShutter(shutter: Int?)
+    func didUpdateShutter(shutter: Int16?)
     func didUpdateNotes(notes: String?)
     func didUpdateLocationInfo(location: CLLocation, title: String, detail: String)
 }
@@ -39,6 +39,8 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     //variable for showing or hiding date picker
     var isDatePickerHidden = true
     
+    //date formatter
+    let dateFormatter = DateFormatter()
     
     
     override func viewDidLoad() {
@@ -47,6 +49,13 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         //set the mapView's delegate
         mapView.delegate = self
         noteTextView.delegate = self
+        
+        //setup date formatter
+        dateFormatter.dateStyle = .full
+        dateFormatter.dateFormat = "h:mm a"
+        dateFormatter.amSymbol = "AM"
+        dateFormatter.pmSymbol = "PM"
+        
         
         //add toolbar items
         addToolBar(title: "Done", textField: lensTextField, textView: nil)
@@ -61,7 +70,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         // Dispose of any resources that can be recreated.
     }
     
-    //table view protocol method
+    // MARK: - table view protocol method
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
@@ -96,7 +105,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
                 
             } else if locationNameLabel.text == "Tap to reload" {
                 guard let currentFrameIndex = delegate?.currentFrameIndex,
-                    let location = delegate?.frames?[currentFrameIndex]?.location else {return}
+                    let location = delegate?.frames[currentFrameIndex]?.location else {return}
                 
                 delegate?.updateLocationDescription(with: location, for: currentFrameIndex)
                 locationNameLabel.text = "Loading location..."
@@ -124,15 +133,89 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     }
     
     
+    // MARK: - Functions for update parts of the view
+    func updateDateView(with date: Date) {
+        dateFormatter.dateStyle = .full
+        dateLabel.text = dateFormatter.string(from: date)
+        dateFormatter.dateFormat = "h:mm a"
+        dateFormatter.amSymbol = "AM"
+        dateFormatter.pmSymbol = "PM"
+        timeLabel.text = dateFormatter.string(from: date)
+        
+        datePicker.date = date
+    }
     
-    func updateView(with frame: Frame?) {
+    func updateLensText(with lens: Int16) {
+        if lens != 0 {
+            lensTextField.text = "\(lens)mm"
+        } else {
+            lensTextField.text = nil
+        }
+    }
+    
+    func updateApertureText(with aperture: Double) {
+        if aperture != 0 {
+            apertureTextField.text = "\(aperture)"
+        } else {
+            apertureTextField.text = nil
+        }
+    }
+    
+    func updateShutterText(with shutter: Int16) {
+        if shutter != 0 {
+            shutterTextField.text = "\(shutter)"
+        } else {
+            shutterTextField.text = nil
+        }
+    }
+    
+    func updateNotesView(with notes: String?) {
+        if let notes = notes {
+            noteTextView.textColor = .black
+            noteTextView.text = notes
+        } else {
+            //reset to the place holder
+            noteTextView.textColor = .lightGray
+            noteTextView.text = "Notes"
+        }
+    }
+    
+    func updateLocationViews(with location: CLLocation?, locationName: String?, locationDescription: String?) {
+        if let location = location {
+            
+            //update map
+            let locationObject = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = locationObject
+            mapView.addAnnotation(annotation)
+            
+            let span = MKCoordinateSpanMake(0.002, 0.002)
+            let region = MKCoordinateRegionMake(locationObject, span)
+            
+            
+            //map setup
+            mapView.setRegion(region, animated: true)
+            mapView.showsUserLocation = false
+            
+            //location info
+            locationNameLabel.text = locationName
+            locationDetailLabel.text = locationDescription
+            
+        } else {
+            updateViewForLocationNotCaptured()
+        }
+    }
+    
+    
+    func updateView(with frame: NewFrame?) {
         
         //remove annotation
         let existingAnnotations = mapView.annotations
         mapView.removeAnnotations(existingAnnotations)
         
         guard let frame = frame else {
-            
+            //if frame is nil
             let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
             mapView.setRegion(region, animated: true)
             
@@ -158,71 +241,86 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         }
         
         //for existing frames
-        if let location = frame.location {
-            
-            //update map
-            let locationObject = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-            
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = locationObject
-            mapView.addAnnotation(annotation)
-            
-            let span = MKCoordinateSpanMake(0.002, 0.002)
-            let region = MKCoordinateRegionMake(locationObject, span)
-            
-            
-            //map setup
-            mapView.setRegion(region, animated: true)
-            mapView.showsUserLocation = false
-            
-            //location info
-            locationNameLabel.text = frame.locationName
-            locationDetailLabel.text = frame.locationDescription
-            
-        } else {
-            updateViewForLocationNotCaptured()
-        }
+        updateLocationViews(with: frame.location, locationName: frame.locationName, locationDescription: frame.locationDescription)
+        
+//        if let location = frame.location {
+//
+//            //update map
+//            let locationObject = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+//
+//            let annotation = MKPointAnnotation()
+//            annotation.coordinate = locationObject
+//            mapView.addAnnotation(annotation)
+//
+//            let span = MKCoordinateSpanMake(0.002, 0.002)
+//            let region = MKCoordinateRegionMake(locationObject, span)
+//
+//
+//            //map setup
+//            mapView.setRegion(region, animated: true)
+//            mapView.showsUserLocation = false
+//
+//            //location info
+//            locationNameLabel.text = frame.locationName
+//            locationDetailLabel.text = frame.locationDescription
+//
+//        } else {
+//            updateViewForLocationNotCaptured()
+//        }
         
         //update other views
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .full
-        dateLabel.text = dateFormatter.string(from: frame.addDate)
-        dateFormatter.dateFormat = "h:mm a"
-        dateFormatter.amSymbol = "AM"
-        dateFormatter.pmSymbol = "PM"
-        timeLabel.text = dateFormatter.string(from: frame.addDate)
+        //let dateFormatter = DateFormatter()
+//        dateFormatter.dateStyle = .full
+//        dateLabel.text = dateFormatter.string(from: frame.addDate)
+//        dateFormatter.dateFormat = "h:mm a"
+//        dateFormatter.amSymbol = "AM"
+//        dateFormatter.pmSymbol = "PM"
+//        timeLabel.text = dateFormatter.string(from: frame.addDate)
+//
+//        datePicker.date = frame.addDate
         
-        datePicker.date = frame.addDate
+        //update date view
+        if let date = frame.date {
+            updateDateView(with: date)
+        }
         datePicker.maximumDate = Date()
         
         //update lens
-        if let lens = frame.lens {
-            lensTextField.text = "\(lens)mm"
-        } else {
-            lensTextField.text = nil
-        }
+        updateLensText(with: frame.lens)
+//        if let lens = frame.lens {
+//            lensTextField.text = "\(lens)mm"
+//        } else {
+//            lensTextField.text = nil
+//        }
         
         //update aperture
-        if let aperture = frame.aperture {
-            apertureTextField.text = "\(aperture)"
-        } else {
-            apertureTextField.text = nil
-        }
+        updateApertureText(with: frame.aperture)
+//        if let aperture = frame.aperture {
+//            apertureTextField.text = "\(aperture)"
+//        } else {
+//            apertureTextField.text = nil
+//        }
+        
+        
         //update shutter
-        if let shutter = frame.shutter {
-            shutterTextField.text = "\(shutter)"
-        } else {
-            shutterTextField.text = nil
-        }
+        updateShutterText(with: frame.shutter)
+//        if let shutter = frame.shutter {
+//            shutterTextField.text = "\(shutter)"
+//        } else {
+//            shutterTextField.text = nil
+//        }
+        
+        
         //update notes
-        if let notes = frame.notes {
-            noteTextView.textColor = .black
-            noteTextView.text = notes
-        } else {
-            //reset to the place holder
-            noteTextView.textColor = .lightGray
-            noteTextView.text = "Notes"
-        }
+        updateNotesView(with: frame.notes)
+//        if let notes = frame.notes {
+//            noteTextView.textColor = .black
+//            noteTextView.text = notes
+//        } else {
+//            //reset to the place holder
+//            noteTextView.textColor = .lightGray
+//            noteTextView.text = "Notes"
+//        }
     }
     
     func resignResponder() {
@@ -246,6 +344,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         delegate?.didUpdateLocationInfo(location: location, title: title, detail: detail)
     }
     
+    // MARK: - Stroy board action methods
     @IBAction func lensEditingBegin(_ sender: UITextField) {
         if sender.text != nil && sender.text != "" {
             let withouMM = sender.text?.replacingOccurrences(of: "mm", with: "")
@@ -257,7 +356,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         if sender.text == nil || sender.text == "" {
             delegate?.didUpdateLens(lens: nil)
         } else {
-            delegate?.didUpdateLens(lens: Int(sender.text!))
+            delegate?.didUpdateLens(lens: Int16(sender.text!))
             //("mm" was appended in update view)
         }
     }
@@ -286,11 +385,15 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             delegate?.didUpdateShutter(shutter: nil)
             shutterTextField.placeholder = "Shutter"
         } else {
-            delegate?.didUpdateShutter(shutter: Int(sender.text!))
+            delegate?.didUpdateShutter(shutter: Int16(sender.text!))
         }
     }
     
-    //delegate methods for textView
+    @IBAction func didUpdateDate(_ sender: UIDatePicker) {
+        delegate?.didUpdateDate(with: sender.date)
+    }
+    
+    // MARK: - delegate methods for textView
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Notes" {
             noteTextView.text = ""
@@ -308,7 +411,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         }
     }
     
-    
+    //MARK: - Keyboard toolbar support
     @objc func toolBarButtonTapped() {
         if lensTextField.isFirstResponder {
             lensTextField.resignFirstResponder()
@@ -341,12 +444,6 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         
         
     }
-    
-    
-    @IBAction func didUpdateDate(_ sender: UIDatePicker) {
-        delegate?.didUpdateDate(with: sender.date)
-    }
-    
     
     
     

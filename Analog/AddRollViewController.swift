@@ -7,13 +7,19 @@
 //
 
 import UIKit
+import CoreData
 
-class AddRollViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, RecentlyAddedTableViewControllerDelegate {
+class AddRollViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, RecentlyAddedTableViewControllerDelegate, CameraSettingViewControllerDelegate {
+    
+    var dataController: DataController!
     
     var filteredArray = [String]()
-    var selectedRoll: Roll?
+    var recentlyAddedRolls: [RecentlyAddedRoll]!
+    var halfCompleteRoll: PredefinedRoll?
+    var predefinedRollDictionaryKey: String?
+    
     //decleard in order to pass it to the last view controller
-    var selectedRollKey: String?
+    //var selectedRollKey: String?
     
     let recentlyAddedController = RecentlyAddedTableViewController()
     
@@ -28,6 +34,19 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //setup subview table
+        let fetchRequest:NSFetchRequest<RecentlyAddedRoll> = RecentlyAddedRoll.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "timesAdded", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        if let result = try? dataController?.viewContext.fetch(fetchRequest) {
+            recentlyAddedRolls = result
+            recentlyAddedController.recentlyAddedRolls = result
+            recentlyAddedController.tableView.reloadData()
+        } else {
+            fatalError("Can't load recently added rolls")
+        }
+        
         filmSearchTable.dataSource = recentlyAddedController
         filmSearchTable.delegate = recentlyAddedController
         //hideScopeBar
@@ -35,6 +54,8 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //Add self as the recent dataSource's delegate
         recentlyAddedController.delegate = self
+        recentlyAddedController.dataController = dataController
+        
         
         filmSearchBar.delegate = self
         //hide cancel button on searchBar
@@ -70,20 +91,19 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCellView = filmSearchTable.cellForRow(at: indexPath)
-        let predefinedRolls = Roll.predefinedRolls
         
         if let cellText = selectedCellView?.textLabel?.text {
             if cellText == "Not Listed?" {
-                self.selectedRoll = nil
+                halfCompleteRoll = nil
                 performSegue(withIdentifier: "customRollSegue", sender: self)
-                
-            } else if predefinedRolls.keys.contains(cellText) {
+            } else {
                 //set the selected roll key to pass
-                selectedRollKey = cellText
+                //selectedRollKey = cellText
                 
-                selectedRoll = predefinedRolls[cellText]!
+                predefinedRollDictionaryKey = cellText
+                halfCompleteRoll = AddRollViewController.predefinedRolls[cellText]
                 
-                if predefinedRolls[cellText]?.format == 120 {
+                if AddRollViewController.predefinedRolls[cellText]?.format == 120 {
                     performSegue(withIdentifier: "customRollSegue", sender: self)
                 } else {
                     performSegue(withIdentifier: "cameraSettingSegue", sender: self)
@@ -97,12 +117,12 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     func rollFilter(searchBar: UISearchBar, text: String) {
         
         if searchBar.selectedScopeButtonIndex == 0 {
-            filteredArray = Roll.predefinedRolls.keys.filter({ (rollName) -> Bool in
+            filteredArray = AddRollViewController.predefinedRolls.keys.filter({ (rollName) -> Bool in
                 return rollName.lowercased().contains(text.lowercased())
                     && rollName.lowercased().contains("135")
             })
         } else {
-            filteredArray = Roll.predefinedRolls.keys.filter({ (rollName) -> Bool in
+            filteredArray = AddRollViewController.predefinedRolls.keys.filter({ (rollName) -> Bool in
                 return rollName.lowercased().contains(text.lowercased())
                     && rollName.lowercased().contains("120")
             })
@@ -182,16 +202,36 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     //Protocol requirement to do segue for recently added rolls
-    func performSegueWithInfo(roll: Roll, selectedRollKey: String) {
-        self.selectedRoll = roll
-        self.selectedRollKey = selectedRollKey
-        if roll.format == 120 {
+    func performSegueWithInfo(halfCompleteRoll: PredefinedRoll, predefinedRollDictionaryKey: String) {
+        self.halfCompleteRoll = halfCompleteRoll
+        self.predefinedRollDictionaryKey = predefinedRollDictionaryKey
+        if halfCompleteRoll.format == 120 {
             performSegue(withIdentifier: "customRollSegue", sender: self)
         } else {
             performSegue(withIdentifier: "cameraSettingSegue", sender: self)
         }
     }
     
+    //delegate for final predefined roll addition
+    //Will be called when a predefined roll are actually used
+    func didConfirmSavingPredefinedRoll(rollKey: String) {
+        var previouslySaved = false
+        for roll in recentlyAddedRolls {
+            if roll.predefinedRoll?.filmName == rollKey {
+                roll.timesAdded += 1
+                previouslySaved = true
+                break
+            }
+        }
+        
+        if !previouslySaved {
+            let recentlyAdded = RecentlyAddedRoll(context: dataController.viewContext)
+            recentlyAdded.predefinedRoll = AddRollViewController.predefinedRolls[rollKey]
+            recentlyAdded.timesAdded = 1
+        }
+        //The context will be saved after new roll was added
+        //try? dataController.viewContext.save()
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         reverseAnimation()
@@ -199,12 +239,24 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
         if segue.identifier == "customRollSegue" {
             filmSearchBar.resignFirstResponder()
             let destination = segue.destination as! CustomRollViewController
-            destination.selectedRollKey = selectedRollKey
-            destination.customRoll = selectedRoll
+            destination.halfCompleteRoll = halfCompleteRoll
+            destination.cameraSettingDelegate = self
+            destination.predefinedRollDictionaryKey = predefinedRollDictionaryKey
+            destination.dataController = dataController
+            
+            //destination.selectedRollKey = selectedRollKey
+            //destination.customRoll = selectedRoll
         } else if segue.identifier == "cameraSettingSegue" {
             let destination = segue.destination as! CameraSettingViewController
-            destination.selectedRollKey = selectedRollKey
-            destination.roll = selectedRoll
+            destination.dataController = dataController
+            guard halfCompleteRoll != nil else {fatalError("no roll has been selected before cameraSettingSegue")}
+            destination.halfCompleteRoll = halfCompleteRoll
+            destination.rollPredefined = true
+            destination.delegate = self
+            destination.predefinedRollDictionaryKey = predefinedRollDictionaryKey
+            
+            //destination.selectedRollKey = selectedRollKey
+            //destination.roll = selectedRoll
         }
         
     }

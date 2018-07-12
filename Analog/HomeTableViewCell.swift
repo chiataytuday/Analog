@@ -30,7 +30,7 @@ class HomeTableViewCell: UITableViewCell {
     }
     
     //called by the table view, update all the info related to the roll
-    func update(with roll: Roll) {
+    func update(with roll: NewRoll) {
         filmTypeImage.image = UIImage(named: "\(roll.format)")
         
         if roll.title == nil {
@@ -42,19 +42,35 @@ class HomeTableViewCell: UITableViewCell {
         }
         
         var evString = ""
-        if let pushPull = roll.pushPull {
-            if pushPull > 0 {
-                evString = ", \(-Int(pushPull))ev"
-            } else if pushPull < 0 {
-                evString = ", +\(-Int(pushPull))ev"
+        let pushPull = roll.pushPull
+        
+        if pushPull > 0 {
+            evString = ", \(-Int(pushPull))ev"
+        } else if pushPull < 0 {
+            evString = ", +\(-Int(pushPull))ev"
+        }
+        
+//        if let pushPull = roll.pushPull {
+//            if pushPull > 0 {
+//                evString = ", \(-Int(pushPull))ev"
+//            } else if pushPull < 0 {
+//                evString = ", +\(-Int(pushPull))ev"
+//            }
+//        }
+        
+        if let filmName = roll.filmName {
+            if roll.camera == nil  {
+                rollDetailLabel.text = filmName + evString
+            } else {
+                rollDetailLabel.text = filmName + ", " + (roll.camera ?? "Camera missing") + evString
             }
         }
         
-        if roll.camera == nil  {
-            rollDetailLabel.text = roll.filmName + evString
-        } else {
-            rollDetailLabel.text = roll.filmName + ", " + (roll.camera ?? "Camera missing") + evString
-        }
+//        if roll.camera == nil  {
+//            rollDetailLabel.text = roll.filmName + evString
+//        } else {
+//            rollDetailLabel.text = roll.filmName + ", " + (roll.camera ?? "Camera missing") + evString
+//        }
         
         
         let dateFormatter = DateFormatter()
@@ -86,22 +102,25 @@ class HomeTableViewCell: UITableViewCell {
             }
         }
         
-        if let frames = roll.frames {
-            var lastFrame: Int?
-            
-            for index in frames.indices {
-                if frames[index] != nil {
-                    lastFrame = index + 1
-                }
-            }
-            
-            if let lastFrame = lastFrame {
-                frameCountLabel.text = "\(lastFrame)/\(roll.frameCount)"
-            } else {
-                frameCountLabel.text = "0/\(roll.frameCount)"
-            }
-            
-        }
+        frameCountLabel.text = "\(roll.lastAddedFrame + 1)/\(roll.frameCount)"
+        
+        
+//        if let frames = roll.frames {
+//            var lastFrame: Int?
+//
+//            for index in frames.indices {
+//                if frames[index] != nil {
+//                    lastFrame = index + 1
+//                }
+//            }
+//
+//            if let lastFrame = lastFrame {
+//                frameCountLabel.text = "\(lastFrame)/\(roll.frameCount)"
+//            } else {
+//                frameCountLabel.text = "0/\(roll.frameCount)"
+//            }
+//
+//        }
         
         //end of cell update method
     }

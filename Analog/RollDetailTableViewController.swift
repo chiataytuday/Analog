@@ -19,59 +19,79 @@ class RollDetailTableViewController: UITableViewController {
     @IBOutlet weak var lastAddedLabel: UILabel!
     @IBOutlet weak var framesRecordedLabel: UILabel!
         
-    var loadedRoll: Roll?
+    var roll: NewRoll!
+    var dataController: DataController!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //load from file again, end up in the dataIOQueue
-        guard let loadedRoll = loadedRoll else {return}
+        //guard let loadedRoll = loadedRoll else {return}
         
-        let film = loadedRoll.filmName
-        let frames = loadedRoll.frameCount
-        let iso = loadedRoll.iso
+        let film = roll.filmName
+        let frameCount = roll.frameCount
+        let iso = roll.iso
+        let pushPull = roll.pushPull
         
-        var frameRecordedCount = 0
-        if let frames = loadedRoll.frames {
-            frameRecordedCount = frames.filter { $0 != nil }.count
-        }
+        var frameRecordedCount = roll.frames?.count
         
         
-        if let pushPull = loadedRoll.pushPull {
-            var pushPullString: String{
-                if pushPull == -1 {
-                    return "Overexposed 1 stop"
-                } else if pushPull == 1 {
-                    return "Underexposed 1 stop"
-                } else if pushPull == 0 {
-                    return "Normal"
-                } else if pushPull < 0 {
-                    return "Overexposed \(Int(-pushPull)) stops"
-                } else {
-                    return "Underexposed \(Int(pushPull)) stops"
-                }
+//        if let frames = roll.frames {
+//            frameRecordedCount =
+//        }
+        
+        
+        var pushPullString: String{
+            if pushPull == -1 {
+                return "Overexposed 1 stop"
+            } else if pushPull == 1 {
+                return "Underexposed 1 stop"
+            } else if pushPull == 0 {
+                return "Normal"
+            } else if pushPull < 0 {
+                return "Overexposed \(Int(-pushPull)) stops"
+            } else {
+                return "Underexposed \(Int(pushPull)) stops"
             }
-            pushPullLabel.text = pushPullString
         }
+        pushPullLabel.text = pushPullString
+        
+//        if let pushPull = roll.pushPull {
+//            var pushPullString: String{
+//                if pushPull == -1 {
+//                    return "Overexposed 1 stop"
+//                } else if pushPull == 1 {
+//                    return "Underexposed 1 stop"
+//                } else if pushPull == 0 {
+//                    return "Normal"
+//                } else if pushPull < 0 {
+//                    return "Overexposed \(Int(-pushPull)) stops"
+//                } else {
+//                    return "Underexposed \(Int(pushPull)) stops"
+//                }
+//            }
+//            pushPullLabel.text = pushPullString
+//        }
         
         filmLabel.text = film
-        framesLabel.text = "\(frames)"
+        framesLabel.text = "\(frameCount)"
         isoLabel.text = "\(iso)"
         
-        if let lastAddedFrame = loadedRoll.lastAddedFrame {
-            lastAddedLabel.text = "\(lastAddedFrame + 1)"
+        if roll.lastAddedFrame != -1 {
+            lastAddedLabel.text = "\(roll.lastAddedFrame + 1)"
         } else {
             lastAddedLabel.text = "N/A"
         }
         
-        framesRecordedLabel.text = "\(frameRecordedCount)/\(frames)"
+        framesRecordedLabel.text = "\(frameRecordedCount ?? 0)/\(frameCount)"
         
         
-        if let rollName = loadedRoll.title {
+        if let rollName = roll.title {
             rollNameTextField.text = rollName
         }
         
-        if let camera = loadedRoll.camera {
+        if let camera = roll.camera {
             cameraTextField.text = camera
         }
         
@@ -100,18 +120,18 @@ class RollDetailTableViewController: UITableViewController {
             //save roll title
             if let text = rollNameTextField.text {
                 if text != "" {
-                    destination?.loadedRoll?.title = text
+                    destination?.roll?.title = text
                 } else {
-                    destination?.loadedRoll?.title = nil
+                    destination?.roll?.title = nil
                 }
             }
             
             //save roll camera
             if let text = cameraTextField.text {
                 if text != "" {
-                    destination?.loadedRoll?.camera = text
+                    destination?.roll?.camera = text
                 } else {
-                    destination?.loadedRoll?.camera = nil
+                    destination?.roll?.camera = nil
                 }
             }
             
