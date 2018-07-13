@@ -49,13 +49,13 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         super.viewDidLoad()
         
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.pausesLocationUpdatesAutomatically = true
+        locationManager.distanceFilter = 50
         locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
         
         if roll.lastAddedFrame != -1 {
             currentFrameIndex = roll.lastAddedFrame
-
         }
         
         
@@ -153,6 +153,10 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
 //        }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        locationManager.startUpdatingLocation()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //show the index combo, should later disapper with perform normal index animation
@@ -161,7 +165,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        locationManager.stopUpdatingLocation()
+        //locationManager.stopUpdatingLocation()
         geoCoder.cancelGeocode()
         //set the location lable
         for frame in frames.values {
@@ -344,9 +348,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         
         frames[currentFrameIndex] = frame
         
+        
         roll.lastEditedDate = Date()
         roll.lastAddedFrame = currentFrameIndex
-        
         
         if let currentLocation = currentLocation {
             frame.location = currentLocation

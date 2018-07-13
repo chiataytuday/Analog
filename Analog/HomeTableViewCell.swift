@@ -102,7 +102,24 @@ class HomeTableViewCell: UITableViewCell {
             }
         }
         
-        frameCountLabel.text = "\(roll.lastAddedFrame + 1)/\(roll.frameCount)"
+        let largestFrame = roll.frames?.max(by: { (f1, f2) -> Bool in
+            let frame1 = f1 as! NewFrame
+            let frame2 = f2 as! NewFrame
+            
+            if frame1.index < frame2.index {
+                return true
+            } else {
+                return false
+            }
+        }) as? NewFrame
+        
+        var largestFrameIndex:Int16 = 0
+        
+        if let largestFrame = largestFrame {
+            largestFrameIndex = largestFrame.index + 1
+        }
+        
+        frameCountLabel.text = "\(largestFrameIndex)/\(roll.frameCount)"
         
         
 //        if let frames = roll.frames {

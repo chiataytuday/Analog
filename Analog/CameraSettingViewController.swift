@@ -94,6 +94,7 @@ class CameraSettingViewController: UIViewController {
             let recentlyAdded = RecentlyAddedRoll(context: dataController.viewContext)
             recentlyAdded.predefinedRoll = halfCompleteRoll
             recentlyAdded.timesAdded = 1
+            recentlyAdded.fullName = halfCompleteRoll.filmName + " (\(halfCompleteRoll.format), \(halfCompleteRoll.frameCount)exp.)"
         }
         
         roll = NewRoll(context: dataController.viewContext)

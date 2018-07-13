@@ -50,7 +50,7 @@ class RecentlyAddedTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "searchResultCell", for: indexPath)
 //        let mappedDict = recentlyAddedRolls?.map { (key, value)  in key }
         
-        cell.textLabel?.text = recentlyAddedRolls[indexPath.row].predefinedRoll?.filmName
+        cell.textLabel?.text = recentlyAddedRolls[indexPath.row].fullName
         
         return cell
     }
@@ -80,12 +80,16 @@ class RecentlyAddedTableViewController: UITableViewController {
         if editingStyle == .delete {
             // Roll.deleteRecentlyAdded(with: text)
             // Delete the row from the data source
-            
+
             dataController?.viewContext.delete(recentlyAddedRolls[indexPath.row])
-            try? dataController?.viewContext.save()
+            recentlyAddedRolls.remove(at: indexPath.row)
+            
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.beginUpdates()
             tableView.endUpdates()
+            
+            try? dataController?.viewContext.save()
+
         }
     }
     

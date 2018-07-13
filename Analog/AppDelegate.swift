@@ -40,21 +40,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         
-        let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
-        let frameEditingViewController = navigationController?.visibleViewController as? FrameEditingViewController
-        
-        frameEditingViewController?.geoCoder.cancelGeocode()
-        
+//        let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+//        let frameEditingViewController = navigationController?.visibleViewController as? FrameEditingViewController
+//
+//        frameEditingViewController?.geoCoder.cancelGeocode()
+//
         //current?.saveRoll()
         
-        if let frames = frameEditingViewController?.frames {
-            for frame in frames.values {
-                if frame.locationName == "Loading location" {
-                    frame.locationName = "Tap to reload"
-                    frame.locationDescription = "Can not load location"
-                }
-            }
-        }
+//        if let frames = frameEditingViewController?.frames {
+//            for frame in frames.values {
+//                if frame.locationName == "Loading location" {
+//                    frame.locationName = "Tap to reload"
+//                    frame.locationDescription = "Can not load location"
+//                }
+//            }
+//        }
         
         saveViewContext()
         
@@ -69,14 +69,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         
         //used to notify the user which frame they are in while unlocking
-        let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
-        let current = navigationController?.visibleViewController as? FrameEditingViewController
-        
-        current?.performIndexViewAnimation()
-        
-        current?.locationManager.requestWhenInUseAuthorization()
-        current?.locationManager.startUpdatingLocation()
-        
+//        let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+//        let current = navigationController?.visibleViewController as? FrameEditingViewController
+//
+//        current?.performIndexViewAnimation()
+//
+//        current?.locationManager.requestWhenInUseAuthorization()
+//        current?.locationManager.startUpdatingLocation()
+//
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 

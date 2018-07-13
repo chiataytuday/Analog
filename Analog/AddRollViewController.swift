@@ -228,6 +228,7 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
             let recentlyAdded = RecentlyAddedRoll(context: dataController.viewContext)
             recentlyAdded.predefinedRoll = AddRollViewController.predefinedRolls[rollKey]
             recentlyAdded.timesAdded = 1
+            recentlyAdded.fullName = rollKey
         }
         //The context will be saved after new roll was added
         //try? dataController.viewContext.save()
