@@ -217,7 +217,7 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
     func didConfirmSavingPredefinedRoll(rollKey: String) {
         var previouslySaved = false
         for roll in recentlyAddedRolls {
-            if roll.predefinedRoll?.filmName == rollKey {
+            if roll.fullName == rollKey {
                 roll.timesAdded += 1
                 previouslySaved = true
                 break

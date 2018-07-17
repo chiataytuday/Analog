@@ -12,11 +12,11 @@ import MapKit
 extension FrameEditingViewController {
     
     //called whenever the add frame button tapped
-    func updateLocationDescription(with location: CLLocation, for frameIndex: Int16) {
+    func updateLocationDescription(with location: CLLocation, for frameIndex: Int64) {
         
         
         //deep copy the frameIndex
-        let frameIndex = Int16(frameIndex)
+        let frameIndex = Int64(frameIndex)
         
         let networkGroup = DispatchGroup()
         
@@ -51,9 +51,6 @@ extension FrameEditingViewController {
                                 
                                 try? self.dataController.viewContext.save()
                                 
-                                //self.updateView(for: frameIndex)
-//                                //save roll again because the view might already disappear
-//                                self.saveRoll()
                             }
                             
                             networkGroup.leave()
@@ -74,9 +71,6 @@ extension FrameEditingViewController {
                                 
                                 try? self.dataController.viewContext.save()
                                 
-                                //self.updateView(for: frameIndex)
-                                
-                                //self.saveRoll()
                             }
                             
                             networkGroup.leave()
@@ -112,9 +106,6 @@ extension FrameEditingViewController {
                         self.frameDetailTableViewController?.updateLocationViews(with: location, locationName: locationName, locationDescription: locationDetail)
                     }
                     
-                    //self.updateView(for: frameIndex)
-                    
-                    //self.saveRoll()
                 }
                 
             }

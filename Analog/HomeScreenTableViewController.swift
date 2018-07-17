@@ -23,7 +23,7 @@ class HomeScreenTableViewController: UITableViewController {
         let sortDescriptor = NSSortDescriptor(key: "dateAdded", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "album")
         fetchedResultsController.delegate = self
         
         do {
@@ -38,6 +38,8 @@ class HomeScreenTableViewController: UITableViewController {
         
         setupFetchedResultsController()
 
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
+        
         //Hide unused cell
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         tableView.tableFooterView?.isHidden = true
@@ -45,23 +47,22 @@ class HomeScreenTableViewController: UITableViewController {
         
         if fetchedResultsController.sections == nil || fetchedResultsController.sections?[0].numberOfObjects == 0 {
             self.navigationItem.leftBarButtonItem?.isEnabled = false
-            
-            let notifGroup = DispatchGroup()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                notifGroup.enter()
-                self.navigationItem.prompt = "Tap ➕ to add a roll"
-                notifGroup.leave()
-            })
-            //wait for the first to complete
-            notifGroup.wait()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-                self.navigationItem.prompt = nil
-            })
-            
+//            //let notifGroup = DispatchGroup()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+////                notifGroup.enter()
+//                self.navigationItem.prompt = "Tap ➕ to add a roll"
+////                notifGroup.leave()
+//            })
+//            //wait for the first to complete
+////            notifGroup.wait()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+//                self.navigationItem.prompt = nil
+//            })
+
         } else {
             //reload table
             //tableView.reloadData()
-            
+
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
         
@@ -69,16 +70,20 @@ class HomeScreenTableViewController: UITableViewController {
 //        if let savedAlbum = Roll.loadAlbum() {
 //            album = savedAlbum
 //        }
-
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if fetchedResultsController.sections == nil || fetchedResultsController.sections?[0].numberOfObjects == 0 {
+            self.navigationItem.prompt = "Tap ➕ to add a roll"
+        } else {
+            self.navigationItem.prompt = nil
+        }
+        
         if #available(iOS 11.0, *) {
-            navigationController?.navigationBar.prefersLargeTitles = true
+            navigationItem.largeTitleDisplayMode = .automatic
         }
         
 //        //reload album from file
@@ -86,6 +91,12 @@ class HomeScreenTableViewController: UITableViewController {
 //            album = savedAlbum
 //        }
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.setEditing(false, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -198,6 +209,13 @@ extension HomeScreenTableViewController: NSFetchedResultsControllerDelegate {
         
         tableView.beginUpdates()
         tableView.endUpdates()
+        
+        if controller.sections == nil || controller.sections?[0].numberOfObjects == 0 {
+            self.setEditing(false, animated: true)
+            self.navigationItem.leftBarButtonItem?.isEnabled = false
+        } else {
+            self.navigationItem.leftBarButtonItem?.isEnabled = true
+        }
         
     }
     

@@ -11,9 +11,9 @@ import MapKit
 
 protocol FrameDetailTableViewControllerDelegate {
     func didUpdateDate(with date: Date)
-    func didUpdateLens(lens: Int16?)
+    func didUpdateLens(lens: Int64?)
     func didUpdateAperture(aperture: Double?)
-    func didUpdateShutter(shutter: Int16?)
+    func didUpdateShutter(shutter: Int64?)
     func didUpdateNotes(notes: String?)
     func didUpdateLocationInfo(location: CLLocation, title: String, detail: String)
 }
@@ -32,7 +32,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     @IBOutlet weak var noteTextView: UITextView!
     
     //setting up location manager for map and description use
-    let locationManager = CLLocationManager()
+    //let locationManager = CLLocationManager()
     //delegate in order to pass data to the parent
     var delegate: FrameEditingViewController?
     
@@ -48,6 +48,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         
         //set the mapView's delegate
         mapView.delegate = self
+        
         noteTextView.delegate = self
         
         //setup date formatter
@@ -145,7 +146,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         datePicker.date = date
     }
     
-    func updateLensText(with lens: Int16) {
+    func updateLensText(with lens: Int64) {
         if lens != 0 {
             lensTextField.text = "\(lens)mm"
         } else {
@@ -158,14 +159,16 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
             apertureTextField.text = "\(aperture)"
         } else {
             apertureTextField.text = nil
+            apertureTextField.placeholder = "Aperture"
         }
     }
     
-    func updateShutterText(with shutter: Int16) {
+    func updateShutterText(with shutter: Int64) {
         if shutter != 0 {
             shutterTextField.text = "\(shutter)"
         } else {
             shutterTextField.text = nil
+            shutterTextField.placeholder = "Shutter"
         }
     }
     
@@ -216,8 +219,8 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         
         guard let frame = frame else {
             //if frame is nil
-            let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
-            mapView.setRegion(region, animated: true)
+//            let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
+//            mapView.setRegion(region, animated: true)
             
             locationNameLabel.text = "Loading location..."
             locationDetailLabel.text = "Loading location..."
@@ -356,7 +359,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         if sender.text == nil || sender.text == "" {
             delegate?.didUpdateLens(lens: nil)
         } else {
-            delegate?.didUpdateLens(lens: Int16(sender.text!))
+            delegate?.didUpdateLens(lens: Int64(sender.text!))
             //("mm" was appended in update view)
         }
     }
@@ -369,11 +372,15 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     @IBAction func apertureEditingEnd(_ sender: UITextField) {
         if sender.text == nil || sender.text == "" {
             delegate?.didUpdateAperture(aperture: nil)
-            apertureTextField.placeholder = "Aperture"
         } else {
             delegate?.didUpdateAperture(aperture: Double(sender.text!))
         }
     }
+    
+    @IBAction func apertureTextFieldReturned(_ sender: Any) {
+        shutterTextField.becomeFirstResponder()
+    }
+    
     
     @IBAction func ShutterEditingBegin(_ sender: UITextField) {
         shutterTextField.placeholder = nil
@@ -383,9 +390,8 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     @IBAction func shutterEditingEnd(_ sender: UITextField) {
         if sender.text == nil || sender.text == "" {
             delegate?.didUpdateShutter(shutter: nil)
-            shutterTextField.placeholder = "Shutter"
         } else {
-            delegate?.didUpdateShutter(shutter: Int16(sender.text!))
+            delegate?.didUpdateShutter(shutter: Int64(sender.text!))
         }
     }
     
@@ -403,8 +409,8 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text == "" {
-            noteTextView.textColor = .lightGray
-            noteTextView.text = "Notes"
+//            noteTextView.textColor = .lightGray
+//            noteTextView.text = "Notes"
             delegate?.didUpdateNotes(notes: nil)
         } else {
             delegate?.didUpdateNotes(notes: textView.text)

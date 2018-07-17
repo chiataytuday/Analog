@@ -26,20 +26,12 @@ class RollDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //load from file again, end up in the dataIOQueue
-        //guard let loadedRoll = loadedRoll else {return}
-        
         let film = roll.filmName
         let frameCount = roll.frameCount
         let iso = roll.iso
         let pushPull = roll.pushPull
         
         var frameRecordedCount = roll.frames?.count
-        
-        
-//        if let frames = roll.frames {
-//            frameRecordedCount =
-//        }
         
         
         var pushPullString: String{
@@ -56,23 +48,6 @@ class RollDetailTableViewController: UITableViewController {
             }
         }
         pushPullLabel.text = pushPullString
-        
-//        if let pushPull = roll.pushPull {
-//            var pushPullString: String{
-//                if pushPull == -1 {
-//                    return "Overexposed 1 stop"
-//                } else if pushPull == 1 {
-//                    return "Underexposed 1 stop"
-//                } else if pushPull == 0 {
-//                    return "Normal"
-//                } else if pushPull < 0 {
-//                    return "Overexposed \(Int(-pushPull)) stops"
-//                } else {
-//                    return "Underexposed \(Int(pushPull)) stops"
-//                }
-//            }
-//            pushPullLabel.text = pushPullString
-//        }
         
         filmLabel.text = film
         framesLabel.text = "\(frameCount)"

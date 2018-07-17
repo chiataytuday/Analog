@@ -26,15 +26,12 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     var dataController: DataController!
     //use for loading roll
-//    var rollIndexPath: IndexPath?
     var roll: NewRoll!
     //used to cache the frames
-    var frames = [Int16: NewFrame]()
-    
-//    var album: NewRoll!
-    
+    var frames = [Int64: NewFrame]()
+        
     //start with 0!!!
-    var currentFrameIndex:Int16 = 0
+    var currentFrameIndex:Int64 = 0
     
     //the reference to the container view
     var frameDetailTableViewController: FrameDetailTableViewController?
@@ -49,10 +46,11 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         super.viewDidLoad()
         
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.pausesLocationUpdatesAutomatically = true
-        locationManager.distanceFilter = 50
+        locationManager.distanceFilter = 100
         locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
         
         if roll.lastAddedFrame != -1 {
             currentFrameIndex = roll.lastAddedFrame
@@ -98,63 +96,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             fatalError("Can't load frames from store")
         }
         
+        updateLocationDescription()
+        
         updateView(for: currentFrameIndex)
-        
-//        guard let rollIndexPath = rollIndexPath,
-//            let loadedRoll = Roll.loadRoll(with: rollIndexPath) else { return }
-        
-        //assign loadedRoll
-//        self.loadedRoll = loadedRoll
-//        frames = loadedRoll.frames
-        
-        
-        
-//        //initialize the array for saving if not existed
-//        if loadedRoll.frames == nil {
-//
-//            //initialize the frames
-//            frames = Array(repeating: nil, count: loadedRoll.frameCount)
-//
-//            tapToSwitchImage.isHidden = false
-//
-//            updateView(for: 0)
-//
-//            have a notification for user when first added
-//            let notifGroup = DispatchGroup()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-//                notifGroup.enter()
-//                self.navigationItem.prompt = "Now you can start to record your frames!"
-//                notifGroup.leave()
-//            })
-//            //wait for the first to complete
-//            notifGroup.wait()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 7, execute: {
-//                self.navigationItem.prompt = nil
-//            })
-
-//        } else {
-//            //preparation for previously edited roll
-//            if let lastAddedIndex = loadedRoll.lastAddedFrame {
-//
-//                tapToSwitchImage.isHidden = true
-//
-//                currentFrameIndex = lastAddedIndex
-//
-//                slider.value = Float(currentFrameIndex + 1)
-//                stepper.value = Double(currentFrameIndex + 1)
-//                indexLabel.text = "\(currentFrameIndex + 1)"
-//
-//                updateView(for: currentFrameIndex)
-//
-//            } else {
-//
-//                updateView(for: 0)
-//            }
-//        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        locationManager.startUpdatingLocation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -163,21 +107,11 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         performAnimationWithoutPop()
     }
     
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        //locationManager.stopUpdatingLocation()
-        geoCoder.cancelGeocode()
-        //set the location lable
-        for frame in frames.values {
-            if frame.locationName == "Loading location" {
-                frame.locationName = "Tap to reload"
-                frame.locationDescription = "Can not load location"
-            }
-        }
-        //save the roll
-        try? dataController.viewContext.save()
         
-        //saveRoll()
+        try? dataController.viewContext.save()
     }
     
     override func didReceiveMemoryWarning() {
@@ -186,26 +120,17 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     }
     
     
-    //called while back batton was tapped or moving to the background
-//    func saveRoll() {
-//        guard let rollIndexPath = rollIndexPath, let loadedRoll = loadedRoll, let frames = frames else {return}
-//
-//
-//        //Set the location name label to "loading" if not in network queue (thus not cancelled)
-//        for frame in frames {
-//            guard let frame = frame else { continue }
-//
-//            if frame.locationName == "Loading location" {
-//                frame.locationName = "Tap to reload"
-//                frame.locationDescription = "Can not load location"
-//            }
-//        }
-//
-//        loadedRoll.frames = frames
-//
-//        Roll.saveRoll(for: rollIndexPath, with: loadedRoll)
-//    }
-    
+    // MARK: - Update "Loading Location" Description
+    func updateLocationDescription() {
+        guard geoCoder.isGeocoding == false else {return}
+        
+        for frame in frames.values {
+            if frame.locationName == "Loading location..." {
+                frame.locationName = "Tap to reload"
+                frame.locationDescription = "Can't load location info"
+            }
+        }
+    }
     
     //MARK: - core location delegate method
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -323,11 +248,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             tapToSwitchImage.isHidden = true
         }
         
-//        if loadedRoll?.lastAddedFrame == nil {
-//            tapToSwitchImage.isHidden = false
-//        } else {
-//            tapToSwitchImage.isHidden = true
-//        }
     }
     
     
@@ -335,6 +255,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     // MARK: - Actions which changes data
     
     @IBAction func addFrameButtonTapped(_ sender: UIButton) {
+        
+        locationManager.requestLocation()
         
         roll.newlyAdded = false
         
@@ -357,40 +279,15 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             updateLocationDescription(with: currentLocation, for: currentFrameIndex)
         }
         
-        //save the roll
         updateView(for: currentFrameIndex)
         
-        try? dataController.viewContext.save()
-
-        
-//        guard let loadedRoll = loadedRoll, var frames  = frames else {return}
-//
-//        loadedRoll.lastEditedDate = Date()
-//        loadedRoll.lastAddedFrame = currentFrameIndex
-//
-//        let frame = Frame(location: currentLocation, locationName: nil, locationDescription: nil, addDate: Date(), aperture: nil, shutter: nil, lens: nil, notes: nil)
-//
-//        //use current lens if existed
-//        if let lens = loadedRoll.currentLens {
-//            frame.lens = lens
-//        }
-//
-//        frames[currentFrameIndex] = frame
-//        self.frames = frames
-//
-//        if let currentLocation = currentLocation {
-//            updateLocationDescription(with: currentLocation, for: currentFrameIndex)
-//        }
-//
-//        updateView(for: currentFrameIndex)
-
     }
     
     //for changing the current frameindex
     @IBAction func sliderValueChanged(_ sender: UISlider) {
         let floatValue = sender.value
         let roundValue = roundf(floatValue)
-        let intValue = Int16(roundValue)
+        let intValue = Int64(roundValue)
         
         slider.value = roundValue
         stepper.value = Double(roundValue)
@@ -404,7 +301,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
         let doubleValue = sender.value
-        let intValue = Int16(doubleValue)
+        let intValue = Int64(doubleValue)
         
         slider.value = Float(doubleValue)
         
@@ -429,23 +326,12 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             self.dataController.viewContext.delete(frame)
             //update view
             self.frames.removeValue(forKey: self.currentFrameIndex)
+            
+            self.roll.lastEditedDate = Date()
+            //loadedRoll.lastAddedFrame = self.currentFrameIndex
+            
             self.updateView(for: self.currentFrameIndex)
             self.frameDetailTableViewController?.resignResponder()
-            
-//            DispatchQueue.main.async {
-//                guard let loadedRoll = self.loadedRoll, var frames  = self.frames else {return}
-//
-//                loadedRoll.lastEditedDate = Date()
-//                loadedRoll.lastAddedFrame = self.currentFrameIndex
-//
-//                frames[self.currentFrameIndex] = nil
-//                self.frames = frames
-//
-//                self.updateView(for: self.currentFrameIndex)
-//
-//                self.frameDetailTableViewController?.resignResponder()
-//
-//            }
             
         }
         
@@ -474,13 +360,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
                 self.navigationItem.title = "Untitled Roll"
             }
             
-            try? dataController.viewContext.save()
-            
-//            guard let loadedRoll = loadedRoll, let title = loadedRoll.title else {
-//                self.navigationItem.title = "Untitled Roll"
-//                return
-//            }
-//            self.navigationItem.title = title
         }
     }
     
@@ -491,7 +370,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             let targetController = destinationNavigationController.topViewController as! RollDetailTableViewController
             targetController.roll = roll
             targetController.dataController = dataController
-            //targetController.frames = frames
             
         } else if segue.identifier == "frameEmbedSegue" {
             let destinationController = segue.destination as! FrameDetailTableViewController

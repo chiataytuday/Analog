@@ -11,11 +11,11 @@ import Foundation
 public class PredefinedRoll: NSObject, NSCoding {
     
     var filmName: String
-    var format: Int16
-    var frameCount: Int16
-    var iso: Int16
+    var format: Int64
+    var frameCount: Int64
+    var iso: Int64
     
-    init(filmName: String, format: Int16, frameCount: Int16, iso: Int16) {
+    init(filmName: String, format: Int64, frameCount: Int64, iso: Int64) {
         self.filmName = filmName
         self.format = format
         self.frameCount = frameCount
@@ -31,9 +31,9 @@ public class PredefinedRoll: NSObject, NSCoding {
     
     convenience required public init?(coder aDecoder: NSCoder) {
         let filmName = aDecoder.decodeObject(forKey: PropertyKeys.filmName) as! String
-        let format = aDecoder.decodeObject(forKey: PropertyKeys.format) as! Int16
-        let frameCount = aDecoder.decodeObject(forKey: PropertyKeys.frameCount) as! Int16
-        let iso = aDecoder.decodeObject(forKey: PropertyKeys.iso) as! Int16
+        let format = aDecoder.decodeInt64(forKey: PropertyKeys.format)
+        let frameCount = aDecoder.decodeInt64(forKey: PropertyKeys.frameCount)
+        let iso = aDecoder.decodeInt64(forKey: PropertyKeys.iso)
         
         self.init(filmName: filmName, format: format, frameCount: frameCount, iso: iso)
     }

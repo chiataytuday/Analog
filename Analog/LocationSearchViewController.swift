@@ -29,9 +29,7 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
     var selectedLocation: CLLocation?
     var selectedName: String?
     var selectedDetail: String?
-    
-    var locationManager = CLLocationManager()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,9 +47,6 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
         mapView.showsUserLocation = true
         
         searchResultTable.registerForKeyboardNotifications()
-        
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
         
         // Do any additional setup after loading the view.
     }
@@ -103,7 +98,7 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
     
     func reverseAnimation() {
         UIView.animate(withDuration: 0.3) {
-            self.mapHeightConstraint.constant = 260
+            self.mapHeightConstraint.constant = 180
             self.view.layoutIfNeeded()
             self.searchBar.showsCancelButton = false
             self.navigationController?.setNavigationBarHidden(false, animated: true)

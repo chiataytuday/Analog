@@ -113,7 +113,7 @@ class HomeTableViewCell: UITableViewCell {
             }
         }) as? NewFrame
         
-        var largestFrameIndex:Int16 = 0
+        var largestFrameIndex:Int64 = 0
         
         if let largestFrame = largestFrame {
             largestFrameIndex = largestFrame.index + 1

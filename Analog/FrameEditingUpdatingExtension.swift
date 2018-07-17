@@ -18,18 +18,9 @@ extension FrameEditingViewController {
         
         frameDetailTableViewController?.updateDateView(with: date)
         
-        try? dataController.viewContext.save()
-        
-//        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
-//
-//        loadedRoll.lastEditedDate = Date()
-//        //Note: this is allowed because "frames" is only a reference copy
-//        frames[currentFrameIndex]?.addDate = date
-//
-//        updateView(for: currentFrameIndex)
     }
     
-    func didUpdateLens(lens: Int16?) {
+    func didUpdateLens(lens: Int64?) {
         roll.lastEditedDate = Date()
         
         if let lens = lens {
@@ -41,16 +32,6 @@ extension FrameEditingViewController {
             frames[currentFrameIndex]?.lens = 0
             frameDetailTableViewController?.updateLensText(with: 0)
         }
-        
-        try? dataController.viewContext.save()
-
-//        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
-//
-//        loadedRoll.lastEditedDate = Date()
-//        loadedRoll.currentLens = lens
-//        frames[currentFrameIndex]?.lens = lens
-//
-//        updateView(for: currentFrameIndex)
     }
     
     //aperture is 0.0 when not set
@@ -64,18 +45,9 @@ extension FrameEditingViewController {
             frames[currentFrameIndex]?.aperture = 0.0
             frameDetailTableViewController?.updateApertureText(with: 0)
         }
-        
-        try? dataController.viewContext.save()
-        
-//        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
-//
-//        loadedRoll.lastEditedDate = Date()
-//        frames[currentFrameIndex]?.aperture = aperture
-        
-//        updateView(for: currentFrameIndex)
     }
     
-    func didUpdateShutter(shutter: Int16?) {
+    func didUpdateShutter(shutter: Int64?) {
         roll.lastEditedDate = Date()
         
         if let shutter = shutter {
@@ -86,16 +58,6 @@ extension FrameEditingViewController {
             frameDetailTableViewController?.updateShutterText(with: 0)
         }
         
-        try? dataController.viewContext.save()
-
-//        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
-//
-//        loadedRoll.lastEditedDate = Date()
-//        frames[currentFrameIndex]?.shutter = shutter
-//
-//        //necessary because the necessary refresh if frame deleted
-//        updateView(for: currentFrameIndex)
-        
     }
     
     func didUpdateNotes(notes: String?) {
@@ -104,15 +66,6 @@ extension FrameEditingViewController {
         
         frameDetailTableViewController?.updateNotesView(with: notes)
         
-        try? dataController.viewContext.save()
-        
-//
-//        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
-//
-//        loadedRoll.lastEditedDate = Date()
-//        frames[currentFrameIndex]?.notes = notes
-//        
-//        updateView(for: currentFrameIndex)
     }
     
     
@@ -125,23 +78,12 @@ extension FrameEditingViewController {
         
         frameDetailTableViewController?.updateLocationViews(with: location, locationName: title, locationDescription: detail)
         
-        try? dataController.viewContext.save()
-
-//        guard let loadedRoll = loadedRoll, let frames  = frames else {return}
-//
-//        loadedRoll.lastEditedDate = Date()
-//        frames[currentFrameIndex]?.location = location
-//        frames[currentFrameIndex]?.locationName = title
-//        frames[currentFrameIndex]?.locationDescription = detail
-//
-//        updateView(for: currentFrameIndex)
-        
     }
     
     
     //used to update the view excluding the static table view
     //be careful frameIndex start at 0
-    func updateView(for frameIndex: Int16) {
+    func updateView(for frameIndex: Int64) {
         guard
             //important!! check if update is needed
             frameIndex == currentFrameIndex else { return }

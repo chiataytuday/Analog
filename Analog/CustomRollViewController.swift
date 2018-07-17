@@ -178,7 +178,7 @@ class CustomRollViewController: UIViewController {
         
         guard let text = sender.text else { return }
         //if casting is successful
-        if let frameCount = Int16(text) {
+        if let frameCount = Int64(text) {
             halfCompleteRoll.frameCount = frameCount
         }
         
@@ -189,7 +189,7 @@ class CustomRollViewController: UIViewController {
         
         guard let text = sender.text else { return }
         //if casting is sucesseful
-        if let iso = Int16(text) {
+        if let iso = Int64(text) {
             halfCompleteRoll.iso = iso
         }
         
@@ -222,6 +222,7 @@ class CustomRollViewController: UIViewController {
         warningLabel.isHidden = true
         conflictWarningLabel.isHidden = true
         framesWarningLabel.isHidden = true
+        
     }
     
     
