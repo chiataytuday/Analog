@@ -40,8 +40,9 @@ class HomeScreenTableViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         
         //Hide unused cell
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        tableView.tableFooterView?.isHidden = true
+        tableView.tableFooterView = UIView()
+//        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+//        tableView.tableFooterView?.isHidden = true
         
         
         if fetchedResultsController.sections == nil || fetchedResultsController.sections?[0].numberOfObjects == 0 {
@@ -79,6 +80,14 @@ class HomeScreenTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "showRollSegue" && self.isEditing {
+            return false
+        } else {
+            return true
+        }
+    }
+    
     // MARK: - Table view delegate methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fetchedResultsController.sections?[section].numberOfObjects ?? 0
@@ -100,11 +109,10 @@ class HomeScreenTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !self.isEditing {
-            performSegue(withIdentifier: "showRollSegue", sender: self)
-            tableView.deselectRow(at: indexPath, animated: true)
-        } else {
+        if self.isEditing {
             self.navigationItem.rightBarButtonItem?.isEnabled = true
+        } else {
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
@@ -167,9 +175,7 @@ class HomeScreenTableViewController: UITableViewController {
                 try? self.dataController.viewContext.save()
             }
             
-            if self.fetchedResultsController.sections != nil && self.fetchedResultsController.sections?[0].numberOfObjects != 0 {
-                self.navigationItem.rightBarButtonItem?.isEnabled = false
-            }
+            self.setEditing(false, animated: true)
             
         }
         
@@ -193,7 +199,9 @@ class HomeScreenTableViewController: UITableViewController {
             let destination = segue.destination as! FrameEditingViewController
             
             //pass the album object to the frame editing view controller
-            if let indexPath = tableView.indexPathForSelectedRow {
+            if let cell = sender as? UITableViewCell,
+                let indexPath = tableView.indexPath(for: cell) {
+                
                 destination.roll = fetchedResultsController.object(at: indexPath)
                 destination.dataController = dataController
                 destination.navigationItem.leftBarButtonItem = nil

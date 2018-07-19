@@ -8,6 +8,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
+        <capability name="Segues with Peek and Pop" minToolsVersion="7.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -103,6 +104,10 @@
                                     <outlet property="lastEditLabel" destination="Iwu-QH-zo3" id="5pR-Cf-Pmx"/>
                                     <outlet property="rollDetailLabel" destination="vA3-ht-Z7P" id="Z5Q-jd-ZUs"/>
                                     <outlet property="titleLabel" destination="iIk-3s-4jl" id="CGa-yd-8P9"/>
+                                    <segue destination="p11-OD-ebE" kind="show" identifier="showRollSegue" id="BUQ-GL-eJO">
+                                        <segue key="commit" inheritsFrom="parent" id="mqx-yN-ccO"/>
+                                        <segue key="preview" inheritsFrom="commit" id="1E6-fB-MYa"/>
+                                    </segue>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -121,7 +126,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addRollButton" destination="l7u-8U-kIp" id="jFL-ko-2HQ"/>
-                        <segue destination="p11-OD-ebE" kind="show" identifier="showRollSegue" id="GDw-s1-e0K"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J1m-pp-vle" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1572,7 +1576,7 @@
         <image name="divider line" width="376" height="1"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GDw-s1-e0K"/>
+        <segue reference="BUQ-GL-eJO"/>
         <segue reference="P8w-o8-lL5"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
