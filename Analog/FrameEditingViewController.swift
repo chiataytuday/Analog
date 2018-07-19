@@ -86,7 +86,6 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         frameFetchRequest.predicate = framePredicate
         
         if let result = try? dataController?.viewContext.fetch(frameFetchRequest) {
-            
             if let result = result {
                 for frame in result {
                     frames[frame.index] = frame
@@ -154,20 +153,20 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     
     // MARK: - Animations
     
-    fileprivate func performAddFramePrompt() {
-        //have a notification for user when first added
-        let notifGroup = DispatchGroup()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-            notifGroup.enter()
-            self.navigationItem.prompt = "Now you can start to record your frames!"
-            notifGroup.leave()
-        })
-        //wait for the first to complete
-        notifGroup.wait()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 7, execute: {
-            self.navigationItem.prompt = nil
-        })
-    }
+//    fileprivate func performAddFramePrompt() {
+//        //have a notification for user when first added
+//        let notifGroup = DispatchGroup()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+//            notifGroup.enter()
+//            self.navigationItem.prompt = "Now you can start to record your frames!"
+//            notifGroup.leave()
+//        })
+//        //wait for the first to complete
+//        notifGroup.wait()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 7, execute: {
+//            self.navigationItem.prompt = nil
+//        })
+//    }
     
     //for index pop animation
     func performIndexViewAnimation() {

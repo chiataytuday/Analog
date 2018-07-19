@@ -10,13 +10,12 @@ import UIKit
 import CoreData
 
 class HomeScreenTableViewController: UITableViewController {
-    
-//    var album = [Roll]()
-//    var rollIndexPath: IndexPath?
 
     var dataController: DataController!
     
     var fetchedResultsController: NSFetchedResultsController<NewRoll>!
+    
+    @IBOutlet weak var addRollButton: UIBarButtonItem!
     
     func setupFetchedResultsController() {
         let fetchRequest:NSFetchRequest<NewRoll> = NewRoll.fetchRequest()
@@ -47,29 +46,10 @@ class HomeScreenTableViewController: UITableViewController {
         
         if fetchedResultsController.sections == nil || fetchedResultsController.sections?[0].numberOfObjects == 0 {
             self.navigationItem.leftBarButtonItem?.isEnabled = false
-//            //let notifGroup = DispatchGroup()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-////                notifGroup.enter()
-//                self.navigationItem.prompt = "Tap ➕ to add a roll"
-////                notifGroup.leave()
-//            })
-//            //wait for the first to complete
-////            notifGroup.wait()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-//                self.navigationItem.prompt = nil
-//            })
 
         } else {
-            //reload table
-            //tableView.reloadData()
-
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
-        
-//        //load the album
-//        if let savedAlbum = Roll.loadAlbum() {
-//            album = savedAlbum
-//        }
         
     }
     
@@ -85,11 +65,6 @@ class HomeScreenTableViewController: UITableViewController {
         if #available(iOS 11.0, *) {
             navigationItem.largeTitleDisplayMode = .automatic
         }
-        
-//        //reload album from file
-//        if let savedAlbum = Roll.loadAlbum() {
-//            album = savedAlbum
-//        }
         
     }
     
@@ -125,10 +100,20 @@ class HomeScreenTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //prepare for the destination's index path
-        //rollIndexPath = indexPath
-
-        performSegue(withIdentifier: "showRollSegue", sender: self)
+        if !self.isEditing {
+            performSegue(withIdentifier: "showRollSegue", sender: self)
+            tableView.deselectRow(at: indexPath, animated: true)
+        } else {
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if self.isEditing {
+            if tableView.indexPathsForSelectedRows == nil {
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
+            }
+        }
     }
 
     
@@ -145,21 +130,6 @@ class HomeScreenTableViewController: UITableViewController {
                 self.dataController.viewContext.delete(rollToDelete)
                 try? self.dataController.viewContext.save()
                 
-                
-//                Roll.deleteRoll(at: indexPath)
-//                if let albumLoaded = Roll.loadAlbum() {
-//                    self.album = albumLoaded
-//
-//                    if self.album.isEmpty {
-//                        self.setEditing(false, animated: true)
-//                        self.navigationItem.leftBarButtonItem?.isEnabled = false
-//                    }
-//                }
-                
-//                tableView.deleteRows(at: [indexPath], with: .fade)
-//                tableView.beginUpdates()
-//                tableView.endUpdates()
-                
             }
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -172,6 +142,44 @@ class HomeScreenTableViewController: UITableViewController {
         }
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        if editing == true {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete", style: .done, target: self, action: #selector(commitDeleteMultipleRolls))
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+            
+        } else {
+            self.navigationItem.rightBarButtonItem = addRollButton
+        }
+    }
+    
+    @objc func commitDeleteMultipleRolls() {
+        let alertController = UIAlertController(title: "Delete Rolls", message: "Are you sure you want to delete these rolls?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            
+            while self.tableView.indexPathsForSelectedRows != nil {
+                let firstIndex = self.tableView.indexPathsForSelectedRows?.first
+                let rollToDelete = self.fetchedResultsController.object(at: firstIndex!)
+                self.dataController.viewContext.delete(rollToDelete)
+                try? self.dataController.viewContext.save()
+            }
+            
+            if self.fetchedResultsController.sections != nil && self.fetchedResultsController.sections?[0].numberOfObjects != 0 {
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
+            }
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(deleteAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     
     
     // MARK: - Navigation
@@ -190,9 +198,6 @@ class HomeScreenTableViewController: UITableViewController {
                 destination.dataController = dataController
                 destination.navigationItem.leftBarButtonItem = nil
             }
-            
-//            //set the index path for usage
-//            destination.rollIndexPath = rollIndexPath
         } else if segue.identifier == "addRollSegue" {
             let destination = segue.destination as! UINavigationController
             let addRollViewController = destination.topViewController as! AddRollViewController
@@ -213,6 +218,7 @@ extension HomeScreenTableViewController: NSFetchedResultsControllerDelegate {
         if controller.sections == nil || controller.sections?[0].numberOfObjects == 0 {
             self.setEditing(false, animated: true)
             self.navigationItem.leftBarButtonItem?.isEnabled = false
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
