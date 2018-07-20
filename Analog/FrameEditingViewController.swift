@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, FrameDetailTableViewControllerDelegate {
+class FrameEditingViewController: UIViewController, FrameDetailTableViewControllerDelegate {
 
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var stepper: UIStepper!
@@ -36,19 +36,18 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     //the reference to the container view
     var frameDetailTableViewController: FrameDetailTableViewController?
     
-    //setting up the location manager
-    var locationManager = CLLocationManager()
-    var currentLocation: CLLocation?
+    var locationController: LocationController!
     
-    let geoCoder = CLGeocoder()
+    //setting up the location manager
+    var locationManager: CLLocationManager!
+//    var currentLocation: CLLocation?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.pausesLocationUpdatesAutomatically = true
-        locationManager.distanceFilter = 100
+        locationManager = locationController.locationManager
+        
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
@@ -95,7 +94,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
             fatalError("Can't load frames from store")
         }
         
-        updateLocationDescription()
+        resetLocationDescription()
         
         updateView(for: currentFrameIndex)
     }
@@ -110,7 +109,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        try? dataController.viewContext.save()
+        if dataController.viewContext.hasChanges {
+            try? dataController.viewContext.save()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -119,9 +120,9 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
     }
     
     
-    // MARK: - Update "Loading Location" Description
-    func updateLocationDescription() {
-        guard geoCoder.isGeocoding == false else {return}
+    // MARK: - Update "Loading Location" description for this view instance
+    func resetLocationDescription() {
+//        guard geoCoder.isGeocoding == false else {return}
         
         for frame in frames.values {
             if frame.locationName == "Loading location..." {
@@ -131,42 +132,8 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         }
     }
     
-    //MARK: - core location delegate method
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let currentLocation = locations.last {
-            self.currentLocation = currentLocation
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
-        if status != .authorizedWhenInUse {
-            currentLocation = nil
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        currentLocation = nil
-    }
-    
-    
     
     // MARK: - Animations
-    
-//    fileprivate func performAddFramePrompt() {
-//        //have a notification for user when first added
-//        let notifGroup = DispatchGroup()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-//            notifGroup.enter()
-//            self.navigationItem.prompt = "Now you can start to record your frames!"
-//            notifGroup.leave()
-//        })
-//        //wait for the first to complete
-//        notifGroup.wait()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 7, execute: {
-//            self.navigationItem.prompt = nil
-//        })
-//    }
     
     //for index pop animation
     func performIndexViewAnimation() {
@@ -273,7 +240,7 @@ class FrameEditingViewController: UIViewController, CLLocationManagerDelegate, F
         roll.lastEditedDate = Date()
         roll.lastAddedFrame = currentFrameIndex
         
-        if let currentLocation = currentLocation {
+        if let currentLocation = locationController.currentLocation {
             frame.location = currentLocation
             updateLocationDescription(with: currentLocation, for: currentFrameIndex)
         }

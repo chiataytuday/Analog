@@ -21,11 +21,12 @@ class CameraSettingViewController: UIViewController {
     @IBOutlet weak var filmImage: UIImageView!
     @IBOutlet weak var exposureLabel: UILabel!
     
-    var cameraName: String?
     var pushPull: Double = 0.0
     
     //var selectedRollKey: String?
     var dataController: DataController!
+    var locationController: LocationController!
+    
     var roll: NewRoll!
     var halfCompleteRoll: PredefinedRoll!
     var predefinedRollDictionaryKey: String?
@@ -50,15 +51,6 @@ class CameraSettingViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    @IBAction func cameraEditEnded(_ sender: UITextField) {
-        if let cameraName = sender.text {
-            self.cameraName = cameraName
-        } else {
-            self.cameraName = nil
-        }
-        
     }
     
     @IBAction func cameraTextReturnTriggered(_ sender: UITextField) {
@@ -111,7 +103,13 @@ class CameraSettingViewController: UIViewController {
         roll.format = halfCompleteRoll.format
         roll.newlyAdded = true
         roll.dateAdded = Date()
-        roll.camera = cameraName
+        
+        if let cameraName = cameraTextField.text {
+            if !cameraName.isEmpty {
+                roll.camera = cameraName
+            }
+        }
+        
         roll.pushPull = pushPull
         
         
@@ -167,6 +165,7 @@ class CameraSettingViewController: UIViewController {
             //destination.rollIndexPath = IndexPath(row: 0, section: 0)
             destination.roll = roll
             destination.dataController = dataController
+            destination.locationController = locationController
         }
         
     }

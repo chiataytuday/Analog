@@ -12,6 +12,7 @@ import CoreData
 class AddRollViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, RecentlyAddedTableViewControllerDelegate, CameraSettingViewControllerDelegate {
     
     var dataController: DataController!
+    var locationController: LocationController!
     
     var filteredArray = [String]()
     var recentlyAddedRolls: [RecentlyAddedRoll]!
@@ -244,12 +245,15 @@ class AddRollViewController: UIViewController, UITableViewDataSource, UITableVie
             destination.cameraSettingDelegate = self
             destination.predefinedRollDictionaryKey = predefinedRollDictionaryKey
             destination.dataController = dataController
+            destination.locationController = locationController
             
             //destination.selectedRollKey = selectedRollKey
             //destination.customRoll = selectedRoll
         } else if segue.identifier == "cameraSettingSegue" {
             let destination = segue.destination as! CameraSettingViewController
             destination.dataController = dataController
+            destination.locationController = locationController
+            
             guard halfCompleteRoll != nil else {fatalError("no roll has been selected before cameraSettingSegue")}
             destination.halfCompleteRoll = halfCompleteRoll
             destination.rollPredefined = true

@@ -29,6 +29,7 @@ class CustomRollViewController: UIViewController {
     var predefinedRollDictionaryKey: String?
     
     var dataController: DataController!
+    var locationController: LocationController!
 
     
 //    var customRoll: Roll?
@@ -263,6 +264,7 @@ class CustomRollViewController: UIViewController {
             destination.delegate = cameraSettingDelegate
             destination.predefinedRollDictionaryKey = predefinedRollDictionaryKey
             destination.dataController = dataController
+            destination.locationController = locationController
             
 //            destination.selectedRollKey = selectedRollKey
 //            destination.roll = customRoll

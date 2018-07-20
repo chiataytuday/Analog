@@ -28,17 +28,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             dataController.load()
         }
         
-        
         let navigationController = window?.rootViewController as! UINavigationController
-        
-        if #available(iOS 11.0, *) {
-            navigationController.navigationBar.prefersLargeTitles = true
-        }
         
         let homeScreenTableViewController = navigationController.topViewController as! HomeScreenTableViewController
         
         //pass the data controller to home screen
         homeScreenTableViewController.dataController = dataController
+        //singleton design for location manager and geocoder
+        homeScreenTableViewController.locationController = LocationController()
+        
+        if #available(iOS 11.0, *) {
+            navigationController.navigationBar.prefersLargeTitles = true
+        }
         
         return true
     }
@@ -106,6 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let migrator = DataMigrator(dataController: dataController)
         print(migrator.migrateRollsAndFrames())
         print(migrator.migrateRecentlyAdded())
+        
     }
 
 }

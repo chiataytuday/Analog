@@ -26,8 +26,8 @@ class DataController {
             if let error = error {
                 fatalError(error.localizedDescription)
             }
-            
             self.autoSaveViewContext()
+            self.viewContext.undoManager = UndoManager()
         }
     }
 }

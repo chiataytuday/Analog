@@ -105,8 +105,8 @@
                                     <outlet property="rollDetailLabel" destination="vA3-ht-Z7P" id="Z5Q-jd-ZUs"/>
                                     <outlet property="titleLabel" destination="iIk-3s-4jl" id="CGa-yd-8P9"/>
                                     <segue destination="p11-OD-ebE" kind="show" identifier="showRollSegue" id="BUQ-GL-eJO">
-                                        <segue key="commit" inheritsFrom="parent" id="mqx-yN-ccO"/>
-                                        <segue key="preview" inheritsFrom="commit" id="1E6-fB-MYa"/>
+                                        <segue key="commit" inheritsFrom="parent" id="vb1-jx-mqD"/>
+                                        <segue key="preview" inheritsFrom="commit" id="IpM-I8-xGm"/>
                                     </segue>
                                 </connections>
                             </tableViewCell>
@@ -305,9 +305,8 @@
                                                                 <color key="tintColor" red="0.51768016819999996" green="0.5136700273" blue="0.51769715549999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="23"/>
-                                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardType="alphabet" returnKeyType="done"/>
+                                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" returnKeyType="done"/>
                                                                 <connections>
-                                                                    <action selector="cameraEditEnded:" destination="mnA-cB-U5G" eventType="editingDidEnd" id="aQd-LZ-aHR"/>
                                                                     <action selector="cameraTextReturnTriggered:" destination="mnA-cB-U5G" eventType="primaryActionTriggered" id="ylp-vV-3jW"/>
                                                                 </connections>
                                                             </textField>
@@ -748,21 +747,21 @@
                                         <rect key="frame" x="0.0" y="535" width="375" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Bz-tN-ACn" id="bAY-qB-MaC">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="74.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="oew-Wq-NFn">
-                                                    <rect key="frame" x="15" y="0.0" width="340" height="74.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="340" height="74"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Lens" translatesAutoresizingMaskIntoConstraints="NO" id="Ba5-0D-3ZZ">
-                                                            <rect key="frame" x="0.0" y="19" width="40" height="37"/>
+                                                            <rect key="frame" x="0.0" y="18.5" width="40" height="37"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="40" id="BgU-XN-lhF"/>
                                                                 <constraint firstAttribute="height" constant="37.25" id="g37-8u-Lvz"/>
                                                             </constraints>
                                                         </imageView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="ZZh-tx-2Pn">
-                                                            <rect key="frame" x="55" y="13.5" width="285" height="48"/>
+                                                            <rect key="frame" x="55" y="13" width="285" height="48"/>
                                                             <subviews>
                                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Lens (mm)" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="aVH-Ua-Z87">
                                                                     <rect key="frame" x="0.0" y="0.0" width="285" height="24"/>
@@ -797,7 +796,7 @@
                                         <rect key="frame" x="0.0" y="610" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tuw-JT-lYp" id="FNu-0m-hBV">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="f/" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hcG-Xz-b9T">
@@ -886,14 +885,14 @@
                                         <rect key="frame" x="0.0" y="710" width="375" height="180"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1cp-xn-nDy" id="GxR-Kd-VIo">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="179.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="180"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="divider line" translatesAutoresizingMaskIntoConstraints="NO" id="Mn5-6D-wzR">
                                                     <rect key="frame" x="8" y="0.0" width="359" height="1"/>
                                                 </imageView>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="tIS-oq-iW3">
-                                                    <rect key="frame" x="15" y="8" width="352" height="163"/>
+                                                    <rect key="frame" x="15" y="8" width="352" height="163.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1054,7 +1053,7 @@
                                                     <rect key="frame" x="15" y="0.0" width="352" height="43"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="alphabet" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                                     <connections>
                                                         <action selector="rollFieldReturned:" destination="a1a-wR-w3Z" eventType="primaryActionTriggered" id="1gc-Cu-nzj"/>
                                                     </connections>
@@ -1083,7 +1082,7 @@
                                                     <rect key="frame" x="15" y="0.0" width="352" height="43"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="alphabet" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                                     <connections>
                                                         <action selector="cameraFieldReturned:" destination="a1a-wR-w3Z" eventType="primaryActionTriggered" id="vha-p1-MQi"/>
                                                     </connections>
@@ -1348,7 +1347,7 @@
                                                                 <color key="tintColor" red="0.51768016819999996" green="0.5136700273" blue="0.51769715549999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="23"/>
-                                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" keyboardType="alphabet" returnKeyType="next"/>
+                                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                                 <connections>
                                                                     <action selector="filmChanged:" destination="1p6-8C-TGK" eventType="editingChanged" id="sMn-ip-58f"/>
                                                                     <action selector="filmReturnTriggered:" destination="1p6-8C-TGK" eventType="primaryActionTriggered" id="6i0-sj-nBQ"/>
@@ -1576,7 +1575,7 @@
         <image name="divider line" width="376" height="1"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="BUQ-GL-eJO"/>
+        <segue reference="2eD-m7-ub0"/>
         <segue reference="P8w-o8-lL5"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

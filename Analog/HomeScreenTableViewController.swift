@@ -9,9 +9,12 @@
 import UIKit
 import CoreData
 
+
 class HomeScreenTableViewController: UITableViewController {
 
     var dataController: DataController!
+    
+    var locationController: LocationController!
     
     var fetchedResultsController: NSFetchedResultsController<NewRoll>!
     
@@ -41,9 +44,6 @@ class HomeScreenTableViewController: UITableViewController {
         
         //Hide unused cell
         tableView.tableFooterView = UIView()
-//        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-//        tableView.tableFooterView?.isHidden = true
-        
         
         if fetchedResultsController.sections == nil || fetchedResultsController.sections?[0].numberOfObjects == 0 {
             self.navigationItem.leftBarButtonItem?.isEnabled = false
@@ -51,6 +51,9 @@ class HomeScreenTableViewController: UITableViewController {
         } else {
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
+        
+        //In order to detect shake motion
+        self.becomeFirstResponder()
         
     }
     
@@ -66,6 +69,9 @@ class HomeScreenTableViewController: UITableViewController {
         if #available(iOS 11.0, *) {
             navigationItem.largeTitleDisplayMode = .automatic
         }
+        
+        //prevent undoing frame changes and undoing changes during launching
+        dataController.viewContext.undoManager?.removeAllActions()
         
     }
     
@@ -85,6 +91,29 @@ class HomeScreenTableViewController: UITableViewController {
             return false
         } else {
             return true
+        }
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        guard let undoManager = dataController.viewContext.undoManager else {return}
+
+        if undoManager.canUndo {
+            let alertController = UIAlertController(title: "Undo", message: "Undo Action?", preferredStyle: .alert)
+            
+            let undoAction = UIAlertAction(title: "Undo", style: .default) { (action) in
+                undoManager.undo()
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alertController.addAction(cancelAction)
+            alertController.addAction(undoAction)
+            
+            present(alertController, animated: true, completion: nil)
         }
     }
     
@@ -204,12 +233,15 @@ class HomeScreenTableViewController: UITableViewController {
                 
                 destination.roll = fetchedResultsController.object(at: indexPath)
                 destination.dataController = dataController
+                destination.locationController = locationController
                 destination.navigationItem.leftBarButtonItem = nil
+                
             }
         } else if segue.identifier == "addRollSegue" {
             let destination = segue.destination as! UINavigationController
             let addRollViewController = destination.topViewController as! AddRollViewController
             addRollViewController.dataController = dataController
+            addRollViewController.locationController = locationController
         }
         
     }

@@ -21,6 +21,7 @@
 		364A92981F19CAE100B0D442 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 364A92961F19CAE100B0D442 /* LaunchScreen.storyboard */; };
 		364A92A31F19CAE100B0D442 /* AnalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92A21F19CAE100B0D442 /* AnalogTests.swift */; };
 		364A92AE1F19CAE100B0D442 /* AnalogUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */; };
+		3663A7592101C5C9006D791A /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3663A7582101C5C9006D791A /* LocationController.swift */; };
 		3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */; };
 		3687E9551F29E43C00432E31 /* PredefinedRoll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E9541F29E43C00432E31 /* PredefinedRoll.swift */; };
 		3687E95B1F29E63800432E31 /* PropertyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687E95A1F29E63800432E31 /* PropertyKeys.swift */; };
@@ -76,6 +77,7 @@
 		364A92A91F19CAE100B0D442 /* AnalogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnalogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		364A92AD1F19CAE100B0D442 /* AnalogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalogUITests.swift; sourceTree = "<group>"; };
 		364A92AF1F19CAE100B0D442 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3663A7582101C5C9006D791A /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
 		3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingViewController.swift; sourceTree = "<group>"; };
 		3687E9541F29E43C00432E31 /* PredefinedRoll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredefinedRoll.swift; sourceTree = "<group>"; };
 		3687E95A1F29E63800432E31 /* PropertyKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyKeys.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				3644EFF120EF2E9200E4859B /* Analog.xcdatamodeld */,
 				3687E9541F29E43C00432E31 /* PredefinedRoll.swift */,
 				3644EFF620EF3D2800E4859B /* DataController.swift */,
+				3663A7582101C5C9006D791A /* LocationController.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 				364A928E1F19CAE100B0D442 /* AppDelegate.swift in Sources */,
 				3682199C1F1F913B00B30651 /* CameraSettingViewController.swift in Sources */,
 				3644EFF320EF2E9200E4859B /* Analog.xcdatamodeld in Sources */,
+				3663A7592101C5C9006D791A /* LocationController.swift in Sources */,
 				3687E9601F29E85700432E31 /* FrameEditingLocationExtension.swift in Sources */,
 				369AEF7420F84A8A007D304C /* Frame.swift in Sources */,
 				369AAFA01F23029C00C23125 /* FrameEditingViewController.swift in Sources */,
