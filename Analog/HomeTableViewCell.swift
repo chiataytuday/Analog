@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TimeAgoInWords
 
 class HomeTableViewCell: UITableViewCell {
 
@@ -68,23 +69,24 @@ class HomeTableViewCell: UITableViewCell {
         }
         
         if let lastEdited = roll.lastEditedDate {
-            if Calendar.current.isDateInToday(lastEdited) {
-                dateFormatter.dateFormat = "h:mm a"
-                lastEditLabel.text = dateFormatter.string(from: lastEdited)
-            } else {
-                dateFormatter.dateStyle = .short
-                lastEditLabel.text = dateFormatter.string(from: lastEdited)
-            }
+            lastEditLabel.text = lastEdited.timeAgoInWords()
+//            if Calendar.current.isDateInToday(lastEdited) {
+//                dateFormatter.dateFormat = "h:mm a"
+//                lastEditLabel.text = dateFormatter.string(from: lastEdited)
+//            } else {
+//                dateFormatter.dateStyle = .short
+//                lastEditLabel.text = dateFormatter.string(from: lastEdited)
+//            }
         } else {
             if let dateAdded = roll.dateAdded {
-                                
-                if Calendar.current.isDateInToday(dateAdded) {
-                    dateFormatter.dateFormat = "h:mm a"
-                    lastEditLabel.text = dateFormatter.string(from: dateAdded)
-                } else {
-                    dateFormatter.dateStyle = .short
-                    lastEditLabel.text = dateFormatter.string(from: dateAdded)
-                }
+                lastEditLabel.text = dateAdded.timeAgoInWords()
+//                if Calendar.current.isDateInToday(dateAdded) {
+//                    dateFormatter.dateFormat = "h:mm a"
+//                    lastEditLabel.text = dateFormatter.string(from: dateAdded)
+//                } else {
+//                    dateFormatter.dateStyle = .short
+//                    lastEditLabel.text = dateFormatter.string(from: dateAdded)
+//                }
             }
         }
         
