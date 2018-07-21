@@ -55,6 +55,7 @@ class HomeScreenTableViewController: UITableViewController {
         //In order to detect shake motion
         self.becomeFirstResponder()
         
+        self.refreshTable()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -214,6 +215,20 @@ class HomeScreenTableViewController: UITableViewController {
         alertController.addAction(deleteAction)
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    func refreshTable(interval: TimeInterval = 60) {
+        print("refreshing table")
+        guard interval > 0 else {
+            print("Time interval is negative")
+            return
+        }
+        
+        tableView.reloadData()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+            self.refreshTable(interval: interval)
+        }
     }
     
     

@@ -336,6 +336,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
             let targetController = destinationNavigationController.topViewController as! RollDetailTableViewController
             targetController.roll = roll
             targetController.dataController = dataController
+            targetController.frames = frames
             
         } else if segue.identifier == "frameEmbedSegue" {
             let destinationController = segue.destination as! FrameDetailTableViewController
