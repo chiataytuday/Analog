@@ -11,11 +11,13 @@ import CoreLocation
 
 
 class LocationController: NSObject, CLLocationManagerDelegate {
-    var locationManager = CLLocationManager()
+    var locationManager: CLLocationManager!
     var currentLocation: CLLocation?
     
     override init() {
         super.init()
+        
+        locationManager = CLLocationManager()
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters

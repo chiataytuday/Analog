@@ -48,8 +48,8 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
         
         locationManager = locationController.locationManager
         
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+//        locationManager.requestWhenInUseAuthorization()
+//        locationManager.startUpdatingLocation()
         
         if roll.lastAddedFrame != -1 {
             currentFrameIndex = roll.lastAddedFrame
@@ -94,15 +94,22 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
             fatalError("Can't load frames from store")
         }
         
-        resetLocationDescription()
+//        resetLocationDescription()
         
         updateView(for: currentFrameIndex)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        
         //show the index combo, should later disapper with perform normal index animation
         performAnimationWithoutPop()
+        
+        resetLocationDescription()
+
     }
     
     
@@ -122,7 +129,6 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     
     // MARK: - Update "Loading Location" description for this view instance
     func resetLocationDescription() {
-//        guard geoCoder.isGeocoding == false else {return}
         
         for frame in frames.values {
             if frame.locationName == "Loading location..." {
@@ -130,6 +136,10 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
                 frame.locationDescription = "Can't load location info"
             }
         }
+        
+        let frame = frames[currentFrameIndex]
+        
+        frameDetailTableViewController?.updateLocationViews(with: frame?.location, locationName: frame?.locationName, locationDescription: frame?.locationDescription)
     }
     
     

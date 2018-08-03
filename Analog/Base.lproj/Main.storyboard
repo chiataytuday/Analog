@@ -16,7 +16,7 @@
         <scene sceneID="cGB-ac-4dn">
             <objects>
                 <tableViewController id="8Fo-3M-jsD" customClass="HomeScreenTableViewController" customModule="Analog" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="LsF-5Y-M0D">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="LsF-5Y-M0D">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -36,8 +36,8 @@
                                                 <constraint firstAttribute="height" constant="47.5" id="Kck-5z-vhS"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Untitled Roll" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="19" translatesAutoresizingMaskIntoConstraints="NO" id="iIk-3s-4jl">
-                                            <rect key="frame" x="70" y="15" width="186" height="25.5"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Untitled Roll" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="19" translatesAutoresizingMaskIntoConstraints="NO" id="iIk-3s-4jl">
+                                            <rect key="frame" x="70" y="15" width="114.5" height="25.5"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="21"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -79,9 +79,11 @@
                                         </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="GTw-Cu-AZ6" secondAttribute="trailing" constant="16" id="1FD-VF-3Jt"/>
                                         <constraint firstItem="vA3-ht-Z7P" firstAttribute="top" secondItem="iIk-3s-4jl" secondAttribute="bottom" constant="6.5" id="53A-MD-b3G"/>
                                         <constraint firstItem="gMF-zE-oD2" firstAttribute="centerY" secondItem="avS-H0-J2t" secondAttribute="centerY" id="C4A-Lp-BgY"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="vA3-ht-Z7P" secondAttribute="trailing" constant="15" id="C92-KJ-47l"/>
+                                        <constraint firstItem="Iwu-QH-zo3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iIk-3s-4jl" secondAttribute="trailing" constant="10" id="GOW-MT-OWr"/>
                                         <constraint firstItem="iIk-3s-4jl" firstAttribute="top" secondItem="avS-H0-J2t" secondAttribute="top" constant="15" id="Lne-li-p8S"/>
                                         <constraint firstItem="gMF-zE-oD2" firstAttribute="leading" secondItem="avS-H0-J2t" secondAttribute="leading" constant="8" id="Orz-es-anP"/>
                                         <constraint firstItem="CFj-FM-JtO" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Z3g-Pl-OkE" secondAttribute="trailing" constant="208" id="R8K-g3-ngo"/>
@@ -91,7 +93,6 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="CFj-FM-JtO" secondAttribute="trailing" constant="8" id="bhv-xP-sSQ"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="3Jy-7B-H0c" secondAttribute="trailing" id="fa1-O4-bp4"/>
                                         <constraint firstItem="GTw-Cu-AZ6" firstAttribute="top" secondItem="avS-H0-J2t" secondAttribute="topMargin" constant="9" id="jTU-dY-lkA"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="iIk-3s-4jl" secondAttribute="trailing" constant="103" id="oKn-EB-Ob1"/>
                                         <constraint firstItem="Z3g-Pl-OkE" firstAttribute="leading" secondItem="gMF-zE-oD2" secondAttribute="trailing" constant="14.5" id="ruG-sP-VXz"/>
                                         <constraint firstItem="Z3g-Pl-OkE" firstAttribute="top" secondItem="vA3-ht-Z7P" secondAttribute="bottom" constant="7" id="tFk-6y-4d1"/>
                                         <constraint firstItem="iIk-3s-4jl" firstAttribute="leading" secondItem="gMF-zE-oD2" secondAttribute="trailing" constant="14.65" id="uxf-fc-jQ4"/>
@@ -1259,7 +1260,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Export as CSV" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Fge-f5-qff">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Export as CSV File" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Fge-f5-qff">
                                                     <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1600,8 +1601,8 @@
         <image name="divider line" width="376" height="1"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IpM-I8-xGm"/>
-        <segue reference="P8w-o8-lL5"/>
+        <segue reference="2eD-m7-ub0"/>
+        <segue reference="Kz5-Xo-go3"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>

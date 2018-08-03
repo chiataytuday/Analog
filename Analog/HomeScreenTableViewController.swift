@@ -55,7 +55,6 @@ class HomeScreenTableViewController: UITableViewController {
         //In order to detect shake motion
         self.becomeFirstResponder()
         
-        self.refreshTable()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +69,8 @@ class HomeScreenTableViewController: UITableViewController {
         if #available(iOS 11.0, *) {
             navigationItem.largeTitleDisplayMode = .automatic
         }
+        
+        refreshTable()
         
         //prevent undoing frame changes and undoing changes during launching
         dataController.viewContext.undoManager?.removeAllActions()
@@ -217,7 +218,7 @@ class HomeScreenTableViewController: UITableViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    func refreshTable(interval: TimeInterval = 60) {
+    func refreshTable(interval: TimeInterval = 40) {
         print("refreshing table")
         guard interval > 0 else {
             print("Time interval is negative")

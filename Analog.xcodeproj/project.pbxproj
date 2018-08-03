@@ -81,6 +81,7 @@
 		364A92AF1F19CAE100B0D442 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3663A7582101C5C9006D791A /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
 		366A2E872101EC2700C50B50 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		36767613210B7D7F00AB6855 /* Analog 1.0.4 (With Photo).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Analog 1.0.4 (With Photo).xcdatamodel"; sourceTree = "<group>"; };
 		3682199B1F1F913B00B30651 /* CameraSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingViewController.swift; sourceTree = "<group>"; };
 		3687E9541F29E43C00432E31 /* PredefinedRoll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredefinedRoll.swift; sourceTree = "<group>"; };
 		3687E95A1F29E63800432E31 /* PropertyKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyKeys.swift; sourceTree = "<group>"; };
@@ -771,9 +772,10 @@
 		3644EFF120EF2E9200E4859B /* Analog.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				36767613210B7D7F00AB6855 /* Analog 1.0.4 (With Photo).xcdatamodel */,
 				3644EFF220EF2E9200E4859B /* Analog.xcdatamodel */,
 			);
-			currentVersion = 3644EFF220EF2E9200E4859B /* Analog.xcdatamodel */;
+			currentVersion = 36767613210B7D7F00AB6855 /* Analog 1.0.4 (With Photo).xcdatamodel */;
 			path = Analog.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

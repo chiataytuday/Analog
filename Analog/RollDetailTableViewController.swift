@@ -97,6 +97,9 @@ class RollDetailTableViewController: UITableViewController {
     }
     
     func exportCSV() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .full
+        dateFormatter.timeStyle = .long
         
         let filename = (roll.title ?? "Untitled Roll") + ".csv"
         let path = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
@@ -104,7 +107,7 @@ class RollDetailTableViewController: UITableViewController {
         var CSVtext = ""
         
         if frames.values.count > 0 {
-            CSVtext.append("Frame,Lens,Aperture,Shutter,Date,Location Name,Location Description,Notes\n")
+            CSVtext.append("\"Frame\",\"Lens\",\"Aperture\",\"Shutter\",\"Date\",\"Location Name\",\"Location Description\",\"Notes\"\n")
             
             let framesSorted = frames.values.sorted { (frame1, frame2) -> Bool in
                 if frame1.index < frame2.index {
@@ -119,11 +122,12 @@ class RollDetailTableViewController: UITableViewController {
                 let lens = frame.lens != 0 ? "\(frame.lens)" + "mm" : "None"
                 let aperture = frame.aperture != 0 ? "\(frame.aperture)" : "None"
                 let shutter = frame.shutter != 0 ? "\(frame.shutter)" : "None"
-                let locationName = frame.locationName != "Loading location..." && frame.locationName != "Tap to reload" ? frame.locationName?.replacingOccurrences(of: ",", with: " ") : "None"
-                let locationDescription = frame.locationDescription != "Loading location..." && frame.locationDescription != "Can't load location info" ? frame.locationDescription?.replacingOccurrences(of: ",", with: " ") : "None"
-                let notes = frame.notes?.replacingOccurrences(of: ",", with: " ").replacingOccurrences(of: "\n", with: " ") ?? "None"
+                let locationName = frame.locationName != "Loading location..." && frame.locationName != "Tap to reload" ? frame.locationName : "None"
+                let locationDescription = frame.locationDescription != "Loading location..." && frame.locationDescription != "Can't load location info" ? frame.locationDescription : "None"
+                let notes = frame.notes ?? "None"
+                let date = (frame.date != nil) ? dateFormatter.string(from: frame.date!) : "None"
                 
-                let newLine = "\(frame.index + 1),\(lens),\(aperture),\(shutter),\(frame.date?.description ?? "None"),\(locationName ?? "None"),\(locationDescription ?? "None"),\(notes)\n"
+                let newLine = "\"\(frame.index + 1)\",\"\(lens)\",\"\(aperture)\",\"\(shutter)\",\"\(date)\",\"\(locationName ?? "None")\",\"\(locationDescription ?? "None")\",\"\(notes)\"\n"
                 
                 CSVtext.append(newLine)
             }
@@ -131,8 +135,9 @@ class RollDetailTableViewController: UITableViewController {
             CSVtext.append("\n\n")
         }
         
-        var title = rollNameTextField.text?.replacingOccurrences(of: ",", with: " ")
-        var camera = cameraTextField.text?.replacingOccurrences(of: ",", with: " ")
+        var title = rollNameTextField.text
+        var camera = cameraTextField.text
+        let dateAdded = (roll.dateAdded != nil) ? dateFormatter.string(from: roll.dateAdded!) : "None"
         
         if (title?.isEmpty)! {
             title = "Untitled"
@@ -142,12 +147,10 @@ class RollDetailTableViewController: UITableViewController {
             camera = "None"
         }
         
-        let rollString = "Roll Name,Film Type,Film Format,Frame Count,Film Speed,Camera,Date Added\n\(title ?? "Untitled"),\(roll.filmName ?? "None"),\(roll.format),\(roll.frameCount),\(roll.pushPull)ev,\(camera ?? "None"),\(roll.dateAdded?.description ?? "None")\n"
+        let rollString = "\"Roll Name\",\"Film Type\",\"Film Format\",\"Frame Count\",\"Film Speed\",\"Camera\",\"Date Added\"\n\"\(title ?? "Untitled")\",\"\(roll.filmName ?? "None")\",\"\(roll.format)\",\"\(roll.frameCount)\",\"\(roll.pushPull)ev\",\"\(camera ?? "None")\",\"\(dateAdded)\"\n"
         
         CSVtext.append(rollString)
-        
-        CSVtext = CSVtext.replacingOccurrences(of: "\"", with: " ")
-        
+                
         do {
             try CSVtext.write(to: path, atomically: true, encoding: .utf8)
             let vc = UIActivityViewController(activityItems: [path], applicationActivities: [])

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //Data controller for Core Data Stack
     var dataController = DataController(modelName: "Analog")
+    var locationController = LocationController()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -35,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //pass the data controller to home screen
         homeScreenTableViewController.dataController = dataController
         //singleton design for location manager and geocoder
-        homeScreenTableViewController.locationController = LocationController()
+        homeScreenTableViewController.locationController = locationController
         
         if #available(iOS 11.0, *) {
             navigationController.navigationBar.prefersLargeTitles = true
@@ -51,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         saveViewContext()
-
+        
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }

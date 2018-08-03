@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="NewFrame" representedClassName="NewFrame" syncable="YES" codeGenerationType="class">
+        <attribute name="aperture" optional="YES" attributeType="Double" minValueString="0" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <attribute name="lens" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="Transformable" customClassName="CoreLocation.CLLocation" syncable="YES"/>
+        <attribute name="locationDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="photo" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="shutter" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <relationship name="roll" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewRoll" inverseName="frames" inverseEntity="NewRoll" syncable="YES"/>
+    </entity>
+    <entity name="NewRoll" representedClassName="NewRoll" syncable="YES" codeGenerationType="class">
+        <attribute name="camera" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="currentLens" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="filmName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="format" optional="YES" attributeType="Integer 64" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <attribute name="frameCount" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <attribute name="iso" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <attribute name="lastAddedFrame" optional="YES" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" customClassName="Int" syncable="YES"/>
+        <attribute name="lastEditedDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="newlyAdded" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="pushPull" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="frames" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NewFrame" inverseName="roll" inverseEntity="NewFrame" syncable="YES"/>
+    </entity>
+    <entity name="RecentlyAddedRoll" representedClassName="RecentlyAddedRoll" syncable="YES" codeGenerationType="class">
+        <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="predefinedRoll" optional="YES" attributeType="Transformable" customClassName="PredefinedRoll" syncable="YES"/>
+        <attribute name="timesAdded" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="NewFrame" positionX="-38" positionY="9" width="128" height="210"/>
+        <element name="NewRoll" positionX="178" positionY="-36" width="128" height="240"/>
+        <element name="RecentlyAddedRoll" positionX="45" positionY="-126" width="128" height="90"/>
+    </elements>
+</model>
