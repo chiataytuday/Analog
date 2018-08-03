@@ -33,8 +33,9 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
     
     //setting up location manager for map and description use
     //let locationManager = CLLocationManager()
-    //delegate in order to pass data to the parent
-    var delegate: FrameEditingViewController?
+    
+    //weak delegate in order to pass data to the parent
+    weak var delegate: FrameEditingViewController?
     
     //variable for showing or hiding date picker
     var isDatePickerHidden = true

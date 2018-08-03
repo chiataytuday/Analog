@@ -94,7 +94,6 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
             fatalError("Can't load frames from store")
         }
         
-//        resetLocationDescription()
         
         updateView(for: currentFrameIndex)
     }
@@ -109,7 +108,6 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
         performAnimationWithoutPop()
         
         resetLocationDescription()
-
     }
     
     
@@ -123,7 +121,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        // Dispose of any resources that can be recreated.        
     }
     
     
