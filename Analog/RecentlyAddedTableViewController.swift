@@ -16,7 +16,7 @@ protocol RecentlyAddedTableViewControllerDelegate {
 
 class RecentlyAddedTableViewController: UITableViewController {
     
-    var delegate: RecentlyAddedTableViewControllerDelegate?
+    weak var delegate: AddRollViewController?
     
     var dataController: DataController?
     

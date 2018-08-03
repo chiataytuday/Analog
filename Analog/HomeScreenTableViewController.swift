@@ -219,6 +219,8 @@ class HomeScreenTableViewController: UITableViewController {
     }
     
     func refreshTable(interval: TimeInterval = 40) {
+        guard tableView.isEditing == false else {return}
+        
         guard interval > 0 else {
             print("Time interval is negative")
             return
