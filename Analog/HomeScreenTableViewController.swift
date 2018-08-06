@@ -9,14 +9,15 @@
 import UIKit
 import CoreData
 
-
-class HomeScreenTableViewController: UITableViewController {
+class HomeScreenTableViewController: UITableViewController, FrameEditingViewControllerDelegate {
 
     var dataController: DataController!
-    
     var locationController: LocationController!
-    
     var fetchedResultsController: NSFetchedResultsController<NewRoll>!
+    
+    var preFetchedRollFrames = [NSManagedObjectID: [Int64: NewFrame]]()
+    
+    var timer: Timer!
     
     @IBOutlet weak var addRollButton: UIBarButtonItem!
     
@@ -33,6 +34,33 @@ class HomeScreenTableViewController: UITableViewController {
         } catch {
             fatalError("Home screen rolls can't be fetched")
         }
+    }
+    
+    
+    func preFetchFrames() {
+        guard let objects = fetchedResultsController.fetchedObjects else {return}
+        
+        let preLoadRollCount = objects.count < 10 ? objects.count : 10
+        
+        for i in 0..<preLoadRollCount {
+            let roll = objects[i]
+            guard let frameSet = roll.frames else {continue}
+            
+            if let dict = framesDictify(frameSet: frameSet) {
+                preFetchedRollFrames[roll.objectID] = dict
+            }
+        }
+    }
+    
+    func framesDictify(frameSet: NSSet) -> [Int64: NewFrame]? {
+        var frames = [Int64: NewFrame]()
+        
+        for frame in frameSet {
+            guard let frame = frame as? NewFrame else {return nil}
+            frames[frame.index] = frame
+        }
+        
+        return frames
     }
     
     override func viewDidLoad() {
@@ -52,11 +80,17 @@ class HomeScreenTableViewController: UITableViewController {
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
         
+        //preload first 15 frames
+        preFetchFrames()
+        
         //In order to detect shake motion
         self.becomeFirstResponder()
         
-        refreshTable()
-        
+        timer = Timer.scheduledTimer(withTimeInterval: 40, repeats: true, block: { (timer) in
+            if self.isEditing == false {
+                self.tableView.reloadData()
+            }
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +111,15 @@ class HomeScreenTableViewController: UITableViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let selectedRoll = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: selectedRoll, animated: true)
+
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -86,6 +129,9 @@ class HomeScreenTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        
+        preFetchedRollFrames.removeAll()
+        preFetchFrames()
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -218,19 +264,9 @@ class HomeScreenTableViewController: UITableViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    func refreshTable(interval: TimeInterval = 40) {
-        guard tableView.isEditing == false else {return}
-        
-        guard interval > 0 else {
-            print("Time interval is negative")
-            return
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-            print("refreshing table")
-            self.tableView.reloadData()
-            self.refreshTable(interval: interval)
-        }
+    
+    func didUpdateFrames(rollID: NSManagedObjectID, frames: [Int64: NewFrame]) {
+        preFetchedRollFrames[rollID] = frames
     }
     
     
@@ -247,8 +283,13 @@ class HomeScreenTableViewController: UITableViewController {
             //pass the album object to the frame editing view controller
             if let cell = sender as? UITableViewCell,
                 let indexPath = tableView.indexPath(for: cell) {
+                let roll = fetchedResultsController.object(at: indexPath)
                 
-                destination.roll = fetchedResultsController.object(at: indexPath)
+                destination.roll = roll
+                destination.frames = preFetchedRollFrames[roll.objectID]
+                
+                destination.homeController = self
+                
                 destination.dataController = dataController
                 destination.locationController = locationController
                 destination.navigationItem.leftBarButtonItem = nil

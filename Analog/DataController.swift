@@ -26,26 +26,7 @@ class DataController {
             if let error = error {
                 fatalError(error.localizedDescription)
             }
-            self.autoSaveViewContext()
             self.viewContext.undoManager = UndoManager()
-        }
-    }
-}
-
-extension DataController {
-    func autoSaveViewContext(interval: TimeInterval = 20) {
-        print("autosaving")
-        guard interval > 0 else {
-            print("Time interval is negative")
-            return
-        }
-        
-        if viewContext.hasChanges {
-            try? viewContext.save()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-            self.autoSaveViewContext(interval: interval)
         }
     }
 }

@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //Data controller for Core Data Stack
     var dataController = DataController(modelName: "Analog")
     var locationController = LocationController()
+    var timer: Timer!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -29,6 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //This will setup the stack after the app launch
             dataController.load()
         }
+        
+        //automatically save view context every 20 seconds
+        timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true, block: { (timer) in
+            if self.dataController.viewContext.hasChanges {
+                try? self.dataController.viewContext.save()
+            }
+        })
         
         let navigationController = window?.rootViewController as! UINavigationController
         

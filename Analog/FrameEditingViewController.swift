@@ -10,6 +10,11 @@ import UIKit
 import MapKit
 import CoreData
 
+protocol FrameEditingViewControllerDelegate {
+    func didUpdateFrames(rollID: NSManagedObjectID, frames: [Int64: NewFrame])
+}
+
+
 class FrameEditingViewController: UIViewController, FrameDetailTableViewControllerDelegate {
 
     @IBOutlet weak var slider: UISlider!
@@ -28,7 +33,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     //use for loading roll
     var roll: NewRoll!
     //used to cache the frames
-    var frames = [Int64: NewFrame]()
+    var frames: [Int64: NewFrame]!
         
     //start with 0!!!
     var currentFrameIndex:Int64 = 0
@@ -42,6 +47,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     var locationManager: CLLocationManager!
 //    var currentLocation: CLLocation?
     
+    var homeController: FrameEditingViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,24 +85,40 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
             tapToSwitchImage.isHidden = true
         }
         
-        //load the frame
-        let frameFetchRequest:NSFetchRequest<NewFrame> = NewFrame.fetchRequest()
-        let framePredicate = NSPredicate(format: "roll == %@", roll)
-        frameFetchRequest.predicate = framePredicate
-        
-        if let result = try? dataController?.viewContext.fetch(frameFetchRequest) {
-            if let result = result {
-                for frame in result {
-                    frames[frame.index] = frame
-                }
-            }
-        } else {
-            fatalError("Can't load frames from store")
-        }
-        
-        
+//        //load the frame
+//        let frameFetchRequest:NSFetchRequest<NewFrame> = NewFrame.fetchRequest()
+//        let framePredicate = NSPredicate(format: "roll == %@", roll)
+//        frameFetchRequest.predicate = framePredicate
+
+//        if let result = try? dataController?.viewContext.fetch(frameFetchRequest) {
+//            if let result = result {
+//                for frame in result {
+//                    frames[frame.index] = frame
+//                }
+//            }
+//        } else {
+//            fatalError("Can't load frames from store")
+//        }
+
+        fetchFrames()
+
         updateView(for: currentFrameIndex)
     }
+    
+    func fetchFrames() {
+        
+        if frames != nil {return}
+        
+        guard let Rollframes = roll.frames else {return}
+        //initialize the frames
+        frames = [Int64: NewFrame]()
+        
+        for frame in Rollframes {
+            guard let frame = frame as? NewFrame else {return}
+            frames[frame.index] = frame
+        }
+    }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -114,9 +136,16 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if dataController.viewContext.hasChanges {
-            try? dataController.viewContext.save()
+        if self.isMovingFromParentViewController || self.isBeingDismissed {
+            if let homeController = homeController {
+                homeController.didUpdateFrames(rollID: roll.objectID, frames: frames)
+            }
+            
+//            if dataController.viewContext.hasChanges {
+//                try? dataController.viewContext.save()
+//            }
         }
+        
     }
     
     override func didReceiveMemoryWarning() {
