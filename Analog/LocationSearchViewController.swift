@@ -73,8 +73,8 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
         //show the annotation title automatically
         mapView.selectAnnotation(annotation, animated: true)
         
-        let span = MKCoordinateSpanMake(0.002, 0.002)
-        let region = MKCoordinateRegionMake(placemark.coordinate, span)
+        let span = MKCoordinateSpan.init(latitudeDelta: 0.002, longitudeDelta: 0.002)
+        let region = MKCoordinateRegion.init(center: placemark.coordinate, span: span)
         mapView.setRegion(region, animated: true)
         
     }
@@ -108,7 +108,7 @@ class LocationSearchViewController: UIViewController, UISearchBarDelegate, UITab
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let text = searchBar.text else {return}
         
-        let request = MKLocalSearchRequest()
+        let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = text
         request.region = mapView.region
         let search = MKLocalSearch(request: request)

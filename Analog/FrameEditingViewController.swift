@@ -52,22 +52,31 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if #available(iOS 11.0, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
+        
+        if frames == nil {
+            fetchFrames()
+        }
+        
         locationManager = locationController.locationManager
         
-//        locationManager.requestWhenInUseAuthorization()
-//        locationManager.startUpdatingLocation()
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
         
+        updateControlViews()
+        showHideFrame(for: currentFrameIndex)
+    }
+    
+    
+    fileprivate func updateControlViews() {
         if roll.lastAddedFrame != -1 {
             currentFrameIndex = roll.lastAddedFrame
         }
         
-        
         if let title = roll.title {
             self.navigationItem.title = title
-        }
-        
-        if #available(iOS 11.0, *) {
-            navigationItem.largeTitleDisplayMode = .never
         }
         
         //set the slider and stepper value, they are currentFrameIndex + 1!!!!!
@@ -84,69 +93,35 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
         } else {
             tapToSwitchImage.isHidden = true
         }
-        
-//        //load the frame
-//        let frameFetchRequest:NSFetchRequest<NewFrame> = NewFrame.fetchRequest()
-//        let framePredicate = NSPredicate(format: "roll == %@", roll)
-//        frameFetchRequest.predicate = framePredicate
-
-//        if let result = try? dataController?.viewContext.fetch(frameFetchRequest) {
-//            if let result = result {
-//                for frame in result {
-//                    frames[frame.index] = frame
-//                }
-//            }
-//        } else {
-//            fatalError("Can't load frames from store")
-//        }
-
-        fetchFrames()
-
-        updateView(for: currentFrameIndex)
-    }
-    
-    func fetchFrames() {
-        
-        if frames != nil {return}
-        
-        guard let Rollframes = roll.frames else {return}
-        //initialize the frames
-        frames = [Int64: NewFrame]()
-        
-        for frame in Rollframes {
-            guard let frame = frame as? NewFrame else {return}
-            frames[frame.index] = frame
-        }
     }
     
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-        
-        //show the index combo, should later disapper with perform normal index animation
-        performAnimationWithoutPop()
-        
-        resetLocationDescription()
-    }
-    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//        locationManager.requestWhenInUseAuthorization()
+//        locationManager.startUpdatingLocation()
+//
+//        //resetLocationDescription()
+//
+//        //show the index combo, should later disapper with perform normal index animation
+////        performAnimationWithoutPop()
+//
+//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if self.isMovingFromParentViewController || self.isBeingDismissed {
+        if self.isMovingFromParent {
+            //Notice that when being newly added, reset description will happen when fetching
+            //resetLocationDescription()
+            
             if let homeController = homeController {
                 homeController.didUpdateFrames(rollID: roll.objectID, frames: frames)
             }
-            
-//            if dataController.viewContext.hasChanges {
-//                try? dataController.viewContext.save()
-//            }
         }
-        
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -155,18 +130,35 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     
     
     // MARK: - Update "Loading Location" description for this view instance
-    func resetLocationDescription() {
+//    func resetLocationDescription() {
+//
+//        for frame in frames.values {
+//            if frame.locationName == "Loading location..." {
+//                frame.locationName = "Tap to reload"
+//                frame.locationDescription = "Can't load location info"
+//            }
+//        }
+//
+//    }
+    
+    // MARK: - Frame fetching fuction when roll is not preloaded
+    func fetchFrames() {
+        guard let Rollframes = roll.frames else {return}
         
-        for frame in frames.values {
+        //initialize the frames
+        frames = [Int64: NewFrame]()
+        
+        for frame in Rollframes {
+            guard let frame = frame as? NewFrame else {return}
+            
             if frame.locationName == "Loading location..." {
                 frame.locationName = "Tap to reload"
                 frame.locationDescription = "Can't load location info"
             }
+            
+            frames[frame.index] = frame
         }
         
-        let frame = frames[currentFrameIndex]
-        
-        frameDetailTableViewController?.updateLocationViews(with: frame?.location, locationName: frame?.locationName, locationDescription: frame?.locationDescription)
     }
     
     
@@ -186,12 +178,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
                 UIView.animate(withDuration: 0.09, animations: {
                     self.indexBackgroundBlack.transform = CGAffineTransform.identity
                     self.indexLabel.transform = CGAffineTransform.identity
-                }, completion: { (_) in
-                    UIView.animate(withDuration: 0.5, delay: 8, options: .curveEaseOut, animations: {
-                        self.indexBackgroundBlack.alpha = 0
-                        self.indexLabel.alpha = 0
-                    }, completion: nil)
-                })
+                }, completion: nil)
             })
         })
     }
@@ -282,7 +269,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
             updateLocationDescription(with: currentLocation, for: currentFrameIndex)
         }
         
-        updateView(for: currentFrameIndex)
+        showHideFrame(for: currentFrameIndex)
         
     }
     
@@ -299,7 +286,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
         
         indexLabel.text = "\(intValue)"
         
-        updateView(for: currentFrameIndex)
+        showHideFrame(for: currentFrameIndex)
     }
     
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
@@ -311,7 +298,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
         currentFrameIndex = intValue - 1
         indexLabel.text = "\(intValue)"
         
-        updateView(for: currentFrameIndex)
+        showHideFrame(for: currentFrameIndex)
     }
     
     @IBAction func stepperTouched(_ sender: UIStepper) {
@@ -333,7 +320,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
             self.roll.lastEditedDate = Date()
             //loadedRoll.lastAddedFrame = self.currentFrameIndex
             
-            self.updateView(for: self.currentFrameIndex)
+            self.showHideFrame(for: self.currentFrameIndex)
             self.frameDetailTableViewController?.resignResponder()
             
         }
@@ -355,7 +342,7 @@ class FrameEditingViewController: UIViewController, FrameDetailTableViewControll
     @IBAction func unwindToEditing(unwindSegue: UIStoryboardSegue) {
         
         if unwindSegue.identifier == "saveRollDetailSegue" {
-            updateView(for: currentFrameIndex)
+            showHideFrame(for: currentFrameIndex)
             
             if let title = roll.title {
                 self.navigationItem.title = title

@@ -232,7 +232,7 @@ class CustomRollViewController: UIViewController {
         let toolBar = UIToolbar()
         toolBar.tintColor = .black
         //Add a flexible space so that the button is positioned on the right
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         let button = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(CustomRollViewController.toolBarNextButtonTapped))
         toolBar.setItems([flexSpace, button], animated: false)
         toolBar.isUserInteractionEnabled = true

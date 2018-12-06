@@ -17,9 +17,9 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
     
     var preFetchedRollFrames = [NSManagedObjectID: [Int64: NewFrame]]()
     
-    var timer: Timer!
+    var timer: Timer?
     
-    @IBOutlet weak var addRollButton: UIBarButtonItem!
+    @IBOutlet var addRollButton: UIBarButtonItem!
     
     func setupFetchedResultsController() {
         let fetchRequest:NSFetchRequest<NewRoll> = NewRoll.fetchRequest()
@@ -57,6 +57,12 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
         
         for frame in frameSet {
             guard let frame = frame as? NewFrame else {return nil}
+            
+            if frame.locationName == "Loading location..." {
+                frame.locationName = "Tap to reload"
+                frame.locationDescription = "Can't load location info"
+            }
+            
             frames[frame.index] = frame
         }
         
@@ -75,7 +81,6 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
         
         if fetchedResultsController.sections == nil || fetchedResultsController.sections?[0].numberOfObjects == 0 {
             self.navigationItem.leftBarButtonItem?.isEnabled = false
-
         } else {
             self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
@@ -85,12 +90,8 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
         
         //In order to detect shake motion
         self.becomeFirstResponder()
+
         
-        timer = Timer.scheduledTimer(withTimeInterval: 40, repeats: true, block: { (timer) in
-            if self.isEditing == false {
-                self.tableView.reloadData()
-            }
-        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,28 +103,42 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
             self.navigationItem.prompt = nil
         }
         
-        if #available(iOS 11.0, *) {
-            navigationItem.largeTitleDisplayMode = .automatic
-        }
+//        if #available(iOS 11.0, *) {
+//            navigationItem.largeTitleDisplayMode = .automatic
+//        }
         
         //prevent undoing frame changes and undoing changes during launching
         dataController.viewContext.undoManager?.removeAllActions()
         
+        timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true, block: { (timer) in
+            if self.isEditing == false {
+                self.tableView.reloadData()
+            }
+        })
+        
+        
+//        if let selectedRoll = tableView.indexPathForSelectedRow {
+//            tableView.deselectRow(at: selectedRoll, animated: true)
+//        }
+        
+        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if let selectedRoll = tableView.indexPathForSelectedRow {
-            tableView.deselectRow(at: selectedRoll, animated: true)
-
-        }
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//        if let selectedRoll = tableView.indexPathForSelectedRow {
+//            tableView.deselectRow(at: selectedRoll, animated: true)
+//        }
+//
+//    }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        self.setEditing(false, animated: true)
+
+        timer?.invalidate()
+        //self.setEditing(false, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -146,7 +161,7 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
         return true
     }
     
-    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         guard let undoManager = dataController.viewContext.undoManager else {return}
 
         if undoManager.canUndo {
@@ -203,7 +218,7 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
 
     
     // MARK: - Editing
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             //present an alert to notify the user before delete
@@ -237,8 +252,10 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
             
         } else {
             self.navigationItem.rightBarButtonItem = addRollButton
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
+    
     
     @objc func commitDeleteMultipleRolls() {
         let alertController = UIAlertController(title: "Delete Rolls", message: "Are you sure you want to delete these rolls?", preferredStyle: .alert)

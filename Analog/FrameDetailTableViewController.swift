@@ -188,14 +188,18 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         if let location = location {
             
             //update map
+            
+            let currentAnnotation = mapView.annotations
+            mapView.removeAnnotations(currentAnnotation)
+            
             let locationObject = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = locationObject
             mapView.addAnnotation(annotation)
             
-            let span = MKCoordinateSpanMake(0.002, 0.002)
-            let region = MKCoordinateRegionMake(locationObject, span)
+            let span = MKCoordinateSpan.init(latitudeDelta: 0.002, longitudeDelta: 0.002)
+            let region = MKCoordinateRegion.init(center: locationObject, span: span)
             
             
             //map setup
@@ -340,7 +344,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         locationDetailLabel.text = "Location not captured"
         
         //recenter the map to locale
-        let region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360))
+        let region = MKCoordinateRegion.init(center: mapView.centerCoordinate, span: MKCoordinateSpan.init(latitudeDelta: 180, longitudeDelta: 360))
         mapView.setRegion(region, animated: true)
     }
     
@@ -437,7 +441,7 @@ class FrameDetailTableViewController: UITableViewController, CLLocationManagerDe
         let toolBar = UIToolbar()
         toolBar.tintColor = .black
         //Add a flexible space so that the button is positioned on the right
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         let button = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(toolBarButtonTapped))
         toolBar.setItems([flexSpace, button], animated: false)
         toolBar.isUserInteractionEnabled = true

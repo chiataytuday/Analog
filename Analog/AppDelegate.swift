@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var locationController = LocationController()
     var timer: Timer!
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         if UserDefaults.standard.value(forKey: "Updated") == nil {
@@ -33,9 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //automatically save view context every 20 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true, block: { (timer) in
-            if self.dataController.viewContext.hasChanges {
-                try? self.dataController.viewContext.save()
-            }
+            self.saveViewContext()
         })
         
         let navigationController = window?.rootViewController as! UINavigationController
@@ -57,6 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        
+        timer.invalidate()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -67,12 +67,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
-        let current = navigationController?.visibleViewController as? FrameEditingViewController
+//        let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+//        let current = navigationController?.visibleViewController as? FrameEditingViewController
+//
+        //automatically save view context every 20 seconds
+        timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true, block: { (timer) in
+            self.saveViewContext()
+        })
         
-        if let current = current {
-            current.updateView(for: current.currentFrameIndex)
-        }
+//        if let current = current {
+//            current.showHideFrame(for: current.currentFrameIndex)
+//        }
         
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
@@ -82,12 +87,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //used to notify the user which frame they are in while unlocking
         let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
         let current = navigationController?.visibleViewController as? FrameEditingViewController
-
+        
         current?.performIndexViewAnimation()
-//
-//        current?.locationManager.requestWhenInUseAuthorization()
-//        current?.locationManager.startUpdatingLocation()
-//
+
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 

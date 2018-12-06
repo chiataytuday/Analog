@@ -83,7 +83,7 @@ extension FrameEditingViewController {
     
     //used to update the view excluding the static table view
     //be careful frameIndex start at 0
-    func updateView(for frameIndex: Int64) {
+    func showHideFrame(for frameIndex: Int64) {
         guard
             //important!! check if update is needed
             frameIndex == currentFrameIndex else { return }
