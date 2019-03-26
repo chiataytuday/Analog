@@ -103,10 +103,6 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
             self.navigationItem.prompt = nil
         }
         
-//        if #available(iOS 11.0, *) {
-//            navigationItem.largeTitleDisplayMode = .automatic
-//        }
-        
         //prevent undoing frame changes and undoing changes during launching
         dataController.viewContext.undoManager?.removeAllActions()
         
@@ -117,21 +113,7 @@ class HomeScreenTableViewController: UITableViewController, FrameEditingViewCont
         })
         
         
-//        if let selectedRoll = tableView.indexPathForSelectedRow {
-//            tableView.deselectRow(at: selectedRoll, animated: true)
-//        }
-        
-        
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//
-//        if let selectedRoll = tableView.indexPathForSelectedRow {
-//            tableView.deselectRow(at: selectedRoll, animated: true)
-//        }
-//
-//    }
     
     
     override func viewWillDisappear(_ animated: Bool) {

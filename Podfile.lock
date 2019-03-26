@@ -1,0 +1,16 @@
+PODS:
+  - TimeAgoInWords (3.0.0)
+
+DEPENDENCIES:
+  - TimeAgoInWords
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - TimeAgoInWords
+
+SPEC CHECKSUMS:
+  TimeAgoInWords: 633dbb30810de855333dedd1d5033d28b1ecfd6f
+
+PODFILE CHECKSUM: 2027108810e79da4252c89495a619a64067bf41d
+
+COCOAPODS: 1.5.3
