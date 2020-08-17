@@ -7,11 +7,11 @@ The app has a predefined list of film rolls from different brands to speed up th
 
 Home Screen, Data Input/Lookup Screen:
 
-<img src="img/home.png" width="300"><img src="img/main.png" width="300">
+<img src="img/home.png" width="300">      <img src="img/main.png" width="300">
 
 Screen for adding roll, showing detailed info of film roll:
 
-<img src="img/addSearch.png" width="300"><img src="img/rollDetail.png" width="300">
+<img src="img/addSearch.png" width="300">      <img src="img/rollDetail.png" width="300">
 
 
 Positive reviews from photographers :)
