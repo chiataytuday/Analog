@@ -5,31 +5,24 @@ An iOS app written in Swift and Cocoa. Allows film photographers to note down sh
 
 The app has a predefined list of film rolls from different brands to speed up the process of adding a roll section.
 
-The App's main data input screen:
+Home Screen, Data Input/Lookup Screen:
 
-Home Screen:
+<img src="img/home.png" width="300">
+<img src="img/main.png" width="300">
 
-<img src="img/home.png" width="400">
+Screen for adding roll, showing detailed info of film roll:
 
-Data Input/Lookup Screen:
+<img src="img/addSearch.png" width="300">
+<img src="img/rollDetail.png" width="300">
 
-<img src="img/main.png" width="400">
 
-Screen for searching and adding film rolls:
+Positive reviews from photographers :)
 
-<img src="img/addSearch.png" width="400">
+<img src="img/review1.png" width="800">
 
-The screen for roll information lookup:
+<img src="img/review2.png" width="800">
 
-<img src="img/rollDetail.png" width="400">
-
-Positive reviews from photographers :):
-
-<img src="img/review1.png" width="600">
-
-<img src="img/review2.png" width="600">
-
-<img src="img/review3.png" width="600">
+<img src="img/review3.png" width="800">
 
 
 Check it out on the AppStore:
